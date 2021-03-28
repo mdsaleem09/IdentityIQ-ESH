@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule created="1616858394976" id="c0a842057873193b8178744531600132" language="beanshell" modified="1616860783539" name="return managed attributes(list entitlements)" type="Validation">
+  <Source>
+  
+  
+  import java.util.*;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+ 
+  
+  
+
+         //return li;
+  
+  List l=new ArrayList();
+  String RestrictedEmpID="";
+ArrayList li=new ArrayList();
+  List&lt;ManagedAttribute> managedAttrs=context.getObjects(ManagedAttribute.class);
+    if(managedAttrs != null){
+ for(ManagedAttribute managedAttr : managedAttrs){
+ if( managedAttr != null){
+  RestrictedEmpID=managedAttr.getAttribute("RestrictedEmpID");
+    l.add(RestrictedEmpID);
+ }
+ }
+ }
+ return l;
+
+  </Source>
+</Rule>
