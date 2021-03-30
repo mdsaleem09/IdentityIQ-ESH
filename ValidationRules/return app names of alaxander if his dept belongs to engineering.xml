@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule created="1617090112577" id="c0a842057873193b81788214ec410891" language="beanshell" modified="1617090594667" name="return app names whose id is info techno" type="Validation">
+  <Source>
+  
+  
+ import java.util.*;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+ 
+
+   List l1=new ArrayList();
+
+  Filter filter=Filter.eq("Department","Information Technology");
+  QueryOptions opts=new QueryOptions();
+  opts.addFilter(filter);
+      			List identites=context.getObjects(Identity.class,opts);
+    for(Identity ids:identites)
+     {
+       if(ids.getName().equals("Ann Alexander"))
+       {
+         List links=ids.getLinks(); 
+          
+         for(Link li:links)
+         {
+           l1.add(li.getApplication().getName());
+         }
+       }
+     }
+   
+  
+  
+  
+    return l1;
+  </Source>
+</Rule>
