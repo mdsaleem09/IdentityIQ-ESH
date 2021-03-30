@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule created="1617019868737" id="c0a842057873193b81787de5164105b9" language="beanshell" modified="1617020304831" name="list identities from only particular application" type="Validation">
+  <Source>
+  
+  
+  import java.util.*;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+ 
+  List list=new ArrayList();
+  Filter f=Filter.eq("application.name","AD Application");
+  QueryOptions opts=new QueryOptions();
+  opts.addFilter(f);
+  List ide=context.getObjects(Link.class,opts);
+  for(Link ids:ide)
+  {
+    list.add(ids.getDisplayName());
+  }
+  return list;
+                  
+  </Source>
+</Rule>

@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule created="1617012756299" id="c0a842057873193b81787d788f4b04f9" language="beanshell" modified="1617033843209" name="list only entitlements that consists of extended attrributes" type="Validation">
+  <Source>
+  
+  
+  import java.util.*;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+ 
+ 
+   List list = new ArrayList();
+
+                  
+                 String RestrictedEmpID="";
+                
+
+                  QueryOptions ops = new QueryOptions();
+
+                  
+                   //Filter identityFilter= Filter.eq("identity", identityObject);
+                  //ops.addFilter(identityFilter);
+                  		Filter filter=Filter.eq("application.name","AD Application");
+				  						ops.addFilter(filter);
+                      
+
+                  Iterator identityEntitlements = context.search(ManagedAttribute.class,ops);
+
+                  while(identityEntitlements.hasNext()) 
+                  {
+                 
+                  
+					ma=(ManagedAttribute) identityEntitlements.next();
+                   RestrictedEmpID=ma.getAttribute("RestrictedEmpID");
+                  
+					     if(RestrictedEmpID!=null)
+               {
+                 
+             
+                 list.add(ma.getDisplayName());
+               }
+                    
+                  }
+  return list;
+                   
+                  
+  </Source>
+</Rule>
