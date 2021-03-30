@@ -1,0 +1,106 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell"  name="REstrictPolicy" type="Policy">
+  <Description>This rule is used to determine if a Policy has been violated.</Description>
+  <Signature returnType="PolicyViolation">
+    <Inputs>
+      <Argument name="log">
+        <Description>
+          The log object associated with the SailPointContext.
+        </Description>
+      </Argument>
+      <Argument name="context">
+        <Description>
+          A sailpoint.api.SailPointContext object that can be used to query the database if necessary.
+        </Description>
+      </Argument>
+      <Argument name="identity">
+        <Description>
+          The Identity being inspected.
+        </Description>
+      </Argument>
+      <Argument name="policy">
+        <Description>
+          The Policy being evaluated.
+        </Description>
+      </Argument>
+      <Argument name="constraint">
+        <Description>
+          The Constraint being evaluated.
+        </Description>
+      </Argument>
+    </Inputs>
+    <Returns>
+      <Argument name="violation">
+        <Description>
+          The PolicyViolation object.
+        </Description>
+      </Argument>
+    </Returns>
+  </Signature>
+  <Source>import sailpoint.object.ManagedAttribute;
+
+  import sailpoint.object.Filter;
+
+  import sailpoint.object.QueryOptions;
+
+  import sailpoint.object.Application;
+
+  import java.util.*;
+
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+
+  String reid="";
+  String empid="";
+  boolean roleViolation = true; 
+  boolean isViolation = false; 
+  PolicyViolation polVil = null; 
+
+
+
+  Filter f2=Filter.eq("application.name","AD Application");
+  QueryOptions qo=new QueryOptions();
+
+  qo.addFilter(f2);
+
+  List list=context.getObjects(ManagedAttribute.class,qo);
+
+  List displayNames = new ArrayList();
+
+
+  for(ManagedAttribute item : list) {
+
+    reid=item.getAttribute("RestrictedEmpID");
+
+    System.out.println(displayNames.add(reid));
+
+
+
+  } 
+
+  if(identity!=null)
+  {                     
+    empid=identity.getAttribute("EmployeeID");
+
+  }
+
+  if(reid!=null &amp;&amp; empid!=null &amp;&amp; empid.equalsIgnoreCase(reid))
+  {
+    if(roleViolation){ 
+      //==Set the Policy Violation flag if Role Violation is Present
+      isViolation = true; 
+    } 
+  } 
+
+  if (isViolation) { 
+    System.out.println("checking violation");
+    polVil = new PolicyViolation(); 
+    polVil.setActive(true); 
+    polVil.setIdentity(identity); 
+    polVil.setPolicy(policy); 
+    polVil.setDescription("This combination of Role is not allowed for the Identity");
+  } 
+
+  return polVil;</Source>
+</Rule>

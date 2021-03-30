@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule  language="beanshell" name="call workflow" type="Validation">
+  <Source>
+  import sailpoint.object.Identity;
+  import sailpoint.object.Workflow;
+  import sailpoint.object.WorkflowLaunch;
+  import sailpoint.api.Workflower;
+  import sailpoint.api.SailPointContext;
+  import java.util.List;
+  import java.util.ArrayList;
+  import java.util.HashMap;
+  import java.io.BufferedReader;
+  import java.io.File;
+  import java.io.FileReader;
+  import java.io.BufferedWriter;
+  
+  
+  try{
+			File f=new File("C:\\data\\data.csv");
+			FileReader myreader = new FileReader(f);
+			BufferedReader br=new BufferedReader(myreader);
+			String line;
+			List li = new ArrayList();
+
+			while ((line = br.readLine()) != null) 
+        {
+		     	  
+              Identity id=context.getObjectByName(Identity.class,line);
+			   if(id!=null)
+                {
+              HashMap launchArgsMap = new HashMap();
+              launchArgsMap.put("identityName", id.getName());
+              launchArgsMap.put("approvalScheme", "none");        
+              WorkflowLaunch wflaunch = new WorkflowLaunch();
+              Workflow wf = context.getObjectByName(Workflow.class,"My-LeaverAD");
+                   if (wf != null) {
+                       wflaunch.setWorkflowName(wf.getName());
+                       wflaunch.setWorkflowRef(wf.getName());
+                       wflaunch.setVariables(launchArgsMap);
+                       Workflower workflower = new Workflower(context);
+                       WorkflowLaunch launch = workflower.launch(wflaunch);
+                                  }  
+			  File f1=new File("C:\\write\\new Users2.txt");
+			  FileWriter mywriter = new FileWriter(f1,true);
+			  BufferedWriter br=new BufferedWriter(mywriter);
+              br.write(id.getName());
+              br.newLine();
+              br.close();
+			    }
+       
+       }
+   }
+        catch(Exception e) {
+              e.printStackTrace();
+        }
+
+  
+  
+  </Source>
+</Rule>
