@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule created="1617091251821" id="c0a842057873193b817882264e6d08a5" language="beanshell" modified="1617099522130" name="return identity names whose dept is information tech or engineering" type="Validation">
+  <Source>
+  
+  
+  import java.util.*;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+ 
+List l1=new ArrayList();
+  List l2=new ArrayList();
+
+   List id=context.getObjects(Identity.class);
+  for(Identity ids:id)
+  {
+  
+   if(ids.getAttribute("Department")!=null &amp;&amp; ids.getAttribute("Department").equalsIgnoreCase("Information Technology"))
+   {
+     String name=ids.getAttribute("Department");
+    l1.add(ids.getName()+" "+name);
+        //  l1.add(ids.getName());
+  }
+    else  if(ids.getAttribute("Department")!=null &amp;&amp; ids.getAttribute("Department").equalsIgnoreCase("Engineering"))
+    {
+       String name1=ids.getAttribute("Department");
+    l2.add(ids.getName()+"--"+name1);
+     
+  }
+  
+    
+  }
+  l2.addAll(l1);
+  return l2;
+  </Source>
+</Rule>
