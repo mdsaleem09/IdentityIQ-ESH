@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule created="1617087109914" id="c0a842057873193b817881e71b1a081b" language="beanshell" modified="1617087388139" name="display Managers" type="Validation">
+  <Source>
+  
+  
+  import java.util.*;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+ 
+
+   List l1=new ArrayList();
+
+  Filter filter=Filter.eq("managerStatus",true);
+  QueryOptions opts=new QueryOptions();
+  opts.addFilter(filter);
+  
+  List identities =context.getObjects(Identity.class,opts);
+   for(Identity ids:identities)
+   {
+ l1.add(ids.getName());
+   }
+              return l1; 
+  </Source>
+</Rule>

@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule created="1616854095373" id="c0a842057873193b8178740395ea007c" language="beanshell" modified="1616858275899" name="return identity attributes" type="Validation">
+  <Source>
+  
+  import java.util.*;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+ 
+// ArrayList li=new ArrayList();
+  String name="James Smith";
+  Identity identity=context.getObjectByName(Identity.class,name);
+      // String name=Identity(id);
+ // li.add(id);
+ return identity.getAttribute("displayName");
+         
+  </Source>
+</Rule>

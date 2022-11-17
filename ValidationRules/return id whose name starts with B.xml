@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule created="1617097719040" id="c0a842057873193b81788288fd000964" language="beanshell" modified="1617098225450" name="return id whose name starts with B" type="Validation">
+  <Source>
+  
+  
+  import java.util.*;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+
+  List l1=new ArrayList();
+   List id=context.getObjects(Identity.class);
+  for(Identity ids:id)
+  {
+    String s=ids.getName();
+    if(s.startsWith("B"))
+    {
+   l1.add(s);
+  }
+  }
+  return l1;
+  </Source>
+</Rule>

@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Iterator;
+import java.io.FileInputStream;
+
+import org.apache.poi.hssf.model.Sheet;
+import org.apache.poi.hssf.model.Workbook;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import sailpoint.object.Bundle;
+import sailpoint.object.Filter;
+
+public class FileReade {
+
+	public static void main(String[] args) throws IOException, InvalidFormatException {
+		//String file="D:\\ex\\PR1 Security Role Owners and Approvers_FINAL.xls";
+		File excelFile=new File("D:\\ex\\PR1 Security Role Owners and Approvers_FINAL.xlsx");
+		FileInputStream fis=new FileInputStream(excelFile);
+		
+		if((!excelFile.exists()) || (excelFile.isDirectory()))
+				{
+			    System.out.println("Sheet does not exists");
+				}
+		
+		
+		
+		
+		
+		org.apache.poi.ss.usermodel.Workbook workbooks = WorkbookFactory.create(fis);
+		//org.apache.poi.ss.usermodel.Workbook wb = WorkbookFactory.create(new FileInputStream("D:\\ex\\Roles.xlsx"));
+      
+		
+		/*XSSFWorkbook xworkbook;
+		HSSFWorkbook workbook;
+		if (excelFile.toString().endsWith(".xls")) {
+			   workbook = new HSSFWorkbook();
+			   System.out.println("hi");
+			} else {
+			   xworkbook = new XSSFWorkbook();
+			}
+			*/
+	    /*org.apache.poi.ss.usermodel.Sheet sheet = workbooks.getSheetAt(0);
+     System.out.println("sheet"+sheet.getSheetName());
+	    Row row = sheet.getRow(2);
+	    Cell cell = row.getCell(3);
+	    */
+		int indexOfSystem = 0;
+        int indexOfsAp;
+        int indexOfBusinessRole = 0;
+        int indexOfBusinessRoleDescription = 0;
+        int indexOfRoleOwner = 0;
+        int indexOfAccessApprover = 0;
+        int indexOfClassification = 0;
+        int indexOfiiqApprover=0;
+		int count = 0;
+		int header=0;
+		String sheetName=null;
+		//System.out.println(cell);
+		//XSSFWorkbook work= new XSSFWorkbook(fis);
+		//sheetName=workbooks.getSheetName(2);
+		sheetName="Owners_Approvers";
+		//System.out.println(sheetName);
+		XSSFSheet sheet=(XSSFSheet) workbooks.getSheet(sheetName);
+		   XSSFRow row=sheet.getRow(header);
+		   Iterator it =row.cellIterator();
+		   String str=null;
+		   while( it != null && it.hasNext()) {
+			   org.apache.poi.xssf.usermodel.XSSFCell st =  (XSSFCell) it.next();
+			   
+			   
+			  str= st.toString();
+			  
+			   
+			   if(str.equals("System")) {
+				   indexOfSystem = count;
+				   System.out.println("indexOfSystem"+indexOfSystem);
+			   }
+			   if(str.contains("s Ap")) {
+				   indexOfsAp = count;
+				   System.out.println("indexOfsAp"+indexOfsAp);
+			   }
+			   if(str.equalsIgnoreCase("Business Role")) {
+				   indexOfBusinessRole = count;
+				   System.out.println("indexOfBusinessRole"+indexOfBusinessRole);
+			   }
+			   if(str.equalsIgnoreCase("Business Role Description")) {
+				   indexOfBusinessRoleDescription = count;
+				   System.out.println("indexOfBusinessRoleDescription"+indexOfBusinessRoleDescription);
+			   }
+			   if(str.contains("Role Owner")) {
+				   indexOfRoleOwner = count;
+				   System.out.println("indexOfRoleOwner"+indexOfRoleOwner);
+			   }
+			   if(str.contains("Access Approver")) {
+				   indexOfAccessApprover = count;
+				  // System.out.println("indexOfAccessApprover"+indexOfAccessApprover);
+			   }
+			   if(str.contains("IIQ Classification")) {
+				   indexOfClassification = count;
+				   System.out.println("indexOfClassification"+indexOfClassification);
+			   }
+			   if(str.contains("Temp IIQ Approver")) {
+				   indexOfiiqApprover = count;
+				   //System.out.println("indexOfiiqApprover"+indexOfiiqApprover);
+			   }
+			   count++;
+		   }
+		   
+		   String nonReqBusinessRole=null;
+   		XSSFCell reqBusinessRole=null;
+			String accessApprover = null;
+			String classificationName=null;
+           String businessRole=null;
+          String businessRoleDescription=null;
+	      String tempiiqApprover=null;
+	      String iiqApproverBusName=null;
+	      String roleowner=null;
+	      String approverBusName=null;
+	      String clasBusinessRole=null;
+          Iterator sheetIt = sheet.rowIterator();
+          while(sheetIt.hasNext()){
+        	  XSSFRow data = (XSSFRow) sheetIt.next();
+             
+        	 try {
+        		 //Skip the headers
+        		 if(data.getRowNum()==0){
+        			   continue; 
+        		 }
+        	  if(data.getCell(indexOfAccessApprover)==null || data.getCell(indexOfAccessApprover).toString().equals("NA")) {
+        		  nonReqBusinessRole=data.getCell(indexOfBusinessRole).toString();
+        		  //System.out.println("Non****"+nonReqBusinessRole);
+        		  /*Filter filter=Filter.like("displayName",nonReqBusinessRole);
+                  Bundle nonReqBund=context.getUniqueObject(Bundle.class,filter);
+                  if(nonReqBund!=null && nonReqBund!=void)
+                  {
+                  nonReqBund.setAttribute("Requestable",0);
+                  }
+                  */
+              	
+        	  }
+        	  else {
+                  reqBusinessRole = data.getCell(indexOfBusinessRole);
+        		  //System.out.println("Re****"+reqBusinessRole);
+        		  /*Filter filter=Filter.like("displayName",reqBusinessRole.toString());
+                  Bundle reqBund=context.getUniqueObject(Bundle.class,filter);
+                  if(reqBund!=null && reqBund!=void)
+                  {
+                  nonReqBund.setAttribute("Requestable",1);
+                  }
+                  */
+        	  }
+        	  
+        	  
+              if(data.getCell(indexOfClassification)!=null && !data.getCell(indexOfClassification).toString().isEmpty() && data.getCell(indexOfClassification).toString().equals("Privileged"))
+        	  {
+        		 
+        			clasBusinessRole=data.getCell(indexOfBusinessRole).toString();
+        			classificationName=data.getCell(indexOfClassification).toString();
+          		 // System.out.println("PR:::"+classificationName);
+          		  /*Filter filter=Filter.like("displayName",clasBusinessRole);
+                    Bundle nonReqBund=context.getUniqueObject(Bundle.class,filter);
+                    if(nonReqBund!=null && nonReqBund!=void)
+                    {
+                    nonReqBund.setAttribute("Requestable",0);
+                    }
+        		}
+        		
+        			 
+         
+        			 System.out.println("class"+classificationName);
+        		 
+
+        		 /*if(classificationName.equals("Privileged")) {
+        			 Classification cls=context.getObjectByName(Classification.class,classificationName);
+                     ObjectClassification ob=new ObjectClassification();
+                     ob.setClassification(cl);
+                     Filter filter=Filter.like("displayName",businessRole);
+                     Bundle bund=context.getUniqueObject(Bundle.class,filter);
+                     if(bund!=null && bund!=void)
+                     {
+                     bund.addClassification(ob);
+                      }
+                      context.saveObject(bund);
+        		 }
+        		 */
+        		 
+
+        	 
+        	  }
+             
+            	  if(data.getCell(indexOfClassification)!=null && data.getCell(indexOfiiqApprover)!=null && !data.getCell(indexOfiiqApprover).toString().isEmpty() &&  !data.getCell(indexOfClassification).equals(("Privileged")))
+            	  {
+            		  tempiiqApprover=data.getCell(indexOfiiqApprover).toString();
+                	  iiqApproverBusName = data.getCell(indexOfBusinessRole).toString();
+                	 // System.out.println("iiqApprover::"+tempiiqApprover);
+                	  /*
+                       if(!tempiiqApprover.isEmpty())
+                       {
+                    	   Filter filter=Filter.like("displayName",iiqApproverBusName);
+                           Bundle bund=context.getUniqueObject(Bundle.class,filter);
+                           if(bund!=null && bund!=void)
+                           {
+                        	   bund.setAttribute("Access Approver",tempiiqApprover);
+                           }
+                       }
+                       */
+                	  
+                	  
+            	  }
+              
+              
+              
+              
+             
+              
+              
+        	 
+        	 if(data.getCell(indexOfRoleOwner).toString()!=null)
+        	 {
+        		  roleowner = data.getCell(indexOfRoleOwner).toString();
+            	  approverBusName = data.getCell(indexOfBusinessRole).toString();;
+                  System.out.println("role owner"+approverBusName);
+        		  /*if(roleowner!=null && !roleowner.isEmpty())
+        		  {
+        			  Filter filter=Filter.like("displayName", approverBusName);
+        			 Bundle apprbundObj=context.getUniqueObject(Bundle.class,filter);
+        			 if(apprbundObj!=null)
+        			 {
+        				 apprbundObj.setOwner(roleowner);
+        			 }
+        		  }
+        		  */
+        	 }
+        	 
+        	 
+        	 
+        	 
+        	 
+        	 
+        	 
+        	 
+        	 }
+        	 catch(Exception e) {
+        		 nonReqBusinessRole="No Bus Roles";
+        		 //tempiiqApprover="";
+        		 roleowner="NA";
+        	 }
+        	 
+        	 
+        	 
+        	 
+        	 
+        	  
+        	  
+
+          }
+         
+		
+
+	}
+
+}

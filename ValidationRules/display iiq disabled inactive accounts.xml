@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule created="1618504919571" id="c0a8420578d619b28178d6692a130045" language="beanshell" modified="1618574235117" name="INactive links">
+  <Source>
+  
+  import sailpoint.object.*;
+   import java.util.*;
+
+  
+
+                    List activeLinkList=new ArrayList();
+
+                      QueryOptions options = new QueryOptions();
+                      Filter myFilter1=Filter.eq("IIQDisabled", "true");
+                      options.addFilter(myFilter1);
+                     List li= context.getObjects(Link.class,options);
+  									
+                        for(Link link:li)
+                    {
+                      if(link!=null)
+                      {
+                        activeLinkList.add(link.getDisplayName());
+                      }
+                    }
+  return activeLinkList;
+  </Source>
+</Rule>

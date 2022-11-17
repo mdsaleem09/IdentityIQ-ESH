@@ -1,0 +1,8 @@
+  <Source>
+  <Transition to="Exit On SAP Role Violation" when="isTrue(isPolicyViolated)"/>
+ <Step action="call:addMessage" name="Exit On SAP Role Violation" posX="301" posY="253">
+    <Arg name="message" value="Failed due to SAP Role policy violation(s)"/>
+    <Arg name="type" value="Error"/>
+    <Transition to="CheckForLCMErrors"/>
+  </Step>
+  </Source>

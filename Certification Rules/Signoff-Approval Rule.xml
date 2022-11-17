@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule created="1587822928178" id="c0a800ab71821d308171b19f2132356a" language="beanshell" modified="1587992673129" name="my-Signoff-Approval-Rule" type="CertificationSignOffApprover">
+  <Description>This rule is run when the certification is signed off to determine who (if anyone) needs to approve the certification decisions.  If this returns a non-null identity, the certification is forwarded to the returned identity.</Description>
+  <Signature returnType="Map">
+    <Inputs>
+      <Argument name="log">
+        <Description>
+          The log object associated with the SailPointContext.
+        </Description>
+      </Argument>
+      <Argument name="context">
+        <Description>
+          A sailpoint.api.SailPointContext object that can be used to query the database if necessary.
+        </Description>
+      </Argument>
+      <Argument name="certification">
+        <Description>
+          The sailpoint.object.Certification that was signed.
+        </Description>
+      </Argument>
+      <Argument name="certifier">
+        <Description>
+          The sailpoint.object.Identity that signed the certification.
+        </Description>
+      </Argument>
+    </Inputs>
+    <Returns>
+      <Argument name="identityName">
+        <Description>
+        The name of the Identity that should approve the certification.  Either
+        this or 'identity' should be non-null if certification sign off approval
+        is desired.
+        </Description>
+      </Argument>
+      <Argument name="identity">
+        <Description>
+        The Identity that should approve the certification.  Either this or
+        'identityName' should be non-null if certification sign off approval
+        is desired.
+        </Description>
+      </Argument>
+    </Returns>
+  </Signature>
+  <Source>import sailpoint.object.Identity;
+import java.util.Map;
+import java.util.HashMap;
+
+  System.out.println("in my-Signoff-Approval-Rule");
+  if(certification.getSignOffHistory().size() > 1){
+      System.out.println("in my-Signoff-Approval-Rule returning null");
+    return null;
+  }
+  
+Map results = new HashMap();
+results.put("identityName", "Suresh babu");
+return results;
+  
+  </Source>
+</Rule>

@@ -1,0 +1,18 @@
+ <Source>
+   import sailpoint.object.*;
+  import sailpoint.api.*;
+  
+                 List list=new ArrayList();
+                   
+              Identity workgroupName=context.getObjectByName(Identity.class,"Test");
+  							              Identity idName=context.getObjectByName(Identity.class,"James Smith");
+
+                    
+                 if(workgroupName!=null &amp;&amp; idName!=null)
+                 {
+                   idName.add(workgroupName);
+                   context.saveObject(idName);
+                   context.commitTransaction();
+                 }
+               
+  </Source>

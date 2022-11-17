@@ -1,0 +1,22 @@
+<Source>
+  import sailpoint.object.*;
+  import java.util.*;
+  import sailpoint.api.ObjectUtil;
+
+  
+  List li=new ArrayList();
+
+  Filter filter=Filter.isnull("Department");
+  QueryOptions op=new QueryOptions();
+  op.addFilter(filter);
+  List list=context.getObjects(Identity.class,op);
+  List identityNames=ObjectUtil.getObjectNames(list);
+  //Convert a list of objects to a list of names.
+  
+ 
+  //return identityNames.size();
+
+  return identityNames;
+
+                  
+  </Source>

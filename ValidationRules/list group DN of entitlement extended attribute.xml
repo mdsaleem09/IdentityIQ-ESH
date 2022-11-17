@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule created="1617175242729" id="c0a842057887129c81788727e7e90042" language="beanshell" modified="1617613597756" name="list group distinnguished name of entitlent extended attribute" type="Validation">
+  <Source>
+  
+  
+  import java.util.*;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+ 
+  
+  String name="";
+ 
+  List l1=new ArrayList();
+  
+  List li=context.getObjects(ManagedAttribute.class);
+  
+  for(ManagedAttribute ma:li)
+  {
+    if(ma!=null)
+    {
+      name=ma.getAttribute("RestrictedEmpID");
+      if(name!=null)
+      {
+    l1.add(ma.getValue());
+    }
+    }
+  }
+  return l1;
+  </Source>
+</Rule>

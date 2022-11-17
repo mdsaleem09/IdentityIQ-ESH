@@ -1,0 +1,143 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Workflow PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Workflow created="1641391624511" explicitTransitions="true" id="c0a8de017e2310ed817e2a90913e0c0c" libraries="Identity" modified="1641392767674" name="MyJoiner-Esh" type="IdentityLifecycle">
+  <Variable input="true" name="trigger">
+    <Description>The IdentityTrigger</Description>
+  </Variable>
+  <Variable initializer="joiner" name="flow">
+    <Description>The flow</Description>
+  </Variable>
+  <Variable initializer="joiner" input="true" name="trace"/>
+  <Variable input="true" name="event" transient="true">
+    <Description>
+      The IdentityChangeEvent.It can be used to build
+      the provisioning plan, but does not need to be
+      persisted with the case, so marked as transient.
+    </Description>
+  </Variable>
+  <Variable input="true" name="identityName">
+    <Description>The name of the identity.</Description>
+  </Variable>
+  <Description>Process a new employee.</Description>
+  <Step icon="Start" name="Start" posX="28" posY="10">
+    <Transition to="Process user"/>
+  </Step>
+  <Step icon="Message" name="Process user" posX="148" posY="10" resultVariable="adPlan">
+    <Description>Process the user that joined.</Description>
+    <Script>
+      <Source>
+import sailpoint.object.*;
+import sailpoint.api.*;
+Identity identityObj = context.getObjectByName(Identity.class,identityName);
+ProvisioningPlan plan = new ProvisioningPlan();
+plan.setIdentity(identityObj);
+
+        System.out.println("plan in identity"+plan.getIdentity());
+AccountRequest acctReq = new AccountRequest();
+acctReq.setApplication("Active- Directory Demo");
+acctReq.setOp(ProvisioningPlan.ObjectOperation.Create);
+
+//String nativeIdentity = "cn="+identityObj.getName()+","+"OU=People,OU=Demo,DC=Eshiam,DC=com";
+//acctReq.add(new AttributeRequest("sAMAccountName", ProvisioningPlan.Operation.Add,identityObj.getName()));
+//acctReq.add(new AttributeRequest("employeeID", ProvisioningPlan.Operation.Add,identityObj.getAttribute("EmployeeID")));
+//acctReq.add(new AttributeRequest("description", ProvisioningPlan.Operation.Add,identityObj.getAttribute("NetworkID")));
+//acctReq.add(new AttributeRequest("givenName", ProvisioningPlan.Operation.Add,identityObj.getAttribute("firstname")));
+//acctReq.add(new AttributeRequest("sn", ProvisioningPlan.Operation.Add,identityObj.getAttribute("lastname")));
+//acctReq.add(new AttributeRequest("distinguishedName", ProvisioningPlan.Operation.Add, nativeIdentity));
+plan.add(acctReq);    
+        System.out.println("PLAN IN WORKFLOW"+plan.toXml());
+                return plan;
+
+      </Source>
+    </Script>
+    <Transition to="Manual WorkItem"/>
+  </Step>
+  <Step name="Manual WorkItem">
+    <Approval owner="spadmin" send="identityName">
+      <Arg name="workItemType" value="ManualAction"/>
+      <Arg name="workItemDescription" value="AD Account Not Found"/>
+      <Arg name="workItemHoursTillEscalation" value="168"/>
+      <Arg name="workItemHoursTillExpiration" value="168"/>
+      <Arg name="workItemMaxReminders" value="0"/>
+      <Arg name="workItemForm" value="Eshiam Approver Identity selec Form"/>
+      <InterceptorScript>
+        <Source>
+
+import sailpoint.object.Workflow;
+   import sailpoint.object.Attributes;
+   import org.apache.commons.logging.Log;
+   import org.apache.commons.logging.LogFactory;
+
+   Date expirationDate = new Date();
+
+      if (method!=null &amp;&amp; method.equals(Workflow.INTERCEPTOR_OPEN_WORK_ITEM)) {
+     if(workflow!=null) {
+       Attributes configAttrs = item.getAttributes();
+       if(null != configAttrs) {
+         String hoursTillExpiration = configAttrs.get("workItemHoursTillExpiration");
+         
+         if (null != hoursTillExpiration) {
+           int hoursTillExpirationInt=Util.atoi(hoursTillExpiration);
+           if(null != hoursTillExpirationInt &amp;&amp; hoursTillExpirationInt > 0) {
+             int minutes = hoursTillExpirationInt * 60;
+             Date dateExp = Util.incrementDateByMinutes(new Date(), minutes);
+             
+             if(item!=null &amp;&amp; item.getExpirationDate()==null &amp;&amp; context!=null &amp;&amp; dateExp!=null) {
+               
+               item.setExpiration(dateExp);
+               item.setWakeUpDate(dateExp);
+               context.saveObject(item);
+               context.commitTransaction();
+               
+             }
+           }
+         }
+       }
+     }
+   }
+
+</Source>
+      </InterceptorScript>
+    </Approval>
+    <Description>
+Active Directory Account Not Found
+</Description>
+    <Transition to="provisionUser"/>
+  </Step>
+  <Step icon="Task" name="provisionUser" posX="183" posY="12">
+    <Arg name="approvalSet" value="ref:approvalSet"/>
+    <Arg name="flow" value="ref:flow"/>
+    <Arg name="identityName" value="ref:identityName"/>
+    <Arg name="launcher" value="ref:launcher"/>
+    <Arg name="plan" value="ref:adPlan"/>
+    <Arg name="approvalScheme" value="none"/>
+    <Arg name="foregroundProvisioning" value="false"/>
+    <Return name="project" to="project"/>
+    <Script>
+      <Source>
+      import sailpoint.object.*;
+      import sailpoint.api.*;
+       
+       
+        if(plan!=null)
+        {
+
+                             Identity identity = context.getObjectByName(Identity.class,identityName);
+                               
+                               plan.setIdentity(identity);
+                             System.out.println("after setting id to plan"+identity);
+
+                     Identity identityObj= plan.getIdentity();
+                     System.out.println("get id"+identityObj);
+     Provisioner provisioner = new Provisioner(context);
+provisioner.execute(plan);
+context.saveObject(identityObj);
+context.commitTransaction();
+}
+
+</Source>
+    </Script>
+    <Transition to="Stop"/>
+  </Step>
+  <Step icon="Stop" name="Stop" posX="268" posY="10"/>
+</Workflow>

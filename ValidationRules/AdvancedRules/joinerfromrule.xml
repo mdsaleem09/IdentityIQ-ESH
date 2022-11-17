@@ -1,0 +1,55 @@
+ <Source>
+  
+ import sailpoint.object.*;
+import sailpoint.api.*;
+   import sailpoint.object.Application;
+   import sailpoint.api.SailPointContext;
+   import org.apache.commons.logging.Log;
+   import org.apache.commons.logging.LogFactory;
+   import sailpoint.object.Filter;
+   import sailpoint.object.Link;
+   import sailpoint.workflow.WorkflowContext;
+   import sailpoint.object.Workflow;
+   import java.util.ArrayList;
+   import java.util.List;
+   import java.util.Arrays;
+   import java.util.Map;
+   import java.util.HashMap;
+   import sailpoint.object.Identity;
+   import sailpoint.object.ManagedAttribute;
+   import sailpoint.api.Provisioner; 
+   import sailpoint.tools.GeneralException;
+   import sailpoint.tools.Util;
+   import sailpoint.object.Custom;
+   import sailpoint.api.IdentityService;
+   import sailpoint.object.*;
+   import sailpoint.object.ProvisioningPlan.AccountRequest;
+   import sailpoint.object.ProvisioningPlan.AttributeRequest;
+   import sailpoint.object.ProvisioningPlan.Operation;
+  
+        String identityName="Hello AdUser5";
+Identity identityObj = context.getObjectByName(Identity.class,identityName);
+ProvisioningPlan plan = new ProvisioningPlan();
+plan.setIdentity(identityObj);
+AccountRequest acctReq = new AccountRequest();
+acctReq.setApplication("AD Application");
+acctReq.setOp(ProvisioningPlan.ObjectOperation.Create);
+//String nativeIdentity = "cn="+identityObj.getName()+","+"OU=People,OU=Demo,DC=Eshiam,DC=com";
+//acctReq.add(new AttributeRequest("sAMAccountName", ProvisioningPlan.Operation.Add,identityObj.getName())); 
+//acctReq.add(new AttributeRequest("employeeID", ProvisioningPlan.Operation.Add,identityObj.getAttribute("EmployeeID"))); 
+//acctReq.add(new AttributeRequest("description", ProvisioningPlan.Operation.Add,identityObj.getAttribute("NetworkID")));
+//acctReq.add(new AttributeRequest("givenName", ProvisioningPlan.Operation.Add,identityObj.getAttribute("firstname")));
+//acctReq.add(new AttributeRequest("sn", ProvisioningPlan.Operation.Add,identityObj.getAttribute("lastname")));
+//acctReq.add(new AttributeRequest("distinguishedName", ProvisioningPlan.Operation.Add, nativeIdentity));
+plan.add(acctReq);     
+ System.out.println("plan value :"+plan.toXml());
+	try{
+		Provisioner provisioner = new Provisioner(context);
+		provisioner.execute(plan);
+		context.saveObject(identityObj);
+		context.commitTransaction();
+	}catch(GeneralException e){
+		return "Error while adding group "+e.getMessage();
+	}
+return plan;
+  

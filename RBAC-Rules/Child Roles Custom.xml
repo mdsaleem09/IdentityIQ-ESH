@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Custom PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Custom name="ChildRolesCustom">
+  <Attributes>
+    <Map>
+      <entry key="AccountingGeneral">
+        <value>
+          <List>
+            <String>DemoJdbcApp-Engineering</String>
+            <String>DemoJdbcApp-Finance</String>
+          </List>
+        </value>
+      </entry>
+      <entry key="AccountsPayable">
+        <value>
+          <List>
+            <String>Active Directory-AccountsPayable_Ch1</String>
+            <String>App2-AccountsPayable_Ch2</String>
+            <String>App3-AccountsPayable_Ch3</String>
+          </List>
+        </value>
+      </entry>
+      <entry key="DemoGroup1">
+        <value>
+          <List>
+            <String>DemoJdbcApp-Engineering</String>
+            <String>DemoJdbcApp-Testing</String>
+          </List>
+        </value>
+      </entry>
+      <entry key="DemoGroupcommon">
+        <value>
+          <List>
+            <String>DemoJdbcApp-Engineering</String>
+          </List>
+        </value>
+      </entry>
+      <entry key="DemoGroupcommon1">
+        <value>
+          <List>
+            <String>DemoJdbcApp-Testing</String>
+            <String>DemoJdbcApp-Engineering</String>
+            <String>DemoJdbcApp-Finance</String>
+            <String>DemoJdbcApp-Informationtech</String>
+          </List>
+        </value>
+      </entry>
+      <entry key="Group4">
+        <value>
+          <List>
+            <String>ch1</String>
+            <String>ch2</String>
+          </List>
+        </value>
+      </entry>
+      <entry key="Information Technology">
+        <value>
+          <List>
+            <String>JDBC_APPLICATIONTEST-Information Technology</String>
+            <String>JDBC_APPLICATIONTEST-Finance</String>
+          </List>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</Custom>

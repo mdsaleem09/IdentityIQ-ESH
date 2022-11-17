@@ -1,0 +1,74 @@
+<Source>
+  
+  
+  
+    import java.util.*;
+
+import sailpoint.object.*;
+import sailpoint.api.*;
+
+     List list=new ArrayList();
+	 
+	 
+	 
+	 
+	 Filter f=Filter.eq("application.name","ServiceNow");
+	Terminator t=new Terminator(context);
+	 QueryOptions opts=new QueryOptions();
+	 opts.addFilter(f);
+	 List idObjects=context.getObjects(Link.class,opts);
+	 for(Link id:idObjects)
+	 {
+	 if(id!=null)
+	 {
+   // t.deleteObject(id);
+   //   context.saveObject(id);
+   //   context.commitTransaction();
+	 list.add(id.getDisplayName());
+     
+	 }
+	}
+	return list;
+       
+  
+  
+  /*
+import sailpoint.object.*;
+
+import java.util.*;
+
+import sailpoint.api.Terminator;
+
+//Identity iden;
+       List list=new ArrayList();
+
+
+Terminator t = new Terminator(context);
+
+Filter myFilter = Filter.eq("links.application.name", "ServiceNow");
+
+QueryOptions qo = new QueryOptions();
+
+qo.addFilter(myFilter);
+
+List identitys = context.getObjects(Identity.class);
+for(Identity ids:identitys)
+{
+if(ids!=null){
+
+//iden =(Identity)ids.getDisplayName();
+
+//t.deleteObject(ids);
+  t.deleteObjects(Identity.class,qo);
+  
+   context.saveObject(ids);
+      context.commitTransaction();
+ list.add(ids.getDisplayName());
+
+}
+} 
+
+  return list;
+  */
+  </Source>
+</Rule>

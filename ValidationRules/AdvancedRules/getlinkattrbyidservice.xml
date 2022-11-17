@@ -1,0 +1,39 @@
+ <Source>
+  
+  import java.util.List;
+  import java.util.ArrayList;
+
+  import sailpoint.object.Filter;
+  import sailpoint.object.Identity;
+  import sailpoint.object.Link;
+  import sailpoint.object.QueryOptions;
+  import sailpoint.api.ObjectUtil;
+  import sailpoint.object.Bundle;
+ import sailpoint.api.IdentityService;
+import sailpoint.object.Application;
+import sailpoint.object.Link;
+  
+  List li=new ArrayList();
+    String name="Aaron Nichols";
+
+  
+          Identity idObj=context.getObjectByName(Identity.class,name);
+
+
+IdentityService service = new IdentityService(context);
+Application adAppObj = context.getObjectByName(Application.class, "AD Application");
+Link link;
+List accountLinks = service.getLinks(idObj, adAppObj);
+  for(Link accountLink:accountLinks)
+  {
+    if(accountLink !=null)
+    {
+    li.add(accountLink.getAttribute("distinguishedName"));
+  }
+  
+
+}
+  
+//li.add(link.application.name);
+  return li;
+  </Source>

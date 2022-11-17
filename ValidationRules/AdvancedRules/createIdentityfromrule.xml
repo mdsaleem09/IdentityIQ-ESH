@@ -1,0 +1,29 @@
+<Source>
+   import sailpoint.object.*;
+   import java.util.*;
+  
+  
+  List li=new ArrayList();
+String first="";
+  String last="";
+  String id1="Ad User10";
+        String[] s=id1.split(" ");
+  first=s[0];
+  last=s[1];
+  
+	Identity identity = new Identity();
+	identity.setName(identityName);
+  identity.setFirstname(first);	
+   identity.setLastname(last);	
+
+
+		context.saveObject(identity);
+		context.commitTransaction();
+
+  
+ 
+
+  
+
+                  
+  </Source>

@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule created="1617180961872" id="c0a842057887129c8178877f2c5000cc" language="beanshell" modified="1617181066908" name="List of all applications in iqq" type="Validation">
+  <Source>
+  
+  
+  import java.util.*;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+ 
+  
+  
+  List list=new ArrayList();
+  
+       List li=context.getObjects(Application.class);
+  for(Application app:li)
+  {
+    list.add(app.getName());
+    
+  }
+  return list;
+  </Source>
+</Rule>

@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule created="1648624580519" id="c0a8014682e91b808182ed79cb3c09b9" language="beanshell" modified="1661843905749" name="Inside Rule" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Signature returnType="String">
+    <Inputs>
+      <Argument name="context">
+        <Description>
+          A sailpoint.api.SailPointContext object that can be used to query the database if necessary.
+        </Description>
+      </Argument>
+      <Argument name="identity" type="Identity">
+        <Description>
+          The identity that is being created.
+        </Description>
+      </Argument>
+    </Inputs>
+  </Signature>
+  <Source>
+
+ 
+  
+  
+  
+  
+return identity.getName();
+  </Source>
+</Rule>

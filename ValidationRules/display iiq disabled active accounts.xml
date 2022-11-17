@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule created="1618574831912" id="c0a8420578d619b28178da93f12806e8" language="beanshell" modified="1618574861645" name="active links">
+  <Source>
+  
+  import sailpoint.object.*;
+   import java.util.*;
+
+  
+
+                    List activeLinkList=new ArrayList();
+
+                      
+  									 List li= context.getObjects(Link.class);
+                        for(Link link:li)
+                    {
+                      if(link!=null &amp;&amp; !link.isDisabled())
+                      {
+                        
+                        activeLinkList.add(link.getDisplayName());
+                      }
+                    }
+  return activeLinkList;
+  </Source>
+</Rule>

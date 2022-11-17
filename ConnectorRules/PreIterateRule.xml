@@ -1,0 +1,102 @@
+import java.io.*;
+import java.util.*;
+import java.text.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
+import sailpoint.api.*;
+import sailpoint.connector.*;
+import sailpoint.object.*;
+import sailpoint.task.*;
+import sailpoint.tools.*;
+import java.util.stream.*;
+
+
+System.out.println("Context...."+context);
+System.out.println("Application...."+application);
+System.out.println("schema..."+schema);
+System.out.println("Stats...."+stats);
+
+List record=new ArrayList();
+int HEADER_COUNT=3;
+String filepath=(String)application.getAttributeValue("file");
+
+File file=new File(filepath);
+
+System.out.println("filepath...."+filepath);
+
+
+
+TaskManager managerTask=new TaskManager(context);
+if(file.exists())
+{
+FileInputStream fs=new FileInputStream(file);
+BufferedReader br=new BufferedReader(new InputStreamReader(fs));
+//reading the lines
+System.out.println("salim");
+ Stream lines=br.lines();
+System.out.println("hello");
+Iterator iterator=lines.iterator();
+String columnStr=(String)iterator.next();
+String []columns=columnStr.split(",");
+
+System.out.println("line0"+columns[0]);
+
+List columnList=Arrays.asList(columns);
+
+System.out.println("columnList"+columnList);
+
+int column_size=columnList.size();
+
+
+System.out.println("column_size"+column_size);
+
+
+if(HEADER_COUNT!=column_size)
+{
+
+System.out.println("inside if");
+System.out.println("inside if HEADER_COUNT "+HEADER_COUNT);
+System.out.println("inside if column_size"+column_size);
+
+TaskResult result=context.getObject(TaskResult.class,"TestHR Account Aggregation");
+managerTask.terminate(result);
+return;
+}
+
+             else
+                {
+
+
+while(iterator.hasNext())
+{
+String record=(String)iterator.next();
+
+if(record!=null &amp;&amp; record.trim().length()>0)
+{
+String []records=record.split(",");
+
+System.out.println("record"+records[0]);
+
+List recordList=Arrays.asList(records);
+
+System.out.println("recordList"+recordList);
+
+HashMap map =(HashMap)DelimitedFileConnector.defaultBuildMap(columnList, recordList);
+System.out.println("Map....."+map.toString());
+
+if(map.get("EmployeeID")!=null &amp;&amp; map.get("EmployeeID").length()>0)
+{
+System.out.println("continue iteration");
+}
+else{
+System.out.println("Exit  task");
+TaskResult result=context.getObject(TaskResult.class,"TestHR Account Aggregation");
+
+managerTask.terminate(result);
+return;
+}
+}
+}
+             }
+}

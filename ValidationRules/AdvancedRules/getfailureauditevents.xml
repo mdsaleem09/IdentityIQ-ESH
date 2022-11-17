@@ -1,0 +1,19 @@
+ <Source>
+   import sailpoint.object.*;
+  import sailpoint.api.*;
+  
+                 List audit=new ArrayList();
+               Filter fil=Filter.eq("action","loginFailure");
+               QueryOptions opts=new QueryOptions();
+               opts.addFilter(fil);
+              Iterator events=context.search(AuditEvent.class,opts);
+  							while(events.hasNext())
+                {
+                    AuditEvent aevent=events.next();
+                 if(aevent!=null)
+                 {
+                   audit.add(aevent.getSource());
+                 }
+               }
+      return audit;
+  </Source>

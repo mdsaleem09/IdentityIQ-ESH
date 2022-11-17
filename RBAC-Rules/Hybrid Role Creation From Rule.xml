@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule created="1632913613533" id="c0a8de017cc111d1817ce0dd208a09eb" language="beanshell" modified="1637045470719" name="test hybrid rule updated" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+  import sailpoint.object.Identity;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+  import sailpoint.object.Filter;
+  import sailpoint.object.Profile;
+  
+  import java.util.*;
+  
+
+  String roledisplayName=null;
+  String groupName=null;
+  
+String appName="Active Directory";
+  String owner="spadmin";
+  
+ Identity idObject=context.getObjectByName(Identity.class,"spadmin");
+Application appObj=context.getObjectByName(Application.class,appName);
+Filter filter=Filter.eq("application.name",appName);
+QueryOptions opts=new QueryOptions();
+opts.addFilter(filter);
+opts.setCloneResults(true);
+Bundle orgBundle=new Bundle();
+orgBundle.setName("Org-SAP");
+orgBundle.setType("organizational");
+orgBundle.setDisplayName("Org-SAP");
+  orgBundle.setOwner(idObject);
+     context.saveObject(orgBundle);
+
+Iterator it=context.search(ManagedAttribute.class,opts);
+while(it.hasNext())
+{
+  
+ManagedAttribute ma=(ManagedAttribute)it.next();
+  System.out.println("Inside managed Attribute");
+//if(ma.getAttribute("Type")!=null &amp;&amp; ma.getAttribute("Type").equalsIgnoreCase("Composite"))
+//{
+Bundle bundObj=context.getObjectByName(Bundle.class,ma.getDisplayableName());
+if(bundObj!=null)
+{
+  return bundObj;
+}
+  
+bundObj=new Bundle();
+  
+            System.out.println("Inside else bundObj"+bundObj);
+
+  
+  String groupName = (String) ma.getDisplayName();
+		            System.out.println("groupName"+groupName);
+		
+roledisplayName=ma.getAttribute("Description");
+
+
+
+bundObj.setDisplayName(roledisplayName);
+bundObj.setName(ma.getDisplayableName());
+bundObj.setType("Hybrid");
+    //Bundle orgBund=context.getObjectByName(Bundle.class,"Org-SAP");
+bundObj.addInheritance(orgBundle);
+//bundObj.setDescription(ma.getAttribute("Long Description"));
+bundObj.setOwner(appObj.getOwner());
+Profile profile=new Profile();
+profile.setApplication(appObj);
+List entValues = new ArrayList();
+entValues.add(ma.getValue());
+Filter fil = Filter.containsAll(ma.getAttribute(), entValues);
+     profile.addConstraint(fil);
+    bundObj.add(profile);
+    context.saveObject(bundObj);
+    context.commitTransaction();
+  
+  
+}
+  
+    context.decache();
+    sailpoint.tools.Util.flushIterator(it); 
+
+
+  </Source>
+</Rule>

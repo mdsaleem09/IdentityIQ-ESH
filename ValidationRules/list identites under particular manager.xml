@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule created="1617019302237" id="c0a842057873193b81787ddc715d05ac" language="beanshell" modified="1617019413596" name="list identities under particular manager" type="Validation">
+  <Source>
+  
+  
+  import java.util.*;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+ 
+ 
+  List list=new ArrayList();
+  Filter f=Filter.eq("manager.name","Barbara Wilson");
+  QueryOptions opts=new QueryOptions();
+  opts.addFilter(f);
+  List ide=context.getObjects(Identity.class,opts);
+  for(Identity ids:ide)
+  {
+    list.add(ids.getDisplayName());
+  }
+  return list;
+                  
+  </Source>
+</Rule>

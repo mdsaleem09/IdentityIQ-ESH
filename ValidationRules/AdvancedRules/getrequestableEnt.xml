@@ -1,0 +1,16 @@
+import sailpoint.object.*;
+  import sailpoint.api.*;
+  
+                 List entitlement=new ArrayList();
+               Filter fil=Filter.eq("requestable",(boolean)true);
+               QueryOptions opts=new QueryOptions();
+               opts.addFilter(fil);
+              List ents=context.getObjects(ManagedAttribute.class,opts);
+               for(ManagedAttribute ma:ents)
+               {
+                 if(ma!=null)
+                 {
+                   entitlement.add(ma.getDisplayName());
+                 }
+               }
+      return entitlement;

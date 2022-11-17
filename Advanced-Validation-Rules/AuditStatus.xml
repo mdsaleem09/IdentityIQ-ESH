@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule created="1661362370505" id="c0a8010282b31aab8182d37953850f29" language="beanshell" modified="1661417847110" name="Get Audit Status" type="Validation">
+  <Description>This program will check the audit checkboxes</Description>
+  <Source>
+
+
+  import sailpoint.object.AuditConfig.AuditAction;
+  import sailpoint.object.Custom;
+  import sailpoint.object.EmailTemplate;
+  import sailpoint.object.EmailOptions;
+  import sailpoint.object.TaskResult;
+    import sailpoint.tools.Util;
+
+  int count = 0;
+  ArrayList existAuditList = new ArrayList();
+  ArrayList custAuditList = new ArrayList();
+  ArrayList uniqueList = new ArrayList();
+  HashMap args = new HashMap();
+  AuditConfig aud = context.getObjectByName(AuditConfig.class,"AuditConfig");
+  List actions = aud.getActions();
+  if(Util.nullSafeSize(actions)>0){
+    for(AuditAction action:actions){
+      if(action.isEnabled()){
+        existAuditList.add(action.getName());
+      }
+    }
+  }
+
+  Custom custom = context.getObjectByName(Custom.class,"customObject");
+  List actions =  custom.getAttributes().get("Audit Actions");
+  if(Util.nullSafeSize(actions) >0){
+    for(String  action:actions){
+      custAuditList.add(action);
+    }
+  }
+
+  for(String list:custAuditList){
+    if(!existAuditList.contains(list)){
+      uniqueList.add(list);
+    }
+  }
+  if(uniqueList.size()>0){
+    EmailTemplate template = context.getObjectByName(EmailTemplate.class,"MissingAuditActionList");
+    EmailOptions options = new EmailOptions();
+    options.setTo("abc@example.com");
+    args.put("auditConfig",uniqueList);
+    options.setVariables(args);
+    context.sendEmailNotification(template, options);
+  }
+
+  TaskResult result = context.getObject(TaskResult.class,"Audit Stat");
+  result.addMessage(new Message(uniqueList.size()+" Audit Actions are Missing:- ", null));
+  for(String s:uniqueList){
+    result.addMessage(new Message(s, null));
+  }
+  context.saveObject(result);
+  context.commitTransaction();
+  </Source>
+</Rule>

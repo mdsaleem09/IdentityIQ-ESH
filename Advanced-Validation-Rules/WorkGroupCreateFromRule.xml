@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule created="1641371092822" id="c0a8de017e2310ed817e2e04d5da0cf7" language="beanshell" modified="1641475169655" name="workgroup create from rule" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+
+import sailpoint.object.*;
+  import sailpoint.api.*;
+  import java.util.*;
+  import java.util.List;
+  import sailpoint.object.ManagedAttribute;
+    import sailpoint.api.Workgroup;
+ 
+  
+
+ 
+  public void addMember(String identity, String wrgrNm){
+  Identity id = context.getObjectByName(Identity.class,identity);
+  QueryOptions ops = new QueryOptions();
+  ops.addFilter(Filter.eq(wrgrNm,true));
+  id.setWorkgroups(context.getObjects(Identity.class,ops));
+  context.saveObject(id);
+  context.commitTransaction();
+  }
+ 
+  for(int i = 0;i&lt;3 ;i++){
+    String identity = "James Smith";
+    String wrgrNm = "workgroup";
+  ArrayList capist = new ArrayList();
+  capist.add(context.getObjectByName(Capability.class,"SystemAdministrator"));
+  Identity id = new Identity();
+  id.setName("Group -"+i);
+  id.setWorkgroup(true);
+id.setCapabilities(capist);
+  id.setOwner(context.getObjectByName(Identity.class,"spadmin"));
+    context.saveObject(id);
+    context.commitTransaction();
+    addMember(identity, wrgrNm);
+ 
+  }
+
+  
+ 
+  
+  </Source>
+</Rule>

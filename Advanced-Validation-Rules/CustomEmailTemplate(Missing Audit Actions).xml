@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE EmailTemplate PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<EmailTemplate created="1661408941263" id="c0a8010282b31aab8182d3b094cf0fa2" modified="1661408968138" name="MissingAuditActionList">
+  <Body>
+    &lt;html>
+&lt;body style="font-family:Calibri; font-size:100%">
+
+&lt;p>Dear Team, &lt;/p>
+
+&lt;p>Please be informed that the following Audit Actions are missing from Audit Config Object-
+&lt;p>
+#foreach($auditAction in $auditConfig)
+&lt;li> $auditAction&lt;/li>
+#end
+&lt;/p>
+&lt;p>
+Thanks,&lt;/br>
+&lt;/body>
+&lt;/html>
+</Body>
+  <Description>
+      Email template used to notify Admins for missing of users from Workday.
+    </Description>
+  <Signature>
+    <Inputs>
+      <Argument name="auditConfig" type="List">
+        <Description>Account's Username.</Description>
+      </Argument>
+    </Inputs>
+  </Signature>
+  <Subject>List of Missing Audit Actions from Audit Config</Subject>
+</EmailTemplate>

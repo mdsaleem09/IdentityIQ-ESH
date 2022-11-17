@@ -1,0 +1,30 @@
+This example will query the Identity objects and print a log statement of the first name, last name, and email
+address for every Identity object defined in the system:
+import java.util.Iterator;
+import sailpoint.object.Identity;
+import sailpoint.object.QueryOptions;
+import sailpoint.object.Filter;
+import org.apache.log4j.Logger;
+import org.apache.log4j.Level;
+Logger log = Logger.getLogger("sailpoint.services.bshdemo");
+// TODO: Remove this forced log level set before checking in this Rule.
+log.setLevel(Level.DEBUG);
+// The QueryOptions object allows us to specify predicates and other properties
+// to our query. It is analogous to specifying WHERE, ORDER BY, and JOIN terms
+// in a SQL query.
+QueryOptions qo = new QueryOptions();
+qo.addFilter(Filter.eq("workgroup", false));
+qo.setOrderBy("firstname");
+Iterator it = context.search(Identity.class, qo);
+while ( (null != it) && (it.hasNext()) ) {
+// The .next() method in returns an Object reference that is an Identity.
+Identity id = (Identity) it.next();
+String fn = id.getFirstname();
+String ln = id.getLastname();
+String em = id.getEmail();
+log.debug("firstName:[" + fn + "] + lastName:[" + ln + "] email:[" + em + "]");
+// We're done with this Identity object now. Evict it from Hibernate's cache.
+context.decache(id);
+}
+sailpoint.tools.Util.flushIterator(it);
+return;

@@ -1,0 +1,37 @@
+import java.util.ArrayList;
+import java.util.Iterator;
+import sailpoint.object.Identity;
+import sailpoint.object.QueryOptions;
+import sailpoint.object.Filter;
+import org.apache.log4j.Logger;
+import org.apache.log4j.Level;
+Logger log = Logger.getLogger("sailpoint.services.bshdemo");
+// TODO: Remove this forced log level set before checking in this Rule.
+log.setLevel(Level.DEBUG);
+// The QueryOptions object allows us to specify predicates and other properties
+// to our query. It is analogous to specifying WHERE, ORDER BY, and JOIN terms
+// in a SQL query.
+QueryOptions qo = new QueryOptions();
+qo.addFilter(Filter.eq("workgroup", false));
+qo.setOrderBy("firstname");
+// Construct a list of columns to return in our Projection Query.
+ArrayList colsToRead = new ArrayList();
+colsToRead.add("firstname");
+colsToRead.add("lastname");
+colsToRead.add("email");
+Iterator it = context.search(Identity.class, qo, colsToRead);
+while ( (null != it) && (it.hasNext()) ) {
+// When a projection query is used the .next() method in returns
+// a reference to an object array that has each of the columns read in
+// for this record. We no longer get a fully constrcuted Identity object.
+Object [] thisRecord = it.next();
+String fn = (String) thisRecord[0];
+String ln = (String) thisRecord[1];
+String em = (String) thisRecord[2];
+log.debug("firstName:[" + fn + "] + lastName:[" + ln + "] email:[" + em + "]");
+// Projection Queries ususally do not require that we decache their results
+// because the results are ususally primitve types like String.
+// context.decache(id);
+}
+sailpoint.tools.Util.flushIterator(it);
+return;

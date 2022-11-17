@@ -1,0 +1,281 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Workflow PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Workflow created="1635746948132" explicitTransitions="true" id="c0a8de017cc111d1817cda1da424016f" modified="1636371025539" name="AD OU Mover Workflow" type="IdentityLifecycle">
+  <Variable initializer="true" name="trace"/>
+  <Variable initializer="true" name="transient"/>
+  <Description>AD OU Mover QuickLink is used to move the User OU to different OU</Description>
+  <Step icon="Start" name="Start" posX="20" posY="20">
+    <Transition to="AD OU Mover Form"/>
+  </Step>
+  <Step icon="Default" name="AD OU Mover Form" posX="174" posY="16">
+    <Approval name="AD OU Mover Form" owner="spadmin" return="netId,application,currentOU,newOU">
+      <Form name="AD OU Mover Form">
+        <Attributes>
+          <Map>
+            <entry key="pageTitle" value="AD OU Mover Form"/>
+          </Map>
+        </Attributes>
+        <Description>AD OU Mover Form</Description>
+        <Button action="next" label="Modify OU"/>
+        <Button action="cancel" label="Cancel"/>
+        <Section>
+          <Field displayName="Application" displayType="combobox" name="application" postBack="true" required="true" type="string">
+            <AllowedValuesDefinition>
+              <Script>
+                <Source>
+import java.util.ArrayList;
+ArrayList appList = new ArrayList();
+appList.add("Active Directory");
+appList.add("Open LDAP");
+return appList;
+</Source>
+              </Script>
+            </AllowedValuesDefinition>
+          </Field>
+          <Field displayName="Identity Name" name="netId" postBack="true" required="true" type="sailpoint.object.Identity">
+            <Attributes>
+              <Map>
+                <entry key="filterString">
+                  <value>
+                    <Script>
+                      <Source>
+import sailpoint.object.Filter;
+import sailpoint.object.QueryOptions;
+import sailpoint.object.Identity;
+
+
+String app = null;
+Filter idFilter = null;
+System.out.println("The AppName is ");
+if (form.getField("application") != null &amp;&amp; form.getField("application").getValue() != null) {
+	app = form.getField("application").getValue();
+	System.out.println("The AppName is1 "+app);
+	if(app != null){
+		System.out.println("The AppName is2 "+app);
+		idFilter = Filter.eq("links.application.name",app);
+
+		System.out.println("The AppName is3 "+idFilter);
+	}
+}
+if( idFilter != null) field.setFilterString(idFilter.toString());
+</Source>
+                    </Script>
+                  </value>
+                </entry>
+              </Map>
+            </Attributes>
+          </Field>
+          <Field displayName="Current OU" dynamic="true" name="currentOU" readOnly="true" required="true" type="String">
+            <Script>
+              <Source>
+import sailpoint.object.Application;
+import sailpoint.object.Identity;
+import sailpoint.api.IdentityService;
+
+String idName = null;
+String appName = null;
+Identity identity = null;
+Application app = null;
+if (form.getField("netId") != null &amp;&amp; form.getField("netId").getValue() != null &amp;&amp; form.getField("application") != null &amp;&amp; form.getField("application").getValue() != null) {
+	idName =  form.getField("netId").getValue();
+	appName = form.getField("application").getValue();
+	System.out.println("The AppName is1"+appName+" "+idName);
+	if (idName != null &amp;&amp; appName != null){
+		identity = context.getObjectById(Identity.class,idName);
+		app = context.getObjectByName(Application.class,appName);
+		if (identity != null &amp;&amp; app != null){
+			IdentityService idService = new IdentityService(context);
+			List links = idService.getLinks(identity,app);
+			if (sailpoint.tools.Util.nullSafeSize(links) > 0){
+				return links.get(0).getAttribute("distinguishedName");
+			}
+		}
+	}
+}
+return "";
+</Source>
+            </Script>
+          </Field>
+          <Field displayName="New OU" dynamic="true" name="newOU" required="true" type="String">
+            <AllowedValuesDefinition>
+              <Script>
+                <Source>
+import java.util.ArrayList;
+ArrayList newOUList = new ArrayList();
+//newOUList.add("OU=TestOU,OU=Demo,DC=Eshiam,DC=com");
+newOUList.add("OU=Disable-Users,OU=Demo,DC=Eshiam,DC=com");
+newOUList.add("OU=GD,OU=STUDENTS,OU=STEIN,OU=WSQ,OU=USERS,OU=ACCTS,DC=addevl,DC=nyu,DC=edu");
+return newOUList;
+</Source>
+              </Script>
+            </AllowedValuesDefinition>
+          </Field>
+        </Section>
+      </Form>
+    </Approval>
+    <Transition to="Build Plan" when="approved"/>
+  </Step>
+  <Step icon="Message" name="Build Plan" posX="279" posY="20" resultVariable="userDN">
+    <Script>
+      <Source>
+
+import sailpoint.object.*;
+import sailpoint.api.*;
+
+Identity identityObj = context.getObjectById(Identity.class,netId);
+ProvisioningPlan plan = new ProvisioningPlan();
+plan.setIdentity(identityObj);
+
+AccountRequest acctReq = new AccountRequest();
+acctReq.setApplication(application);
+acctReq.setOp(ProvisioningPlan.ObjectOperation.Modify);
+acctReq.setNativeIdentity(currentOU);
+
+acctReq.add(new AttributeRequest("AC_NewParent", ProvisioningPlan.Operation.Set,newOU));
+plan.add(acctReq);
+//return plan;
+Provisioner provisioner = new Provisioner(context);
+if (plan != null) {
+	provisioner.execute(plan);
+	if(currentOU != null){
+		String[] strArray = currentOU.split(",");
+		String userDN = strArray[0];
+		if(userDN != null){
+
+
+			return userDN+","+newOU;
+		}
+	}
+
+
+}
+return null;
+</Source>
+    </Script>
+    <Transition to="Single Account Aggregation" when="userDN != null"/>
+    <Transition to="Stop"/>
+  </Step>
+  <Step icon="Default" name="Single Account Aggregation" posX="279" posY="20">
+    <Script>
+      <Source>
+import sailpoint.object.Application;  
+import sailpoint.object.Attributes;  
+import sailpoint.object.Custom;  
+import sailpoint.object.Filter;  
+import sailpoint.object.Identity;  
+import sailpoint.object.Link;  
+import sailpoint.object.QueryOptions;  
+import sailpoint.object.ResourceObject;  
+import sailpoint.object.TaskResult;  
+import sailpoint.object.Rule;  
+import sailpoint.connector.JDBCConnector;  
+import sailpoint.api.Aggregator;  
+import sailpoint.connector.Connector;  
+
+import org.apache.log4j.Logger;  
+import org.apache.log4j.Level;  
+
+try{
+	Logger aggLog = Logger.getLogger("rule.SingleAccount.Aggregation");  
+
+	// Initialize the error message to nothing.  
+	String errorMessage = "";  
+
+	Application appObject = context.getObjectByName(Application.class, application);  
+	String appConnName = appObject.getConnector();  
+	aggLog.debug("Application " + application + " uses connector " + appConnName);  
+
+	Connector appConnector = sailpoint.connector.ConnectorFactory.getConnector(appObject, null);  
+	if (null == appConnector) {  
+		errorMessage = "Failed to construct an instance of connector [" + appConnName + "]";  
+		return errorMessage;  
+	}  
+	aggLog.debug("Connector instantiated, calling getObject() to read account details...");  
+
+	ResourceObject rObj = null;  
+	try {  
+
+		rObj = (ResourceObject) appConnector.getObject("account", userDN, null);  
+
+	} catch (sailpoint.connector.ObjectNotFoundException onfe) {  
+		errorMessage = "Connector could not find account: [" + userDN + "]";  
+		errorMessage += " in application  [" + application + "]";  
+		aggLog.error(errorMessage);  
+		aggLog.error(onfe);     
+		return errorMessage;  
+	}  
+
+	if (null == rObj) {  
+		errorMessage = "ERROR: Could not get ResourceObject for account: " + userDN;  
+		aggLog.error(errorMessage);  
+		return errorMessage;  
+	}  
+
+	aggLog.debug("Got raw resourceObject: " + rObj.toXml());  
+
+	Rule customizationRule = appObject.getCustomizationRule();  
+	if (null != customizationRule) {  
+
+		aggLog.debug("Customization rule found for applicaiton " + application);     
+
+		try {  
+
+			// Pass the mandatory arguments to the Customization rule for the app.  
+			HashMap ruleArgs = new HashMap();  
+			ruleArgs.put("context",     context);  
+			ruleArgs.put("log",         aggLog);  
+			ruleArgs.put("object",      rObj);  
+			ruleArgs.put("application", appObject);  
+			ruleArgs.put("connector",   appConnector);  
+			ruleArgs.put("state",       new HashMap());  
+
+			// Call the customization rule just like a normal aggregation would.  
+			ResourceObject newRObj = context.runRule(customizationRule, ruleArgs, null);  
+
+			// Make sure we got a valid resourceObject back from the rule.    
+			if (null != newRObj) {  
+				rObj = newRObj;  
+				aggLog.debug("Got post-customization resourceObject: " + rObj.toXml());   
+			}      
+
+		} catch (Exception ex) {  
+			// Swallow any customization rule errors, the show must go on!  
+			aggLog.error("Error while running Customization rule for " + application +" of userDN "+userDN);  
+
+		}    
+
+	}  
+
+	Attributes argMap = new Attributes();  
+	//argMap.put("promoteAttributes",       "true");  
+	//argMap.put("correlateEntitlements",   "true");  
+	//argMap.put("noOptimizeReaggregation", "true");  // Note: Set to false to disable re-correlation.  
+
+	// Consturct an aggregator instance.  
+	Aggregator agg = new Aggregator(context, argMap);  
+	if (null == agg) {  
+		errorMessage = "Null Aggregator returned from constructor.  Unable to Aggregate! "+application+"  of userDN"+userDN;  
+		aggLog.error(errorMessage);  
+		return errorMessage;
+
+	}  
+
+	TaskResult taskResult = agg.aggregate(appObject, rObj);  
+	aggLog.debug("aggregation complete.");  
+
+	if (null == taskResult) {  
+		errorMessage = "ERROR: Null taskResult returned from aggregate() call.Unable to Aggregate! "+application+"  of userDN"+userDN;  
+		aggLog.error(errorMessage);  
+		return errorMessage;  
+	}  
+}catch (GeneralException e){
+	aggLog.error("Error while updating performing targeted aggregation " + e.getMessage());
+	return null;
+}
+return null; 
+</Source>
+    </Script>
+    <Transition to="Stop"/>
+  </Step>
+  <Step icon="Stop" name="Stop" posX="385" posY="24"/>
+</Workflow>

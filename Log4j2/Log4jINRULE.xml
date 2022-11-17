@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Bean Shell Dev Guide - 003 HelloWorld with Logging">
+<Source>
+<![CDATA[
+import org.apache.log4j.Logger;
+import org.apache.log4j.Level;
+Logger log = Logger.getLogger("sailpoint.services.bshdemo");
+// TODO: Remove this forced log level set before checking in this Rule.
+log.setLevel(Level.DEBUG);
+log.debug("Hello logging world!");
+return;
+]]>
+</Source>
+</Rule>

@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule created="1616858394976" id="c0a842057873193b8178744531600132" language="beanshell" modified="1617035349960" name="return managed attributes(list entitlements)" type="Validation">
+  <Source>
+  
+  
+  import java.util.*;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+ 
+  
+  
+  QueryOptions opts=new QueryOptions();
+
+ Filter filter=Filter.eq("application.name","AD Application");
+  opts.addFilter(filter);
+  
+  List l=new ArrayList();
+  
+  Iterator  it=context.search(ManagedAttribute.class,opts);
+   while(it.hasNext())
+   {
+  ManagedAttribute   ma=(ManagedAttribute)it.next();
+     l.add(ma.getDisplayName());
+   }
+ return l;
+
+  </Source>
+</Rule>

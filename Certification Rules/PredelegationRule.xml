@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule created="1587822862600" id="c0a800ab71821d308171b19e21083568" language="beanshell" modified="1587992376993" name="My-PreDelgation-Rule" type="CertificationPreDelegation">
+  <Description>A pre-delegation rule that is run on every CertificationEntity when the certification is generated in order to cause some entities to be pre-delegated.  As an example, a manager certification could pre-delegate the certification responsibility to each employee that reports to the manager.  This would allow each subordinate to first determine what they need access to, then allow the manager to review their decision.</Description>
+  <Signature returnType="Map">
+    <Inputs>
+      <Argument name="log">
+        <Description>
+          The log object associated with the SailPointContext.
+        </Description>
+      </Argument>
+      <Argument name="context">
+        <Description>
+          A sailpoint.api.SailPointContext object that can be used to query the database if necessary.
+        </Description>
+      </Argument>
+      <Argument name="certification">
+        <Description>
+          The sailpoint.object.Certification being created.
+        </Description>
+      </Argument>
+      <Argument name="entity">
+        <Description>
+          The sailpoint.object.CertificationEntity to possibly pre-delegate.
+        </Description>
+      </Argument>
+      <Argument name="certContext">
+        <Description>
+          The sailpoint.api.CertificationContext generating this certification.
+        </Description>
+      </Argument>
+      <Argument name="state">
+        <Description>
+          A Map containing state information.
+        </Description>
+      </Argument>
+    </Inputs>
+    <Returns>
+      <Argument name="recipientName">
+        <Description>
+          The name of the Identity that should certify this entity.  Either
+          this or 'recipient' should be non-null if pre-delegation should be
+          performed.
+        </Description>
+      </Argument>
+      <Argument name="recipient">
+        <Description>
+          The Identity that should certify this entity.  Either this or
+          'recipientName' should be non-null if pre-delegation should be
+          performed.
+        </Description>
+      </Argument>
+      <Argument name="description">
+        <Description>
+          Optional description to set on the delegation WorkItem.  If null, a
+          default description of 'Certify [entity name]' is used.
+        </Description>
+      </Argument>
+      <Argument name="comments">
+        <Description>
+          Optional comments to set on the delegation WorkItems.
+        </Description>
+      </Argument>
+      <Argument name="reassign">
+        <Description>
+          Optional boolean to specify to reassign rather than delegate.
+        </Description>
+      </Argument>
+      <Argument name="certificationName">
+        <Description>
+          Optional String to specify the name for the reassignment certification
+          if creating a new certification for reassignment.  This is ignored for
+          delegations.
+        </Description>
+      </Argument>
+    </Returns>
+  </Signature>
+  <Source>
+  import sailpoint.object.Identity;
+  Map results = new HashMap();
+  String currentUser = entity.getIdentity();
+  Identity identityObj = context.getObjectByName(Identity.class,currentUser); 
+  //if(identityObj.getAttribute("department").equals("Engineering")){
+  if(identityObj.getName().startsWith("S")){
+    System.out.println("Identity Name starts with B "+identityObj.getName() +"; Delegate to Barbara");
+    results.put("recipientName", "Sara Berry");
+    results.put("description", "James smith delegated items to you to certify access of some users who belongs to Egineering deparment");
+    results.put("comments", "This is the access currently granted to user: " + currentUser + ". Please determine whether it is appropriate for job function.");
+    return results;
+  }else{
+    return results;
+  }</Source>
+</Rule>

@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Workflow PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Workflow created="1638522207849" explicitTransitions="true" id="c0a8de017d791a67817d7f88be6909ed" modified="1638538280811" name="Create Identity From Form" type="IdentityLifecycle">
+  <Variable initializer="true" name="trace"/>
+  <Variable initializer="true" name="transient"/>
+  <Variable initializer="false" input="true" name="immediateTermination"/>
+  <Description>Emergency-Workflow</Description>
+  <Step icon="Start" name="Start" posX="20" posY="20">
+    <Transition to="Select Identity"/>
+  </Step>
+  <Step icon="Default" name="Select Identity" posX="174" posY="16">
+    <Approval name="Identity Selection Form" owner="spadmin" return="username,firstName,lastName,email" send="">
+      <Form name="Identity Selection Form">
+        <Attributes>
+          <Map>
+            <entry key="pageTitle" value="Identity Selection Form"/>
+          </Map>
+        </Attributes>
+        <Description>Identity Selection Form</Description>
+        <Button action="next" label="Moify OU"/>
+        <Button action="cancel" label="Cancel"/>
+        <Section>
+          <Field displayName="UserName" name="username" postBack="true" required="true" type="String"/>
+          <Field displayName="First Name" name="firstName" postBack="true" required="true" type="String"/>
+          <Field displayName="Last Name" name="lastName" postBack="true" required="true" type="String"/>
+          <Field displayName="Email Address" dynamic="true" name="email" postBack="true" required="true" type="String">
+            <Script>
+              <Source>
+                String fName = form.getField("firstName").getValue();
+                String lName=  form.getField("lastName").getValue();
+                if(fName != null &amp;&amp; lName != null){
+                return fName+"."+lName+"@eshiam.com";
+                  
+                                 System.out.println("Selected FirstName: "+form.getField("firstName").getValue());
+                                 System.out.println("Selected lastName: "+form.getField("lastName").getValue());
+                  
+                }
+                return null;
+
+
+                </Source>
+            </Script>
+          </Field>
+        </Section>
+      </Form>
+    </Approval>
+    <Transition to="Review"/>
+  </Step>
+  <Step icon="Default" name="Review">
+    <Script>
+      <Source>
+        import sailpoint.object.*;
+        import sailpoint.api.*;
+        import  sailpoint.api.Provisioner;
+
+                 System.out.println("Test Selected Identity: "+idname);
+
+      Identity id=new Identity();
+        id.setName(username);
+        id.setFirstname(firstName);
+        id.setLastname(lastName);
+        id.setEmail(email);
+        	context.saveObject(id);
+	context.commitTransaction();
+ 
+    </Source>
+    </Script>
+    <Transition to="Stop"/>
+  </Step>
+  <Step icon="Stop" name="Stop" posX="385" posY="24"/>
+  <Step icon="Default" name="Process Leaver" posX="279" posY="20">
+    <Arg name="trigger"/>
+    <Arg name="trace"/>
+    <Arg name="event"/>
+    <Arg name="identityName" value="ref:selectIdentity"/>
+    <Arg name="immediateTermination" value="ref:immediateTermination"/>
+    <Transition to="Stop"/>
+  </Step>
+</Workflow>

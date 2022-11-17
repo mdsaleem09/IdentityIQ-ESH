@@ -1,0 +1,17 @@
+ <Source>
+   import sailpoint.object.*;
+  import sailpoint.api.*;
+  
+                 Set set=new HashSet();
+               
+              List idObjs=context.getObjects(Identity.class);
+  							for(Identity idObj:idObjs)
+                {
+                    
+                 if(idObj!=null &amp;&amp; idObj.getAttribute("Department")!=null)
+                 {
+                   set.add(idObj.getAttribute("Department"));
+                 }
+               }
+      return set;
+  </Source>

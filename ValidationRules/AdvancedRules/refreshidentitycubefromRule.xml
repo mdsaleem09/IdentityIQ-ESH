@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule created="1631162201000" id="c0a891017bc41b9c817bc8d7f3a8012a" language="beanshell" modified="1631169599033" name="refresh identity cube from rule" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+
+  
+  import sailpoint.object.Identity;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+  import sailpoint.tools.*;
+  
+  
+  
+  
+  
+  
+  
+  
+  Identity identity=context.getObjectByName(Identity.class,"Alice Ford");
+  Identity refreshIdentity = ObjectUtil.lockObject(context, Identity.class, null, identity.getName(), PersistenceManager.LOCK_TYPE_TRANSACTION);
+   
+    Attributes args = new Attributes();
+           args.put("promoteAttributes",true);
+
+    Identitizer identitizer = new Identitizer(context, args);  
+    identitizer.refresh(identity);
+   
+    context.saveObject(identity);
+    context.commitTransaction();
+  ObjectUtil.unlockIdentity(context,identity);
+  
+System.out.println("Inside the refresh identity cube rule"+identity.getName());
+  System.out.println("Inside the refresh identity cube rule"+args);
+
+
+  </Source>
+</Rule>

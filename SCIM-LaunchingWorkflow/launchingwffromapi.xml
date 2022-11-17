@@ -1,0 +1,23 @@
+http://localhost:8080/identityiq/scim/v2/LaunchedWorkflows
+{
+    "urn:ietf:params:scim:schemas:sailpoint:1.0:LaunchedWorkflow": {
+        "workflowName": "Retry loop workflow",
+        "input": [
+         
+            
+                {
+                "key": "identityName",
+                "value": "Henry Butler"
+                },
+                   {
+                "key": "entitlement",
+                "value": "Employees"
+                   }
+            
+        ]
+            
+            
+          
+        
+    }
+};

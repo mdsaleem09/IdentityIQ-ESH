@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule created="1621838797599" id="c0a84205798a1b4381799d201b1f043a" language="beanshell" modified="1633170622272" name="test log" type="Validation">
+  <Description>This rule is used by the JDBC connector to do provisioning of the data .</Description>
+  <Source>
+    import org.apache.log4j.Logger;
+  import org.apache.log4j.Level;
+  import org.apache.commons.logging.LogFactory;
+
+  String msgSeparator = "*********************************************";
+  System.out.println("New sysThe ADHocLeaverTrigger:********Initial");
+ // Logger log = Logger.getLogger("org.xyz.custom.ACMECorp.test log");
+  Logger log = Logger.getLogger("test.rule.log");
+  log.setLevel(Level.ALL);
+    log.trace("saleem2");
+
+ // log.trace("New******Hiii Saleem*****Entering Rule-Ad Hoc Leaver Trigger Rule **********");
+
+ //   log.debug("New******2222Hiii Saleem*****Entering Rule-Ad Hoc Leaver Trigger Rule **********");
+
+
+  </Source>
+</Rule>

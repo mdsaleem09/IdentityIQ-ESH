@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule created="1639035917750" id="c0a8de017d93142c817d9e2755b60c68" language="beanshell" modified="1639561996726" name="role Testing" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+  import sailpoint.object.Identity;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+  import sailpoint.object.Classification;
+  import sailpoint.object.ObjectClassification;
+  
+ /// String appName="";
+  Classification cl=context.getObjectByName(Classification.class,"Privileged");
+    ObjectClassification ob=new ObjectClassification();
+    ob.setClassification(cl);
+    Bundle bundObj= context.getObjectByName(Bundle.class,"ESHIAM\\Admins");
+  bundObj.addClassification(ob);
+  context.saveObject(bundObj);
+ context.commitTransaction();
+  
+  </Source>
+</Rule>

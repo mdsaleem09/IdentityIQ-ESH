@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule created="1617087698151" id="c0a842057873193b817881f014e70828" language="beanshell" modified="1617088348031" name="return ids whose empid is 1c" type="Validation">
+  <Source>
+  
+  
+  import java.util.*;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+ 
+
+   List l1=new ArrayList();
+
+  Filter filter=Filter.eq("EmployeeID","1a");
+
+  
+  
+          Identity identities= context.getUniqueObject(Identity.class,filter);
+  
+  
+  
+    return identities.getName();
+  </Source>
+</Rule>

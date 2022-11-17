@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Source>
+<Script>
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Ex {
+
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+		
+		File f=new File("D:\\Eshiam-2021\\file.csv");
+		FileReader myreader = new FileReader(f);
+		BufferedReader br=new BufferedReader(myreader);
+		String line;
+		String nonReqRoleName=null;
+		String reqRoleName=null;
+
+		List li = new ArrayList();
+		boolean headerLine = true;
+		 
+		while ((line = br.readLine()) != null) 
+    {
+			 if (headerLine) {
+				 headerLine = false;
+				    continue;
+				  }
+			String[] rowData=line.split(",");
+			int size = rowData.length;
+			System.out.println("size:"+size);
+			String accessApprover = null;
+			//if(size >4) {
+				accessApprover= rowData[4];
+			//}
+			
+				if(accessApprover==null  || accessApprover.equalsIgnoreCase("NA"))
+				{
+					nonReqRoleName=rowData[1];
+				   
+
+					
+			}
+				else {
+					reqRoleName=rowData[1];
+					
+					
+				}
+    }
+		
+
+	}
+}
+</Script>
+</Source>

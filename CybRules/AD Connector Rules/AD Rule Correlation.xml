@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule name="AD-Rule-Correlation" language="beanshell" type="Correlation">
+  <Description>Identity Correlation Rules are used to find identities to which new accounts can be attached.
+
+A correlation rule must return a Map with one of the specified Return arguments.</Description>
+  <Signature returnType="Map">
+    <Inputs>
+      <Argument name="log">
+        <Description>
+          The log object associated with the SailPointContext.
+        </Description>
+      </Argument>
+      <Argument name="context">
+        <Description>
+          A sailpoint.api.SailPointContext object that can be used to query the database if necessary.
+        </Description>
+      </Argument>
+      <Argument name="environment" type="Map">
+        <Description>
+          Arguments passed to the aggregation task.
+        </Description>
+      </Argument>
+      <Argument name="application">
+        <Description>
+          Application being aggregated.
+        </Description>
+      </Argument>
+      <Argument name="account">
+        <Description>
+          A sailpoint.object.ResourceObject returned from the
+          collector.
+        </Description>
+      </Argument>
+      <Argument name="link">
+        <Description>
+          Existing link to this account.
+        </Description>
+      </Argument>
+    </Inputs>
+    <Returns>
+      <Argument name="identityName">
+        <Description>
+          The name of an Identity object.
+        </Description>
+      </Argument>
+      <Argument name="identity">
+        <Description>
+          A fully resolved Identity object if the rule wants
+          to do its own queries to locate the identity.
+        </Description>
+      </Argument>
+      <Argument name="identityAttributeName">
+        <Description>
+          The name of the extended attribute that can be used
+          to locate an existing identity.
+        </Description>
+      </Argument>
+      <Argument name="identityAttributeValue">
+        <Description>
+          The value of the named extended attribute that can be used
+          to locate an existing identity. This attribute is used
+          together with the identityAttributeName argument.
+        </Description>
+      </Argument>
+    </Returns>
+  </Signature>
+  <Source>import org.apache.log4j.Logger;
+import sailpoint.tools.Util;
+import sailpoint.object.Filter;
+import sailpoint.object.Identity;
+import java.util.Map;
+import java.util.HashMap;
+
+Logger logger = Logger.getLogger("log4j.logger.demo.ad");
+logger.info("Entering AD-Rule-Correlation");
+Map returnMap = new HashMap();
+
+String firstName= account.getStringAttribute("givenName");
+String lastName= account.getStringAttribute("sn");
+String msDSprincipleName = account.getStringAttribute("msDS-PrincipalName");
+
+//==== Correlation based of First name and last name match ====
+if(Util.isNotNullOrEmpty(firstName) &amp;&amp; Util.isNotNullOrEmpty(lastName))
+{
+Filter filter1 = Filter.eq("firstname", firstName);
+Filter filter2 = Filter.eq("lastname", lastName);
+filter = Filter.ignoreCase(Filter.and(filter1,filter2));
+	
+Identity id = context.getUniqueObject( Identity.class, filter );
+if(null != id)
+{
+returnMap.put("identity", id);
+logger.info("Correlation done with identity = "+id);
+return returnMap;
+}
+}
+//==== For orphan accounts =======
+else
+{
+Identity orphanAD = context.getObjectByName(Identity.class,"AD_"+msDSprincipleName );
+if(null != orphanAD)
+{
+returnMap.put("identity",orphanAD);
+logger.info("Correlation done with Orphan identity  = "+orphanAD);
+}
+}
+//====== end ==================
+logger.info("Exiting AD-Rule-Correlation");
+return returnMap;</Source>
+</Rule>

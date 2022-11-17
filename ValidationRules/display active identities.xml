@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule created="1618565759355" id="c0a8420578d619b28178da09817b01cd" language="beanshell" modified="1618571086081" name="return ids whose inactive ids are false">
+  <Source>
+  
+  import sailpoint.object.*;
+   import java.util.*;
+
+  
+
+                   List ids=new ArrayList();
+  
+  
+                  List li=context.getObjects(Identity.class);
+                   for(Identity idObj:li)
+                   {
+                     
+                 String isInactive =String.valueOf(idObj.getAttribute("inactive"));
+    System.out.println("isInacive Value ::"+isInactive);
+    if(isInactive != null &amp;&amp; isInactive.equalsIgnoreCase("false"))
+    {
+      ids.add(idObj.getName());
+    }
+                   }
+  return ids;
+                  
+  </Source>
+</Rule>

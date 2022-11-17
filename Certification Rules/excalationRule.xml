@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule created="1586892757680" id="c0a800ab71731c4d81717a2ddab009d3" language="beanshell" name="My-escalation-rule-2" type="Escalation">
+  <Description>Escalation rules are used by the Escalator to figure out where to route notifiable items (work items or certification items) that have expired.
+
+Escalation rules return a string which specifies the name of the identity that should receive the escalated item.</Description>
+  <Signature returnType="String">
+    <Inputs>
+      <Argument name="log">
+        <Description>
+          The log object associated with the SailPointContext.
+        </Description>
+      </Argument>
+      <Argument name="context">
+        <Description>
+          A sailpoint.api.SailPointContext object that can be used to query the database if necessary.
+        </Description>
+      </Argument>
+      <Argument name="item">
+        <Description>
+          The sailpoint.object.Notifiable to escalate.
+        </Description>
+      </Argument>
+    </Inputs>
+    <Returns>
+      <Argument name="newOwner">
+        <Description>
+          The name of the Identity object that should be the new owner of
+          the notifiable.
+        </Description>
+      </Argument>
+    </Returns>
+  </Signature>
+  <Source>import sailpoint.object.Identity;
+
+Identity newOwner;
+// method returns owner of item (workItem)
+Identity owner = item.getNotificationOwner(context);
+// if no owner, escalate to spadmin
+if (owner == null)
+	return "spadmin";
+else {
+	// escalate to owner’s manager; if manager is inactive, keep
+	// escalating until find active manager
+	newOwner = owner.getManager();
+	while (newOwner != null &amp;&amp; newOwner.isInactive()) {
+	newOwner = newOwner.getManager();
+	}
+}
+  if (newOwner == null || item.getEscalationCount() >=1){
+    System.out.println("QAZSE - workitem. EscalationCount"+item.getEscalationCount() );
+	return null;
+  }else{
+ 		return	newOwner.getName();
+  }
+  </Source>
+</Rule>

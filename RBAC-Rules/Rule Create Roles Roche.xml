@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule  language="beanshell"  name="Rule-CreateRoles-Demo" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <ReferencedRules>
+    <Reference class="sailpoint.object.Rule" id="c0a8de017c251895817c3f3f6bed1f10" name="CreateRoleChangeEvent"/>
+  </ReferencedRules>
+  <Source>
+
+  import sailpoint.api.IdentityService;
+  import java.util.List;
+
+  import sailpoint.api.SailPointContext;
+  import sailpoint.object.Application;
+  import sailpoint.object.Bundle;
+  import sailpoint.object.Filter;
+  import sailpoint.object.IdentitySelector;
+  import sailpoint.object.IdentitySelector.MatchExpression;
+  import sailpoint.object.IdentitySelector.MatchTerm;
+  import sailpoint.object.ManagedAttribute;
+  import sailpoint.object.Profile;
+  import sailpoint.object.QueryOptions;
+  import sailpoint.api.ObjectUtil;
+
+  import java.util.*;
+
+
+
+  public static IdentitySelector createSelector(ManagedAttribute ma) {
+    MatchTerm matchTermChild=new MatchTerm();
+    matchTermChild.setName(ma.getAttribute());
+    matchTermChild.setType(IdentitySelector.MatchTerm.Type.Entitlement);
+    matchTermChild.setValue(ma.getValue());
+    matchTermChild.setApplication(ma.getApplication());
+    MatchExpression  matchExpression=new MatchExpression();
+    matchExpression.addTerm(matchTermChild);///assign match list
+    IdentitySelector identitySelector=new IdentitySelector();
+    identitySelector.setMatchExpression(matchExpression);
+    return identitySelector;
+  }
+
+  public static Bundle verifyAndCreateBusinessRole(ManagedAttribute ma){
+    // if exist retun the role if not exist then creat role and retun  
+    //match criteria
+    List newList = null;
+    List oldList = null;
+    boolean isRoleUpdate = true;
+
+    Bundle bundObj= context.getObjectByName(Bundle.class,ma.getDisplayableName());
+    if(bundObj == null){
+      bundObj = new Bundle();
+      bundObj.setDisplayName("Bundle"+ma.getDisplayableName());
+      bundObj.setName(ma.getDisplayableName());
+      bundObj.setType("business");
+      bundObj.setSelector(createSelector(ma));
+      isRoleUpdate = false;
+    }
+    if(bundObj != null &amp;&amp;  bundObj.getSelector()==null)
+    {
+      bundObj.setSelector(createSelector(ma));
+
+
+    }
+    
+    newList =  ma.getAttribute("ChildRoles");
+      List oldReqRoles = bundObj.getRequirements();
+              System.out.println("oldReqRoles:::"+oldReqRoles);
+
+      if(Util.nullSafeSize(oldReqRoles) > 0){
+        oldList = ObjectUtil.getObjectNames(oldReqRoles);
+        System.out.println("oldList inside bundle Object:::"+oldList);
+      }
+
+
+
+    System.out.println("BundleObject name"+bundObj.getName());
+
+    System.out.println("parentbusrole"+bundObj.getName());
+    List requiredItRols = new ArrayList();
+    if(ma!=null &amp;&amp; ma.get("ChildRoles")!=null)
+    {
+      
+      List&lt;String> childroles= (List) ma.getAttribute("ChildRoles");
+      for(String childObj:childroles)
+      {
+        String[] childarr=childObj.split("-");// appname-childName
+        String  appName =childarr[0];
+        String  entName =childarr[1];
+        //check entitlement on the application
+        boolean entitlementExist=checkEntitlmentOnApplication(appName,entName);
+        System.out.println("entitlementExist1"+entitlementExist + " " + entName);
+
+        if(entitlementExist)
+        {
+          System.out.println("entitlementExistInside If"+entitlementExist);
+          Bundle childItRole = createITRole(appName,entName);
+          if(childItRole != null){
+            requiredItRols.add(childItRole);
+          }
+        }
+      }
+
+
+
+
+    }
+    
+     System.out.println("requiredItRols :"+requiredItRols);
+     // if(Util.nullSafeSize(requiredItRols) > 0){
+        bundObj.setRequirements(requiredItRols);
+        System.out.println("before save ParentBusRole"+bundObj.toXml());
+     // }
+
+
+
+            		System.out.println("isRoleUpdate::"+isRoleUpdate);
+
+    
+    if(isRoleUpdate){
+      
+       List tempList = new ArrayList();
+      if (null != oldList){
+       tempList = new ArrayList(oldList);
+        		System.out.println(" oldList before removing : "+oldList);
+
+        if(newList!=null){
+          		System.out.println(" newList before removing : "+newList);
+
+		oldList.removeAll(newList);
+		System.out.println(" oldList after removing : "+oldList);
+		System.out.println(" tempList : "+tempList);
+          newList.removeAll(tempList);
+      }
+        
+      }
+       
+		
+		System.out.println(" newList : "+newList);
+      
+      
+      createRoleChangeEvent( oldList,  newList,  bundObj.getName());
+      
+      System.out.println(" after  createRoleChangeEvent (): ");
+      
+      
+    }
+    
+    context.saveObject(bundObj);
+    context.commitTransaction();
+
+    return bundObj;
+  }
+
+  public static boolean checkEntitlmentOnApplication(String appName, String entName){
+    boolean retVal = false;
+    System.out.println("appName"+appName+"entName"+entName);
+    Filter f = Filter.and(Filter.eq("application.name", appName), Filter.eq("value", entName));
+    QueryOptions opts=new QueryOptions();
+    opts.addFilter(f);
+    int count =  context.countObjects(ManagedAttribute.class, opts);
+    if( count > 0){
+      retVal = true;
+    }
+    return retVal;
+  }
+
+  public static ManagedAttribute getMAObject(String appName, String entName){
+    boolean retVal = false;
+    Filter f = Filter.and(Filter.eq("application.name", appName), Filter.eq("value", entName));
+    QueryOptions opts=new QueryOptions();
+    opts.addFilter(f);
+    ManagedAttribute maObj =  context.getUniqueObject(ManagedAttribute.class, f);
+    return maObj;
+  }
+
+
+  public static Bundle createITRole(String appName, String entName){
+    System.out.println("inside createITRole");
+    String itroleName = appName +"-"+entName;
+    boolean retVal = false;
+    Bundle itRole  = null;
+    Filter f = Filter.and(Filter.eq("type", "it"), Filter.eq("name", itroleName));
+    Application appObj = context.getObjectByName(Application.class, appName);
+    if(appObj != null) {
+      System.out.println("inside createITRole place1");
+      itRole  =  context.getUniqueObject(Bundle.class, f);
+      if( itRole == null){
+        System.out.println("ITRole"+itRole+"ITRole Name"+itroleName);
+        ManagedAttribute childMa = getMAObject(appName, entName);
+        if(childMa != null) {
+          List profileList = new ArrayList();
+          List entValues1 = new ArrayList();
+          entValues1.add(childMa.getValue());
+          Filter f1 = Filter.containsAll(childMa.getAttribute(), entValues1);
+          itRole = new Bundle();
+          itRole.setDisplayName("IT-"+itroleName);
+          itRole.setName(itroleName);
+          itRole.setType("it");
+          Profile profile1 = new Profile();
+          profile1.setApplication(appObj);
+          List fl1 = new ArrayList();
+          fl1.add(f1);
+          profile1.setConstraints(fl1);
+          profileList.add(profile1);
+          itRole.assignProfiles(profileList);
+          context.saveObject(itRole);
+          context.commitTransaction();
+        }
+      }
+      System.out.println("inside createITRole place2"+ itRole);
+      return itRole;
+    }
+  }
+
+
+  /////////////////////////********************************************************************************///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  String appname = "Active Directory";
+  Filter filter = Filter.eq("application.name",appname);
+  QueryOptions opts =new QueryOptions();
+  opts.addFilter(filter);
+  opts.setCloneResults(true);
+  Iterator it= context.search(ManagedAttribute.class, opts);// AD application 
+  while(it.hasNext())
+  {
+    ManagedAttribute ma=(ManagedAttribute) it.next();
+    verifyAndCreateBusinessRole(ma);
+
+    
+    Bundle parentBusRole = verifyAndCreateBusinessRole(ma);
+    if(parentBusRole != null){
+     System.out.println("parentbusrole"+parentBusRole.getName());
+      List requiredItRols = new ArrayList();
+      if(ma!=null &amp;&amp; ma.get("ChildRoles")!=null)
+      {
+        List&lt;String> childroles= (List) ma.getAttribute("ChildRoles");
+        for(String childObj:childroles)
+        {
+          String[] childarr=childObj.split("-");// appname-childName
+          String  appName =childarr[0];
+          String  entName =childarr[1];
+          //check entitlement on the application
+          boolean entitlementExist=checkEntitlmentOnApplication(appName,entName);
+          System.out.println("entitlementExist1"+entitlementExist + " " + entName);
+
+          if(entitlementExist)
+          {
+            System.out.println("entitlementExistInside If"+entitlementExist);
+            Bundle childItRole = createITRole(appName,entName);
+            if(childItRole != null){
+              requiredItRols.add(childItRole);
+            }
+          }
+        }
+
+      }
+
+
+      parentBusRole.setRequirements(requiredItRols);
+      System.out.println("before save ParentBusRole"+parentBusRole);
+
+
+
+
+      context.saveObject(parentBusRole);
+      System.out.println("after save ParentBusRole"+parentBusRole);
+      context.commitTransaction();
+    }
+    
+  }
+
+
+
+  </Source>
+</Rule>
