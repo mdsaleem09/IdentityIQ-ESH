@@ -1,0 +1,76 @@
+pipeline {
+    agent any
+	parameters{
+	string(name: 'GIT_USER',
+	description:'Provide the git USER for authentication and cloning repository',
+	defaultValue:'veerabh')
+	string(name: 'GIT_BRANCH',
+	description:'Provide the git branch for code checkout',
+	defaultValue:'test')
+	string(name: 'SPTARGET',
+	description:'Set the target environment to deploy',
+	defaultValue:'tests')
+	}
+	
+
+    stages {
+        stage('Checkout') {
+            steps {
+			withCredentials([string(credentialsId: 'bitbucket-secret', variable: 'GIT_PASSWD')]) {
+			 script {
+			     //BITBUCKET_URL = 'https://${GIT_USER}:${GIT_PASSWD}@bitbucket.org/idmworks/ohsu.git'
+			     bat "git clone -b ${GIT_BRANCH} https://${GIT_USER}:${GIT_PASSWD}@bitbucket.org/idmworks/ohsu.git"
+				}
+                // Get some code from a GitHub repository
+                //git url: 'https://${GIT_USER}@bitbucket.org/idmworks/ohsu.git' , credentialsId: 'bitbucket-secret', branch: '${GIT_BRANCH}'
+                // Change file permisson
+                //sh "chmod +x -R ./jenkins"
+                // Run shell script
+                //sh "./jenkins/script/scripted_pipeline_ex_2.sh"
+			    }
+            }
+        }
+		stage('Clean Build') {
+            steps {
+			 //build command
+			 dir('ohsu') {
+			     bat '''build clean'''
+                }
+            }
+		}
+	    stage('Set environment for building war') {
+            steps {
+			 //build comand
+			 dir('ohsu') {
+			    bat '''set SPTARGET=${SPTARGET}'''
+                }
+            }
+		}  
+		stage('Building war') {
+            steps {
+			 //build command
+			 dir('ohsu') {
+			    bat '''build war'''
+                }
+            }
+		}
+		
+
+	    stage('Execute build deployment on selected environment') {
+            steps {
+			 //build command
+			 dir('ohsu') {
+			     bat '''build deploy'''
+                }
+            }
+		}
+
+		
+	}
+	//cleaning workspace
+	post { 
+        always { 
+            //cleanWs()
+        }
+    }
+}
