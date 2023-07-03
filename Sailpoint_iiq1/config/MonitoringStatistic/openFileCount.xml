@@ -1,0 +1,3 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE MonitoringStatistic PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<MonitoringStatistic displayName="monitor_stat_label_open_file_count" name="openFileCount" type="Server" value="call:getOpenFileCount" valueType="long"/>

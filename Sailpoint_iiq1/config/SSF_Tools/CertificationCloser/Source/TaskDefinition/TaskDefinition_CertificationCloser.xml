@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE TaskDefinition PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<TaskDefinition  executor="sailpoint.services.standard.task.CertificationCloser"  name="Certification Closer" progressMode="String" resultAction="Delete" subType="task_item_type_generic" template="true" type="Generic">
+  <Attributes>
+    <Map>
+      <entry key="taskCompletionEmailNotify" value="Disabled"/>
+      <entry key="taskCompletionEmailRecipients"/>
+      <entry key="taskCompletionEmailTemplate" value="Task Status"/>
+    </Map>
+  </Attributes>
+  <Description>Close active certifications that have ended.</Description>
+  <Signature>
+    <Inputs>
+      <Argument helpKey="Select the active certification to close.  Only active certifications with access reviews in the End phase will be processed.  Leave blank for all." name="certGroups" multi="true" filterString="status==&quot;Active&quot;" type="CertificationGroup">
+        <Prompt>Select active certifications or leave blank for all.</Prompt>
+      </Argument>
+    </Inputs>
+    <Returns>
+      <Argument name="certificationsClosed" type="string">
+        <Prompt>Total access reviews closed</Prompt>
+      </Argument>
+      <Argument name="certGroupsProcessed" type="string">
+        <Prompt>Total certification groups processed</Prompt>
+      </Argument>
+    </Returns>
+  </Signature>
+</TaskDefinition>

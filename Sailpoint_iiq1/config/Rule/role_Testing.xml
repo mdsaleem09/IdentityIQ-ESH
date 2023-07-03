@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="role Testing" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+  
+  import java.sql.Statement;
+    import java.sql.ResultSet;
+    import java.util.HashMap;
+    import java.util.Map;
+    import sailpoint.connector.JDBCConnector;
+    import java.sql.*;   
+  import java.sql.Connection;
+import sailpoint.object.Identity;
+import sailpoint.object.Application;
+  
+   // Map mape = JDBCConnector.buildMapFromResultSet(result, schema);
+  HashMap mape=new HashMap();
+ String user = mape.get("Name");
+if(user!=null){
+String attrib1 = mape.get("James Smith"); 
+  
+ Identity identity = context.getObjectByName(Identity.class,user) 
+ return identity;
+ Application app1 = context.getObjectByName(Application.class, "Active- DemoJdbcApp"); 
+ if(app1 != null &amp;&amp; identity != null){  
+ Link appdata = identity.getLink(app1); 
+ if(appdata != null) {            
+ String link_attrib1 = (String) appdata.getAttribute("FirstName");     
+   
+ 
+ if(link_attrib1.equals(attrib1))    
+{ 
+ System.out.println("Same");   
+}  
+ else
+{
+ System.out.println("different");  
+  
+ } } }
+}
+return mape ;
+  
+  
+  
+  
+  
+  /*
+  import sailpoint.object.Identity;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+  import sailpoint.object.Classification;
+  import sailpoint.object.ObjectClassification;
+  
+ // String appName="";
+  Classification cl=context.getObjectByName(Classification.class,"Privileged");
+    ObjectClassification ob=new ObjectClassification();
+    ob.setClassification(cl);
+    Bundle bundObj= context.getObjectByName(Bundle.class,"ESHIAM\\Admins");
+  //bundObj.addClassification(ob);
+  //context.saveObject(bundObj);
+ //context.commitTransaction();
+  public static boolean isClassificationAlreadyAdded(List&lt;ObjectClassification&gt; obcList){
+    boolean iscls = false;
+  for(ObjectClassification obc : obcList){
+    if(obc.getClassification() == (cl))
+  //if(bundObj.getClassifications()!=null &amp;&amp; bundObj.getClassifications().contains(ob))
+  {
+      iscls = true;
+    return iscls;     
+  }
+  }
+  }
+  if(bundObj.getClassifications()!=null)
+  return isClassificationAlreadyAdded(bundObj.getClassifications());
+  </Source>
+</Rule>

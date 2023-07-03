@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="identities return" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+  import sailpoint.object.Identity;
+  
+  
+  import sailpoint.object.Custom;
+  import sailpoint.object.Filter;
+  import sailpoint.object.QueryOptions;
+
+  import sailpoint.object.Link;
+  import sailpoint.api.IdentityService;
+
+  import java.util.List;
+  import sailpoint.object.Application;
+  import sailpoint.api.SailPointContext;
+
+
+
+  Custom c = new Custom();
+  c.setName("ChildRolesCustom");
+  List l = new ArrayList();
+  l.add("ch1");
+  l.add("ch2");
+  c.put("Group1", l);
+
+return c;
+
+  List list=new ArrayList();
+
+  //Filter filter=Filter.eq("correlated",true);
+  // QueryOptions opts=new QueryOptions();
+  //            opts.addFilter(filter);
+
+
+  Application appObj=context.getObjectByName(Application.class,"Active Directory");
+  IdentityService idService=new IdentityService(context);
+
+  Iterator it=context.search(Identity.class);
+  while(it.hasNext())
+  {
+    Identity idObj=(Identity)it.next();
+
+    List links=idService.getLinks(idObj,appObj);
+    for(Link link:links)
+    {
+      if(link!=null &amp;&amp; idObj.isCorrelated())
+      {
+
+        list.add(link.getDisplayName());
+      }
+    }
+  }
+
+  return list;
+
+
+
+  </Source>
+</Rule>

@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction accountDisplayName="CN=Ad User8,OU=People,OU=Demo,DC=Eshiam,DC=com" applicationName="Active- Directory" identityDisplayName="Ad User8" identityName="Ad User8" integration="Active- Directory" name="0000000151" nativeIdentity="CN=Ad User8,OU=People,OU=Demo,DC=Eshiam,DC=com" operation="Modify" source="LCM" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="accessRequestId" value="0000000478"/>
+      <entry key="request">
+        <value>
+          <AccountRequest application="Active- Directory" nativeIdentity="CN=Ad User8,OU=People,OU=Demo,DC=Eshiam,DC=com" op="Modify">
+            <Attributes>
+              <Map>
+                <entry key="attachmentConfigList"/>
+                <entry key="attachments"/>
+                <entry key="flow" value="AccessRequest"/>
+                <entry key="id" value="c0a8010283c418b18183ca3604470525"/>
+                <entry key="interface" value="LCM"/>
+                <entry key="operation" value="EntitlementAdd"/>
+                <entry key="provisioningTransactionId" value="c0a8010285b010dc8185ba5070bd026d"/>
+              </Map>
+            </Attributes>
+            <AttributeRequest displayValue="ESHIAM\Buyer" name="memberOf" op="Add" value="CN=Buyer,OU=Groups,OU=Demo,DC=Eshiam,DC=com">
+              <Attributes>
+                <Map>
+                  <entry key="assignment" value="true"/>
+                </Map>
+              </Attributes>
+            </AttributeRequest>
+            <ProvisioningResult status="failed">
+              <Errors>
+                <Message key="Error(s) reported back from the IQService - Failed to update attributes for identity CN=Ad User8,OU=People,OU=Demo,DC=Eshiam,DC=com. Failed to connect to the server for CN=Ad User8,OU=People,OU=Demo,DC=Eshiam,DC=com:There is no such object on the server. 0000208D: NameErr: DSID-03100238, problem 2001 (NO_OBJECT), data 0, best match of: &#x9;'OU=People,OU=Demo,DC=Eshiam,DC=com' . HRESULT:[0x80072030] Possible reasons for failure include a) The Domain Controller is currently not reachable b) The object has either been moved or renamed c) The object has been deleted &#xa; Please Ensure the data has been aggregated before performing the operation " type="Error"/>
+              </Errors>
+            </ProvisioningResult>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

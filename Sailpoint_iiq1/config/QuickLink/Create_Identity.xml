@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE QuickLink PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<QuickLink action="createIdentity" category="Manage" cssClass="quicklink-create-identity" messageKey="quicklink_create_identity" name="Create Identity" ordering="5">
+  <Description>quicklink_create_identity_desc</Description>
+  <QuickLinkOptions allowOther="true">
+    <DynamicScopeRef>
+      <Reference class="sailpoint.object.DynamicScope" name="Manager"/>
+    </DynamicScopeRef>
+  </QuickLinkOptions>
+  <QuickLinkOptions allowOther="true">
+    <DynamicScopeRef>
+      <Reference class="sailpoint.object.DynamicScope" name="Help Desk"/>
+    </DynamicScopeRef>
+  </QuickLinkOptions>
+</QuickLink>

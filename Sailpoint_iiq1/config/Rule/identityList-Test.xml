@@ -1,0 +1,96 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="identityList-Test" type="Validation">
+  <Source>
+  import sailpoint.object.*;
+        import java.util.*;
+        import sailpoint.api.*;
+  import java.util.Date;
+  import java.util.Calendar;
+  
+
+//This Rule is Used to get All the Identities Attributes and their values in a CSV File..
+       
+       File csvFile = new File("D:\\Eshiam-2021\\SAP_CORRELATED_UNCORRELATED_ACCOUNTS.csv");
+       BufferedWriter bw = new BufferedWriter(new FileWriter(csvFile));
+       String delimtier = ",";  
+       String newLine = "\n";
+       
+       bw.append(newLine);
+       ArrayList columnNames = new ArrayList();  
+       columnNames.add("Account Name");
+       columnNames.add("Correlation Status");
+         columnNames.add("Creation Date");
+
+
+ 
+ 
+       
+       boolean commaPrefix = false;  
+       for (String columnName : columnNames) {  
+         if (commaPrefix) bw.append(delimtier);  
+         bw.append(columnName);  
+         commaPrefix = true;      
+       }  
+       bw.append(newLine);
+       
+ 
+List correlatedList=new ArrayList();
+     Application appObj=context.getObjectByName(Application.class,"Active Directory");
+    IdentityService idService=new IdentityService(context);
+  
+  
+  
+  Calendar c=Calendar.getInstance();
+  Date todayDate=c.getTime();
+  c.add(Calendar.DATE,-25);
+  Date modifiedDate=c.getTime();
+  
+  
+  
+Filter filter=Filter.ge("created",modifiedDate);
+   QueryOptions opts=new QueryOptions();
+              opts.addFilter(filter);
+               
+                    Iterator it=context.search(Identity.class,opts);
+                          while(it.hasNext())
+                          {
+                           Identity idObj=(Identity)it.next();
+                             
+
+                            List links=idService.getLinks(idObj,appObj);
+                            for(Link link:links)
+                            {
+                              if(link!=null)
+                              {
+                                
+        HashMap outputRow = new HashMap();
+        outputRow.put("Account Name",link.getDisplayName());
+        outputRow.put("Correlation Status","correlated");
+                                        outputRow.put("Creation Date",idObj.getCreated().toString());
+
+        commaPrefix = false;  
+        System.out.println("columnNames Selected:"+columnNames);
+            for (String columnName : columnNames) {  
+              if (commaPrefix) bw.append(delimtier);  
+              String valToWrite = outputRow.get(columnName);
+        System.out.println("valToWrite Selected Identities:"+valToWrite);
+              if (null != valToWrite)  {  
+                bw.append(valToWrite);        
+              } else {  
+                bw.append("");  
+              }  
+              commaPrefix = true;      
+            }  
+            bw.append("\n");
+       
+}
+}
+                          }
+     
+        bw.flush();
+        bw.close();
+       
+       
+  </Source>
+</Rule>

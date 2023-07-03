@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="buildMap" type="BuildMap">
+  <Description>This rule is used by the delimited file connector to build a map representation of the delimited data.</Description>
+  <Signature returnType="Map">
+    <Inputs>
+      <Argument name="log">
+        <Description>
+          The log object associated with the SailPointContext.
+        </Description>
+      </Argument>
+      <Argument name="context">
+        <Description>
+          A sailpoint.api.SailPointContext object that can be used to query the database if necessary.
+        </Description>
+      </Argument>
+      <Argument name="application">
+        <Description>
+          The application whose data file is being processed.
+        </Description>
+      </Argument>
+      <Argument name="schema">
+        <Description>
+          The Schema currently in use.
+        </Description>
+      </Argument>
+      <Argument name="state">
+        <Description>
+          A Map containing state information.
+        </Description>
+      </Argument>
+      <Argument name="record">
+        <Description>
+          A List of data tokens parsed from the current line of the data file.
+        </Description>
+      </Argument>
+      <Argument name="cols">
+        <Description>
+          A List of the columns to use.
+        </Description>
+      </Argument>
+    </Inputs>
+    <Returns>
+      <Argument name="map">
+        <Description>
+          A Map of the resource object assembled from the data.
+        </Description>
+      </Argument>
+    </Returns>
+  </Signature>
+  <Source>import java.util.*;
+import sailpoint.object.*;
+import sailpoint.connector.*;
+  
+System.out.println("Build Map Rule Called");
+   HashMap map = DelimitedFileConnector.defaultBuildMap(cols, record);
+  if(schema.getObjectType().compareTo(Connector.TYPE_ACCOUNT) == 0){
+    
+    String name = map.get("Name");
+    String[] nameArray = name.split(" ");
+    String firstName = nameArray[0];
+    String lastName = nameArray[1];
+    String email = firstName+"."+lastName+"@sailpointdemo.com";
+    
+    map.put("FirstName",firstName);
+    map.put("LastName",lastName);
+    map.put("EmailAddress",email);
+  }
+
+return map;</Source>
+</Rule>

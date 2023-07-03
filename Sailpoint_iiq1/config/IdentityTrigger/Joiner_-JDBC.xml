@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE IdentityTrigger PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<IdentityTrigger disabled="true" handler="sailpoint.api.WorkflowTriggerHandler" name="Joiner -JDBC" type="Create">
+  <Owner>
+    <Reference class="sailpoint.object.Identity" name="spadmin"/>
+  </Owner>
+  <HandlerParameters>
+    <Attributes>
+      <Map>
+        <entry key="businessProcess"/>
+        <entry key="identityProcessingThreshold"/>
+        <entry key="identityProcessingThresholdType"/>
+        <entry key="workflow" value="Joiner-Jdbc"/>
+      </Map>
+    </Attributes>
+  </HandlerParameters>
+</IdentityTrigger>

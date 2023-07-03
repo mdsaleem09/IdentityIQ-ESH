@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Capability PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Capability displayName="capability_identity_administrator" name="IdentityAdministrator">
+  <Description>capability_desc_identity_administrator</Description>
+  <InheritedCapabilities>
+    <Reference class="sailpoint.object.Capability" name="PasswordAdministrator"/>
+  </InheritedCapabilities>
+  <RightRefs>
+    <Reference class="sailpoint.object.SPRight" name="SetIdentityForwarding"/>
+    <Reference class="sailpoint.object.SPRight" name="SetIdentityAttribute"/>
+    <Reference class="sailpoint.object.SPRight" name="SetIdentityControlledScope"/>
+    <Reference class="sailpoint.object.SPRight" name="SetIdentityRole"/>
+    <Reference class="sailpoint.object.SPRight" name="EditIdentityEntDates"/>
+    <Reference class="sailpoint.object.SPRight" name="DeleteIdentityLink"/>
+    <Reference class="sailpoint.object.SPRight" name="MoveIdentityLink"/>
+    <Reference class="sailpoint.object.SPRight" name="DeleteIdentitySnapshot"/>
+    <Reference class="sailpoint.object.SPRight" name="MonitorIdentityActivity"/>
+    <Reference class="sailpoint.object.SPRight" name="UnlockIdentity"/>
+    <Reference class="sailpoint.object.SPRight" name="MonitorIdentityEvents"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessReport"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessApplicationActivityReport"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessAccountGroupMembershipReport"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessUserReport"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessApplicationUserReport"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessViolationReport"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessIdentityRiskReport"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessIdentityRoleReport"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessIdentityEntitlementReport"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessIdentityApplicationRiskReport"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessGroup"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessIdentityRisk"/>
+    <Reference class="sailpoint.object.SPRight" name="ViewAccountGroups"/>
+    <Reference class="sailpoint.object.SPRight" name="ViewIdentityRequest"/>
+  </RightRefs>
+</Capability>

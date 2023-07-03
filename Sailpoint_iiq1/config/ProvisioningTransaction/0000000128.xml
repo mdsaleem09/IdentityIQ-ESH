@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction accountDisplayName="ESHIAM\Karen Hall" applicationName="Active- Directory" identityDisplayName="Karen Hall" identityName="Karen Hall" integration="Active- Directory" name="0000000128" nativeIdentity="CN=Karen Hall,OU=People,OU=Demo,DC=Eshiam,DC=com" operation="Modify" source="LCM" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="accessRequestId" value="0000000365"/>
+      <entry key="request">
+        <value>
+          <AccountRequest application="Active- Directory" nativeIdentity="CN=Karen Hall,OU=People,OU=Demo,DC=Eshiam,DC=com" op="Modify">
+            <Attributes>
+              <Map>
+                <entry key="attachmentConfigList"/>
+                <entry key="attachments"/>
+                <entry key="flow" value="AccessRequest"/>
+                <entry key="id" value="c0a8010383391672818339e91c6a002f"/>
+                <entry key="interface" value="LCM"/>
+                <entry key="operation" value="EntitlementAdd"/>
+                <entry key="provisioningTransactionId" value="c0a8010283c418b18183ca21cd3f04a4"/>
+              </Map>
+            </Attributes>
+            <AttributeRequest name="memberOf" op="Add" value="CN=AccountsPayable,OU=Groups,OU=Demo,DC=Eshiam,DC=com">
+              <Attributes>
+                <Map>
+                  <entry key="assignment" value="true"/>
+                </Map>
+              </Attributes>
+            </AttributeRequest>
+            <ProvisioningResult status="failed">
+              <Errors>
+                <Message key="Error(s) reported back from the IQService - Failed to update attributes for identity CN=Karen Hall,OU=People,OU=Demo,DC=Eshiam,DC=com. Failed to connect to the server for CN=Karen Hall,OU=People,OU=Demo,DC=Eshiam,DC=com:The user name or password is incorrect. 80090308: LdapErr: DSID-0C0903C5, comment: AcceptSecurityContext error, data 52e, v2580. HRESULT:[0x8007052E] Possible reasons for failure include a) The Domain Controller is currently not reachable b) The object has either been moved or renamed c) The object has been deleted &#xa; Please Ensure the data has been aggregated before performing the operation " type="Error"/>
+              </Errors>
+            </ProvisioningResult>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

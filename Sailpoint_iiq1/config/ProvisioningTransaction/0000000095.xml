@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction accountDisplayName="CN=Carolyn Perry,OU=People,OU=Demo,DC=Eshiam,DC=com" applicationName="Active- Directory Demo" identityDisplayName="Carolyn Perry" identityName="Carolyn Perry" integration="Active- Directory Demo" name="0000000095" nativeIdentity="CN=Carolyn Perry,OU=People,OU=Demo,DC=Eshiam,DC=com" operation="Create" source="LCM" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="accessRequestId" value="0000000266"/>
+      <entry key="request">
+        <value>
+          <AccountRequest application="Active- Directory Demo" nativeIdentity="CN=Carolyn Perry,OU=People,OU=Demo,DC=Eshiam,DC=com" op="Create">
+            <Attributes>
+              <Map>
+                <entry key="attachmentConfigList"/>
+                <entry key="attachments"/>
+                <entry key="flow" value="AccessRequest"/>
+                <entry key="forceNewAccount">
+                  <value>
+                    <Boolean>true</Boolean>
+                  </value>
+                </entry>
+                <entry key="id" value="c0a891017bc41b9c817bc4b41fc60028"/>
+                <entry key="interface" value="LCM"/>
+                <entry key="nativeIdUpdated">
+                  <value>
+                    <Boolean>true</Boolean>
+                  </value>
+                </entry>
+                <entry key="operation" value="EntitlementAdd"/>
+                <entry key="provisioningTransactionId" value="c0a8de017e051105817e0f1a06e4043f"/>
+              </Map>
+            </Attributes>
+            <AttributeRequest displayValue="ESHIAM\Benefits" name="memberOf" op="Add" value="CN=Benefits,OU=Groups,OU=Demo,DC=Eshiam,DC=com">
+              <Attributes>
+                <Map>
+                  <entry key="assignment" value="true"/>
+                </Map>
+              </Attributes>
+            </AttributeRequest>
+            <AttributeRequest name="objectType" op="Set" value="User"/>
+            <AttributeRequest name="sAMAccountName" op="Set" value="Carolyn Perry"/>
+            <AttributeRequest name="password" op="Set">
+              <Attributes>
+                <Map>
+                  <entry key="secret" value="true"/>
+                </Map>
+              </Attributes>
+            </AttributeRequest>
+            <AttributeRequest name="IIQDisabled" op="Set">
+              <Value>
+                <Boolean/>
+              </Value>
+            </AttributeRequest>
+            <AttributeRequest name="givenName" op="Set" value="Carolyn"/>
+            <AttributeRequest name="sn" op="Set" value="Perry"/>
+            <AttributeRequest name="employeeID" op="Add" value="1b2a3d"/>
+            <AttributeRequest name="msNPAllowDialin" op="Set" value="Not Set"/>
+            <AttributeRequest name="msExchHideFromAddressLists" op="Set">
+              <Value>
+                <Boolean/>
+              </Value>
+            </AttributeRequest>
+            <ProvisioningResult status="failed">
+              <Errors>
+                <Message key="Errors returned from IQService. &quot;The object already exists.&#xa; For identity: CN=Carolyn Perry,OU=People,OU=Demo,DC=Eshiam,DC=com&quot;" type="Error"/>
+              </Errors>
+            </ProvisioningResult>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

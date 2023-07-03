@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Test Rule Leaver" type="LeaverReassignment">
+  <Description>
+    This example is for Leaver reassignment.  This simple example returns the manager's name
+    if identityname has a amanger, otherwise returns 'spadmin'.
+  </Description>
+  <Signature>
+    <Inputs>
+      <Argument name="log">
+        <Description>
+          The log object associated with the SailPointContext.
+        </Description>
+      </Argument>
+      <Argument name="context">
+        <Description>
+          A sailpoint.api.SailPointContext object that can be used to query the database if necessary.
+        </Description>
+      </Argument>
+      <Argument name="identityName">
+        <Description>
+          The name of the identity whose artifacts are being reassigned during Leaver.
+        </Description>
+      </Argument>
+    </Inputs>
+    <Returns>
+      <Argument name="reassignee">
+        <Description>
+          The name of the identity to whom the artifacts of identityName should be reassigned
+        </Description>
+      </Argument>
+    </Returns>
+  </Signature>
+  <Source>
+    
+
+    import sailpoint.object.Identity;
+
+    String reassignee = null;
+    Identity identity = context.getObjectByName(Identity.class, identityName);
+    if (identity != null) {
+      Identity mgr = identity.getManager();
+      if (mgr != null) {
+        reassignee = mgr.getName();
+      }
+      else {
+        reassignee = "spadmin";
+      }
+      context.decache(identity);
+    }
+    return reassignee;
+    
+  </Source>
+</Rule>

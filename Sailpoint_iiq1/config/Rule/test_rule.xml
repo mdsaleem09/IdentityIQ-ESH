@@ -1,0 +1,382 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="test rule" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+  import java.util.*;
+
+  import sailpoint.object.Custom;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+
+  Custom customObj = context.getObjectByName(Custom.class, "VolumeNumbers");
+
+  String[] volumes = {"U101","U102","U103","U104","U105","U106","U201","U202","U203","U204","U205","U206"};
+
+  String volumeToAssign = "";
+  String homeDir="\\\\ohsu.edu\\edu\\Users";
+
+
+  List assignedVol = customObj.getAttributes().get("assignedVolumes");
+  for(String vol:assignedVol) {
+    String identityName = customObj.getAttributes().get("identityName");
+    if (identityName == null) {
+      volumeToAssign =  vol;
+      customObj.getAttributes().put("assignedVolumes",assignedVol.remove(vol));
+      Map map = new HashMap();
+      map.put("identityName",identity.getName());
+      map.put("volume",vol);
+      customObj.getAttributes().put("identityName",map);
+      context.saveObject(customObj);
+      context.commitTransaction();
+      System.out.println("Inside identityName Null if:"+volumeToAssign);
+      break;
+    }
+
+    if (!vol.equals("U206") &amp;&amp; !Util.isEmpty(customObj.getAttributes().get("identityName")) &amp;&amp; customObj.getAttributes().get("identityName").get("identityName") != null &amp;&amp; customObj.getAttributes().get("identityName").get("identityName").equals(identity.getName())){
+      volumeToAssign = customObj.getAttributes().get("identityName").get("volume");
+      System.out.println("Inside  if1:"+volumeToAssign);
+      break;
+    } else if (!vol.equals("U206") &amp;&amp; !Util.isEmpty(customObj.getAttributes().get("identityName")) &amp;&amp; customObj.getAttributes().get("identityName").get("identityName") != null &amp;&amp; !customObj.getAttributes().get("identityName").get("identityName").equals(identity.getName())){
+      volumeToAssign = vol;
+      customObj.getAttributes().put("assignedVolumes",assignedVol.remove(vol));
+      context.saveObject(customObj);
+      context.commitTransaction();
+      System.out.println("Inside else if1:"+volumeToAssign);
+      break;
+    } else if(vol.equals("U206") &amp;&amp; !Util.isEmpty(customObj.getAttributes().get("identityName")) &amp;&amp; customObj.getAttributes().get("identityName").get("identityName") != null &amp;&amp; customObj.getAttributes().get("identityName").get("identityName").equals(identity.getName())){
+      volumeToAssign = customObj.getAttributes().get("identityName").get("volume");
+      customObj.getAttributes().put("assignedVolumes",customObj.getAttributes().get("allVolumes"));
+      context.saveObject(customObj);
+      context.commitTransaction();
+      System.out.println("Inside else if2:"+volumeToAssign);
+      break;
+    } else if (vol.equals("U206") &amp;&amp; !Util.isEmpty(customObj.getAttributes().get("identityName")) &amp;&amp; customObj.getAttributes().get("identityName").get("identityName") != null &amp;&amp; !customObj.getAttributes().get("identityName").get("identityName").equals(identity.getName())){
+      volumeToAssign = vol;
+      Map map = new HashMap();
+      map.put("identityName",identity.getName());
+      map.put("volume",vol);
+      customObj.getAttributes().put("assignedVolumes",customObj.getAttributes().get("allVolumes"));
+      context.saveObject(customObj);
+      context.commitTransaction();
+      System.out.println("Inside else if3:"+volumeToAssign);
+      break;
+    }
+  }
+
+  return homeDir+volumeToAssign+sAMAccountName;
+
+
+
+  /*
+  String[] months={"JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"};
+
+  String birthMonth ="03";
+  String month="";
+  // String birthDay = identity.getAttribute("birthDay");
+  log.debug("*****birthMonth1**"+birthMonth);
+  for(int i=1;i&lt;=months.length; i++){
+
+    if(Integer.valueOf(birthMonth)==i){
+     month =  months[i-1].toLowerCase();
+
+    }   
+  }
+  return month;
+  /* 
+Custom customObj = context.getObjectByName(Custom.class, "VolumeNumbers");
+
+		String[] volumes = {"U101","U102","U103","U104","U105","U106","U201","U202","U203","U204","U205","U206"};
+
+		String volumeToAssign = "U101";
+
+	String volumeNumber = customObj.getAttributes().get("volumeNumber");
+
+		if(!volumeNumber.isEmpty()){
+			for(int i=0; i&lt;volumes.length-1; i++){
+				if(volumeNumber.equals(volumes[i]))
+					volumeToAssign = volumes[i+1];
+			}
+		}
+
+		customObj.getAttributes().put("volumeNumber", volumeToAssign);
+		context.saveObject(customObj);
+		context.commitTransaction();
+
+		return volumeToAssign;*/
+
+
+
+
+
+
+
+
+  Custom customObj = context.getObjectByName(Custom.class, "VolumeNumbers");
+
+  String[] volumes = {"U101","U102","U103","U104","U105","U106","U201","U202","U203","U204","U205","U206"};
+
+  String volumeToAssign = "U101";
+
+  String volumeNumber = customObj.getAttributes().get("volumeNumber");
+
+  String identityName= customObj.getAttributes().get("identityName");
+  Identity identity = context.getObjectByName(Identity.class,identityName);
+  Application app = context.getObjectByName(Application.class,"Active- Directory");
+  String latestValue=identity.getLink(app).getAttribute("homeDirectory");
+  latestValue =latestValue.substring(latestValue.lastIndexOf("\\")+1);
+  //return latestValue;
+  //return volumes[0];
+
+  if(latestValue != null){
+    for(int i=0; i&lt;volumes.length-1; i++){
+      if(latestValue.equals(volumes[i])){
+
+        volumeToAssign = volumes[i+1];
+      }
+    }
+  }
+  //return volumeToAssign;
+
+  /*  return volumeNumber;
+  if(volumeNumber != null){
+    for(int i=0; i&lt;volumes.length-1; i++){
+      if(volumeNumber.equals(volumes[i])){
+        volumeToAssign = volumes[i+1];
+      }
+    }
+  }
+  //else volumeToAssign = "U101";
+  */
+
+  //return volumeToAssign;
+  //customObj.getAttributes().put("volumeNumber", volumeToAssign);
+  customObj.getAttributes().put("identityName", identity.getName());
+  context.saveObject(customObj);
+  context.commitTransaction();
+
+  //return volumeToAssign;
+
+
+
+
+
+
+  /*
+
+  Custom custom = context.getObjectByName(Custom.class,"Staging Obj");
+   List links = new ArrayList();
+  if(custom.get("stagingLinks")!=null){
+   links = custom.get("stagingLinks");
+   }
+  links.add("sam");
+    links.add("mas");
+   custom.put("stagingLinks",links);
+
+
+
+
+  context.saveObject(custom);
+  context.commitTransaction();
+  return custom;
+
+
+
+
+  /*
+  ArrayList ob=new ArrayList();
+
+  ObjectConfig obj =  context.getObjectByName(ObjectConfig.class,"Identity");
+   List list = obj.getObjectAttributes();
+  for(ObjectAttribute objs:list){
+
+   {
+     if(objs.getName().equals("firstname")){
+
+         objs.setEditModeString("Permanent");
+
+          ob.add(objs);
+
+
+     }
+
+
+
+  }
+
+  }
+ context.saveObject(obj);
+  context.commitTransaction();
+
+
+
+
+
+  /*
+
+  String fn="";
+  String ln="";
+  String name="";
+  String domain="@eshiam.com";
+  String newmail="";
+  String email="";
+  int count = 0;
+   ArrayList list= new ArrayList();
+     ArrayList linklist= new ArrayList();
+
+     ArrayList existing= new ArrayList();
+
+  String properties = "firstname,lastname,name";
+  QueryOptions opts =new QueryOptions();
+  opts.addFilter(Filter.eq("links.application.name","HR - system"));
+  Iterator it = context.search(Identity.class,opts,properties);
+  while(it.hasNext()){
+   Object[] arr=it.next();
+
+    fn=arr[0];
+    ln=arr[1];
+    name=arr[2];
+    //ArrayList&lt;Object&gt; list = new ArrayList(Arrays.asList(arr[2]));
+
+    //for(String name:list)
+    email=fn+"."+ln+domain;
+    existing.add(email);
+       Identity id =context.getObjectByName(Identity.class,name);
+      List links = id.getLinks();
+    for(Link link:links){
+      if(link.getAttribute("mail")!=null &amp;&amp; link.getApplication()!=null &amp;&amp; link.getApplication().getName().equals("Active- Directory Demo")){
+            newmail=link.getAttribute("mail");
+        StringBuffer sb=new StringBuffer(newmail);
+        if(email.contains(newmail)){
+          count++;
+          sb.append(count);
+          list.add(sb.toString());
+        }
+
+
+      }
+
+    }
+  }
+
+
+
+
+  return list;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  /*
+  long launchTime = System.currentTimeMillis() + 5000;//wait for 2 min
+
+Attributes wfArgs = new Attributes();
+
+Attributes reqArgs = new Attributes();
+
+ArrayList list =new ArrayList();
+  list.add("James Smith");
+  list.add("Aaron Nichols");
+  for(String idName:list){
+
+wfArgs.put("identityName",idName);
+
+
+reqArgs.putAll(wfArgs);
+
+Request req = new Request();
+
+RequestDefinition reqdef = context.getObject(RequestDefinition.class, "Workflow Request");
+
+req.setDefinition(reqdef);
+
+req.setEventDate( new Date( launchTime ));
+
+req.setOwner(context.getObjectByName(Identity.class,"spadmin"));
+
+req.setName("Test WF");
+
+req.setAttributes( reqdef, reqArgs );
+
+// Schedule the work flow via the request manager.
+
+RequestManager.addRequest(context, req);
+
+  }
+
+
+
+
+
+
+
+
+
+
+  /*
+
+WorkflowLaunch wflaunch = new WorkflowLaunch();
+
+Workflow wf = (Workflow) context.getObjectByName(Workflow.class,"Test WF");
+
+wflaunch.setWorkflowName(wf.getName());
+
+wflaunch.setWorkflowRef(wf.getName());
+
+wflaunch.setCaseName("Test WF");
+
+wflaunch.setVariables(launchArgsMap);
+
+
+
+  Calendar c =Calendar.getInstance();
+  //c.add(Calendar.DATE,-7);
+//Date d=c.getTime();
+  Filter filter = Filter.and(Filter.eq("links.application.name","HR - System"),Filter.le("modified",c.getTime()));
+
+
+  QueryOptions opts =new QueryOptions();
+  opts.addFilter(filter);
+ return  context.countObjects(Identity.class,opts);
+
+  /*
+  ArrayList list=new ArrayList();
+  list.add("[vikas.p@abc.com]");
+  list.add("Active- DemoJdbcApp");
+  String app="Active- DemoJdbcApp";
+
+
+
+
+         Custom customObj=context.getObjectByName(Custom.class,"SAP Application Names");
+  if(customObj!=null)
+  {
+    List list=customObj.get("applications");
+
+
+ for(String mail:list)
+  {
+     if(app.contains(mail))
+     {
+       return true;
+     }
+  }
+  }
+  */
+  </Source>
+</Rule>

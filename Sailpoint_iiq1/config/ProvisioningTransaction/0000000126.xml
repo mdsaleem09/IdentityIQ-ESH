@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction accountDisplayName="ESHIAM\Amanda Ross" applicationName="Active- Directory" certificationId="c0a80102839510338183ab34c6e70f3b" identityDisplayName="Amanda Ross" identityName="Amanda Ross" integration="Active- Directory" name="0000000126" nativeIdentity="CN=Amanda Ross,OU=People,OU=Demo,DC=Eshiam,DC=com" operation="Delete" source="Certification" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="certificationName" value="Application Owner Access Review for Active- Directory"/>
+      <entry key="request">
+        <value>
+          <AccountRequest application="Active- Directory" nativeIdentity="CN=Amanda Ross,OU=People,OU=Demo,DC=Eshiam,DC=com" op="Delete" trackingId="c0a80102839510338183ab34ca3a0f46">
+            <Attributes>
+              <Map>
+                <entry key="provisioningTransactionId" value="c0a8010283ab109f8183b592736903c7"/>
+              </Map>
+            </Attributes>
+            <ProvisioningResult status="failed">
+              <Errors>
+                <Message key="Exception occurred while executing the RPCRequest: Errors returned from IQService. &quot;Error occurred while deleting the account CN=Amanda Ross,OU=People,OU=Demo,DC=Eshiam,DC=comFailed to connect to the server for CN=Amanda Ross,OU=People,OU=Demo,DC=Eshiam,DC=com:The user name or password is incorrect. 80090308: LdapErr: DSID-0C0903C5, comment: AcceptSecurityContext error, data 52e, v2580. HRESULT:[0x8007052E]&quot; Possible reasons for failure include a) The Domain Controller is currently not reachable b) The object has either been moved or renamed c) The object has been deleted &#xa; Please Ensure the data has been aggregated before performing the operation " type="Error"/>
+              </Errors>
+            </ProvisioningResult>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

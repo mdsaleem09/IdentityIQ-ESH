@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Capability PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Capability displayName="capability_scim_executor" name="SCIMExecutor">
+  <Description>capability_desc_scim_executor</Description>
+  <RightRefs>
+    <Reference class="sailpoint.object.SPRight" name="ReadSCIMResourceType"/>
+    <Reference class="sailpoint.object.SPRight" name="ReadSCIMSchema"/>
+    <Reference class="sailpoint.object.SPRight" name="CreateSCIMUser"/>
+    <Reference class="sailpoint.object.SPRight" name="ReadSCIMUser"/>
+    <Reference class="sailpoint.object.SPRight" name="UpdateSCIMUser"/>
+    <Reference class="sailpoint.object.SPRight" name="DeleteSCIMUser"/>
+    <Reference class="sailpoint.object.SPRight" name="ReadSCIMApplication"/>
+    <Reference class="sailpoint.object.SPRight" name="ReadSCIMEntitlement"/>
+    <Reference class="sailpoint.object.SPRight" name="ReadSCIMRole"/>
+    <Reference class="sailpoint.object.SPRight" name="ReadSCIMAccount"/>
+    <Reference class="sailpoint.object.SPRight" name="CreateSCIMAccount"/>
+    <Reference class="sailpoint.object.SPRight" name="UpdateSCIMAccount"/>
+    <Reference class="sailpoint.object.SPRight" name="DeleteSCIMAccount"/>
+    <Reference class="sailpoint.object.SPRight" name="CreateSCIMAlert"/>
+    <Reference class="sailpoint.object.SPRight" name="ReadSCIMAlert"/>
+    <Reference class="sailpoint.object.SPRight" name="ReadSCIMWorkflow"/>
+    <Reference class="sailpoint.object.SPRight" name="ReadSCIMTaskResult"/>
+    <Reference class="sailpoint.object.SPRight" name="ReadSCIMObjectConfig"/>
+    <Reference class="sailpoint.object.SPRight" name="CreateSCIMLaunchedWorkflow"/>
+    <Reference class="sailpoint.object.SPRight" name="ReadSCIMLaunchedWorkflow"/>
+    <Reference class="sailpoint.object.SPRight" name="ReadSCIMPolicyViolation"/>
+    <Reference class="sailpoint.object.SPRight" name="ReadSCIMCheckedPolicyViolation"/>
+    <Reference class="sailpoint.object.SPRight" name="CreateSCIMCheckedPolicyViolation"/>
+  </RightRefs>
+</Capability>

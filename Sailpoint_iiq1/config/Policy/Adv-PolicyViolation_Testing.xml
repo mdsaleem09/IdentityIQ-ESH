@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Policy PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Policy certificationActions="Mitigated,Delegated" configPage="advancedPolicy.xhtml" executor="sailpoint.policy.GenericPolicyExecutor" name="Adv-PolicyViolation Testing" state="Inactive" type="Advanced" typeKey="policy_type_advanced" violationOwnerType="None">
+  <PolicyAlert disabled="true" escalationStyle="none"/>
+  <Attributes>
+    <Map>
+      <entry key="checkEffective">
+        <value>
+          <Boolean/>
+        </value>
+      </entry>
+      <entry key="sysDescriptions">
+        <value>
+          <Map>
+            <entry key="en_US"/>
+          </Map>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+  <Owner>
+    <Reference class="sailpoint.object.Identity" name="spadmin"/>
+  </Owner>
+  <GenericConstraints>
+    <GenericConstraint name="new rule" violationOwnerType="None">
+      <Attributes>
+        <Map>
+          <entry key="taskResultId" value="c0a8de017ef61b1f817f1b1a68c20b0b"/>
+        </Map>
+      </Attributes>
+      <IdentitySelector>
+        <RuleRef>
+          <Reference class="sailpoint.object.Rule" name="Advance Policy Rule"/>
+        </RuleRef>
+      </IdentitySelector>
+    </GenericConstraint>
+  </GenericConstraints>
+</Policy>

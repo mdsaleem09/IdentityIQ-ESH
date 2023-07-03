@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE QuickLink PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<QuickLink action="viewDebug" category="Manage" messageKey="GoToDebugPage" name="GoToDebugPage">
+  <Description>quicklink_view_identity_desc</Description>
+  <QuickLinkOptions allowOther="true">
+    <DynamicScopeRef>
+      <Reference class="sailpoint.object.DynamicScope" name="Help Desk"/>
+    </DynamicScopeRef>
+  </QuickLinkOptions>
+  <QuickLinkOptions allowSelf="true">
+    <DynamicScopeRef>
+      <Reference class="sailpoint.object.DynamicScope" name="Self Service"/>
+    </DynamicScopeRef>
+  </QuickLinkOptions>
+  <QuickLinkOptions allowOther="true">
+    <DynamicScopeRef>
+      <Reference class="sailpoint.object.DynamicScope" name="Manager"/>
+    </DynamicScopeRef>
+  </QuickLinkOptions>
+</QuickLink>

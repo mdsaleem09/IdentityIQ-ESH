@@ -1,0 +1,3 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE NativeIdentityChangeEvent PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<NativeIdentityChangeEvent applicationId="c0a891017bb91c9d817bba3e0bfc02ba" launched="1674227793445" linkId="c0a8010285b010dc8185cfb6a6321450" newNativeIdentity="CN=stejob1,OU=Disable,OU=People,OU=Demo,DC=Eshiam,DC=com" oldNativeIdentity="CN=stejob1,OU=People,OU=Demo,DC=Eshiam,DC=com" status="Completed" type="Account" uuid="{7609f236-df10-4f8b-b26b-57fcc3f89aeb}"/>

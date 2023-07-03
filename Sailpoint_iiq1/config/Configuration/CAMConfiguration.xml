@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Configuration PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Configuration name="CAMConfiguration">
+  <Attributes>
+    <Map>
+      <entry key="clientId"/>
+      <entry key="clientSecret"/>
+      <entry key="connectTimeoutSeconds">
+        <value>
+          <Integer>10</Integer>
+        </value>
+      </entry>
+      <entry key="doInitialization">
+        <value>
+          <Boolean/>
+        </value>
+      </entry>
+      <entry key="eventAcknowledgeEndpoint" value="/tqr/v1/messages/acknowledge"/>
+      <entry key="eventGroupId" value="iiq-fe566368949c4c9096fead84bd1125c7"/>
+      <entry key="eventInitializationEndpoint" value="/graph-querymgr/v1/resources/publish"/>
+      <entry key="groupsEndpoint" value="/v1/resources/groups"/>
+      <entry key="healthCheckEndpoint" value="/v1/resources/healthStatus"/>
+      <entry key="hostname"/>
+      <entry key="initializationError"/>
+      <entry key="initializationHost"/>
+      <entry key="initializedDate"/>
+      <entry key="messagesEndpoint" value="/tqr/v1/messages"/>
+      <entry key="oauthHostname"/>
+      <entry key="readTimeoutSeconds">
+        <value>
+          <Integer>60</Integer>
+        </value>
+      </entry>
+      <entry key="rolesEndpoint" value="/v1/resources/roles"/>
+      <entry key="scopesEndpoint" value="/v1/resources/scopes"/>
+      <entry key="servicesEndpoint" value="/v1/resources/services"/>
+      <entry key="subscribersEndpoint" value="/tqr/v1/subscribers"/>
+      <entry key="subscriptionsEndpoint" value="/tqr/v1/subscriptions"/>
+      <entry key="supportedAppTypes">
+        <value>
+          <Map>
+            <entry key="AWS">
+              <value>
+                <Map>
+                  <entry key="cloudType" value="AWS"/>
+                  <entry key="label" value="cam_cloudtype_label_aws"/>
+                </Map>
+              </value>
+            </entry>
+            <entry key="Azure Active Directory">
+              <value>
+                <Map>
+                  <entry key="cloudType" value="AZURE"/>
+                  <entry key="label" value="cam_cloudtype_label_azure"/>
+                </Map>
+              </value>
+            </entry>
+          </Map>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</Configuration>

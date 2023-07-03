@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="plan in  rule" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+ 
+
+  
+ import sailpoint.object.*;
+import sailpoint.api.*;
+import sailpoint.object.ProvisioningPlan.AccountRequest;
+   import sailpoint.object.ProvisioningPlan.AttributeRequest;
+   import sailpoint.object.ProvisioningPlan.Operation;
+  import sailpoint.object.ProvisioningPlan;
+        import sailpoint.object.Identity;
+        import sailpoint.object.Link;
+        import sailpoint.object.Application;
+        import sailpoint.object.ProvisioningPlan;
+        import sailpoint.object.ProvisioningPlan.AccountRequest;
+        import sailpoint.object.ProvisioningPlan.AttributeRequest;
+        import sailpoint.api.Provisioner;
+
+        System.out.println("Inside move user step:");
+
+  
+       
+				String identityName ="Joseph Thompson";     
+  			Identity identity = context.getObjectByName(Identity.class,identityName);
+        
+        String newOU="OU=Standard,OU=User Accounts,DC=devuser,DC=devohsuit,DC=com";
+        String userDN="CN="+sAMAccountName;
+        Application application = context.getObjectByName(Application.class,"Active- Directory");
+        Link link = identity.getLink(application);
+
+        ProvisioningPlan plan = new ProvisioningPlan();
+        plan.setIdentity(identity);
+
+
+        //Disable AD Account 
+        AccountRequest accountRequestDis = new AccountRequest();
+        accountRequestDis.setApplication(application.getName());
+        accountRequestDis.setNativeIdentity(link.getNativeIdentity());
+        accountRequestDis.setOp(ProvisioningPlan.ObjectOperation.Disable);      
+        if(link.getAttribute("mailNickname")!= null){
+        accountRequestDis.add(new AttributeRequest("mailNickname",ProvisioningPlan.Operation.Remove));        
+        }
+       
+        plan.add(accountRequestDis);  
+       // return plan.toXml();
+       // Provisioner provisioner = new Provisioner(context);
+       // provisioner.execute(plan);
+        System.out.println("Exiting move user step:"+plan.toXml());     
+
+
+
+        ProvisioningPlan planMove = new ProvisioningPlan();    
+        planMove.setIdentity(identity);
+        AccountRequest accountRequestMove = new AccountRequest();
+        accountRequestMove.setApplication(application.getName());
+        accountRequestMove.setNativeIdentity(link.getNativeIdentity());
+        accountRequestMove.setOp(ProvisioningPlan.ObjectOperation.Modify);     
+        accountRequestMove.add(new AttributeRequest("AC_NewParent",ProvisioningPlan.Operation.Set,newOU));
+        planMove.add(accountRequestMove);
+        Provisioner provisioner = new Provisioner(context);
+        provisioner.execute(planMove);
+        userDN=userDN+","+newOU;
+        System.out.println("Exiting move user step:"+userDN);
+        return userDN;
+        
+    
+  
+  
+  /*
+        String identityName="Benjamin Hicks";
+        System.out.println("Inside this rule:");
+       Identity idObj=context.getObjectByName(Identity.class,identityName);
+        Link applicationLink = idObj.getLink(context.getObjectByName(Application.class, "Active- Directory"));
+
+  
+  ProvisioningPlan plan=new ProvisioningPlan();
+  System.out.println("plan"+plan);
+  plan.setIdentity(idObj);
+  AccountRequest acctReq=new AccountRequest();
+  acctReq.setApplication("Active- Directory");
+        acctReq.setNativeIdentity(applicationLink.getNativeIdentity());
+  acctReq.setOp(ProvisioningPlan.ObjectOperation.Disable);
+   //String nativeid="CN="+idObj.getName()+","+"OU=Disable-Users,OU=Demo,DC=Eshiam,DC=com";
+  String nativeid ="CN=Compensation,OU=Groups,OU=Demo,DC=Eshiam,DC=com";
+       // String nativeid="OU=Disable-Users,OU=Demo,DC=Eshiam,DC=com";
+        System.out.println("native"+nativeid);
+  acctReq.add(new AttributeRequest("AC_NewParent",ProvisioningPlan.Operation.Set,nativeid));
+  plan.add(acctReq);
+  Provisioner provisioner = new Provisioner(context);
+	provisioner.execute(plan);
+	context.saveObject(idObj);
+	context.commitTransaction();
+  System.out.println("plan in rule"+plan.toXml());
+  
+  
+  
+  Attributes attr = new Attributes();
+  attr.put("correlation",true);
+  plan.setAttributes(attr);
+  return plan;
+  plan.setIdentity(idObj);
+  AccountRequest acctReq=new AccountRequest();
+  acctReq.setApplication("Active Directory");
+        acctReq.setNativeIdentity(applicationLink.getNativeIdentity());
+  acctReq.setOp(ProvisioningPlan.ObjectOperation.Disable);
+   // String nativeid="CN="+idObj.getName()+","+"OU=Disable-Users,OU=Demo,DC=Eshiam,DC=com";
+        String nativeid="OU=Disable-Users,OU=Demo,DC=Eshiam,DC=com";
+        System.out.println("native"+nativeid);
+  acctReq.add(new AttributeRequest("AC_NewParent",ProvisioningPlan.Operation.Set,nativeid));
+  plan.add(acctReq);
+                System.out.println("Plan in Disable Workflow2:"+plan.toXml());
+
+  Provisioner provisioner = new Provisioner(context);
+	provisioner.execute(plan);
+	context.saveObject(idObj);
+	context.commitTransaction();
+ 
+
+ */
+  </Source>
+</Rule>

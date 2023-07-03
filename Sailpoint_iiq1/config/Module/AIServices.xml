@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Module PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Module description="ui_identityai_module_desc" name="AIServices">
+  <Attributes>
+    <Map>
+      <entry key="enabledConfigKey" value="identityAIEnabled"/>
+      <entry key="healthCheckClass" value="sailpoint.identityai.IdentityAIHealthChecker"/>
+    </Map>
+  </Attributes>
+</Module>

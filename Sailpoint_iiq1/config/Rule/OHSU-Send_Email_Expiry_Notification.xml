@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="OHSU-Send Email Expiry Notification" type="Validation">
+  <Description>This program will Send Mail Expiration Notification</Description>
+  <Source>
+  import sailpoint.object.Identity;
+  import sailpoint.object.Filter;
+  import sailpoint.object.QueryOptions;
+  import sailpoint.object.EmailTemplate;
+  import sailpoint.object.EmailOptions;
+  import sailpoint.tools.Util;
+
+  import java.text.SimpleDateFormat;
+  
+
+  String extendDate="";
+  String manager = "";
+  String mail = "";
+  List results = new ArrayList();
+  QueryOptions options = new QueryOptions();
+  Filter filters =  Filter.notnull("mailBoxExtendDate").Filter.eq("mailBoxExtendRequested","Approved"));
+  List identities = context.getObjects(Identity.class,options);
+  String currentDate = new SimpleDateFormat("MM/dd/yyyy").format(new Date());  
+  SimpleDateFormat sf = new SimpleDateFormat("MM/dd/yyyy");
+  for(Identity identity:identities){
+    //grab extendDate
+    extendDate = identity.getAttribute("mailBoxExtendDate");
+
+    //convert date
+    if(extendDate!=null){   
+      Date extDate = sf.parse(extendDate);
+      Date todayDate = sf.parse(currentDate);
+      if(Util.getDaysDifference(new Date(),termDate) &lt;=5){
+        if(identity.getManager()!=null &amp;&amp; identity.getManager().getAttribute("email")!=null)
+          manager = identity.getManager().getAttribute("email");
+        mail = identity.getAttribute("email");
+        EmailTemplate emailTemplate = context.getObjectByName(EmailTemplate.class,"MailBoxExpirationRemainder");
+        EmailOptions options = new EmailOptions();
+        options.setTo(mail);
+        options.setCc(manager);
+        Map args = new HashMap();
+        args.put("identityName",identity.getName());
+        args.put("displayName",identity.getDisplayName());
+        args.put("workItemName","Expiring MailBox");
+        args.put("daysUntilExpire","5");
+        options.setVariable(args);
+        context.sendEmailNotification(emailTemplate,options);
+      }else if(Util.getDaysDifference(new Date(),termDate) &lt;= 0){
+        //sent mail has expired today
+        EmailTemplate emailTemplate = context.getObjectByName(EmailTemplate.class,"MailBoxExpired");
+        EmailOptions options = new EmailOptions();
+        options.setTo(mail);
+        options.setCc(manager);
+        Map args = new HashMap();
+        args.put("identityName",identity.getName());
+        args.put("displayName",identity.getDisplayName());
+        args.put("workItemName","Expired");
+        options.setVariable(args);
+        context.sendEmailNotification(emailTemplate,options);
+        //setting expired to mailboxExtendRequested
+        identity.setAttribute("mailBoxExtendRequested","Expired");
+        context.saveObject(identity);
+        context.commitTransaction();
+
+      }
+    }
+    return results.add(identity.getName());
+  }
+
+
+
+
+
+  </Source>
+</Rule>

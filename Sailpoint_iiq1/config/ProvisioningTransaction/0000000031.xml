@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction accountDisplayName="Emily Kelley" applicationName="DemoJdbcApp" identityDisplayName="Emily Kelley" identityName="Emily Kelley" integration="DemoJdbcApp" name="0000000031" nativeIdentity="1c2b3b4e" operation="Modify" source="IdentityRefresh" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="planResult">
+        <value>
+          <ProvisioningResult status="failed">
+            <Errors>
+              <Message key="BeanShell script error: bsh.EvalError: Sourced file: inline evaluation of: ``import java.sql.ResultSet;    import java.sql.Statement;    import java.sql.Conn . . . '' : Error in method invocation: Method toxml() not found in class'sailpoint.object.ProvisioningPlan' : at Line: 100 : in file: inline evaluation of: ``import java.sql.ResultSet;    import java.sql.Statement;    import java.sql.Conn . . . '' : plan .toxml ( ) &#xa; BSF info: JDBC-Modify-Provisioning at line: 0 column: columnNo" type="Error"/>
+            </Errors>
+          </ProvisioningResult>
+        </value>
+      </entry>
+      <entry key="request">
+        <value>
+          <AccountRequest application="DemoJdbcApp" nativeIdentity="1c2b3b4e" op="Modify">
+            <Attributes>
+              <Map>
+                <entry key="provisioningTransactionId" value="c0a8de017c251895817c35abe6901340"/>
+              </Map>
+            </Attributes>
+            <AttributeRequest name="GroupValue" op="Remove">
+              <Value>
+                <List>
+                  <String>Engineering</String>
+                  <String>Finance</String>
+                </List>
+              </Value>
+            </AttributeRequest>
+            <ProvisioningResult status="failed">
+              <Errors>
+                <Message key="BeanShell script error: bsh.EvalError: Sourced file: inline evaluation of: ``import java.sql.ResultSet;    import java.sql.Statement;    import java.sql.Conn . . . '' : Error in method invocation: Method toxml() not found in class'sailpoint.object.ProvisioningPlan' : at Line: 100 : in file: inline evaluation of: ``import java.sql.ResultSet;    import java.sql.Statement;    import java.sql.Conn . . . '' : plan .toxml ( ) &#xa; BSF info: JDBC-Modify-Provisioning at line: 0 column: columnNo" type="Error"/>
+              </Errors>
+            </ProvisioningResult>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

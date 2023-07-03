@@ -1,0 +1,112 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE JasperResult PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<JasperResult handlerPageCount="-1" pageCount="-1" pagesPerBucket="-1">
+  <Attributes>
+    <Map>
+      <entry key="csvRowsPerBucket">
+        <value>
+          <Integer>1000</Integer>
+        </value>
+      </entry>
+      <entry key="header">
+        <value>
+          <LiveReportSummary title="Application Account Summary Report">
+            <Values>
+              <LiveReportSummaryValue label="Creator" name="creator">
+                <Value>
+                  <String>spadmin</String>
+                </Value>
+              </LiveReportSummaryValue>
+              <LiveReportSummaryValue label="Creation Date" name="date">
+                <Value>
+                  <String>2/28/23 11:00 AM</String>
+                </Value>
+              </LiveReportSummaryValue>
+            </Values>
+          </LiveReportSummary>
+        </value>
+      </entry>
+      <entry key="reportDefinition">
+        <value>
+          <LiveReport title="Application Account Summary Report">
+            <DataSource objectType="Application" type="Filter">
+              <QueryParameters>
+                <Parameter argument="applications" property="id"/>
+              </QueryParameters>
+            </DataSource>
+            <ReportForm>
+              <Reference class="sailpoint.object.Form" name="Report Form Skeleton"/>
+            </ReportForm>
+            <Columns>
+              <ReportColumnConfig field="application" header="Application" property="name" sortable="true" width="183"/>
+              <ReportColumnConfig field="totalAccounts" header="Total Application Accounts" property="id" width="183">
+                <RenderScript>
+                  <Source>
+                          import sailpoint.object.*;
+                          QueryOptions ops = new QueryOptions();
+                          ops.addFilter(Filter.eq("application.id", value));
+                          return context.countObjects(Link.class, ops);
+                        </Source>
+                </RenderScript>
+              </ReportColumnConfig>
+              <ReportColumnConfig field="distinctIdentities" header="Identities With Application Accounts" property="id" width="183">
+                <RenderScript>
+                  <Source>
+                          import sailpoint.object.*;
+                          QueryOptions ops = new QueryOptions();
+                          ops.addFilter(Filter.eq("links.application.id", value));
+                          ops.setDistinct(true);
+                          return context.countObjects(Identity.class, ops);
+                        </Source>
+                </RenderScript>
+              </ReportColumnConfig>
+              <ReportColumnConfig field="multipleAccounts" header="Identities With Multiple Application Accounts" property="id" width="183">
+                <RenderScript>
+                  <Source>
+                            import sailpoint.object.*;
+                            Map queryArgs = new HashMap();
+                            queryArgs.put("application", value);
+
+                            int multipleLinksCount = 0;
+                            String hql = "select count(distinct identityAlias.id) from sailpoint.object.Identity identityAlias where (select count(*) from sailpoint.object.Link links2 where links2.identity.id = identityAlias.id and links2.application.id = (:application)) &gt; 1";
+                            Iterator it = context.search(hql, queryArgs, null);
+                            while (it.hasNext()) {
+                                Object o = it.next();
+                                if(o!=null) {
+                                    multipleLinksCount = ((Long)o).intValue();
+                                }
+                            }
+                          return multipleLinksCount;
+                        </Source>
+                </RenderScript>
+              </ReportColumnConfig>
+            </Columns>
+            <ReportHeader title="Application Account Summary Report">
+              <Values>
+                <LiveReportSummaryValue label="Creator" name="creator">
+                  <Value>
+                    <String>spadmin</String>
+                  </Value>
+                </LiveReportSummaryValue>
+                <LiveReportSummaryValue label="Creation Date" name="date">
+                  <Value>
+                    <String>2/28/23 11:00 AM</String>
+                  </Value>
+                </LiveReportSummaryValue>
+              </Values>
+            </ReportHeader>
+          </LiveReport>
+        </value>
+      </entry>
+      <entry key="reportRowCount">
+        <value>
+          <Integer>15</Integer>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+  <Files>
+    <Reference class="sailpoint.object.PersistedFile" name="Application Account Summary Report.pdf"/>
+    <Reference class="sailpoint.object.PersistedFile" name="Application Account Summary Report.csv"/>
+  </Files>
+</JasperResult>

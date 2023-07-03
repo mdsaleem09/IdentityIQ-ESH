@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="SIEM Group Membership Exclusion Rule" type="CertificationExclusion">
+  <Description>This rule will exclude all entitlements on the application, except the one passed in via the REST endpoint from the SIEM system.</Description>
+  <Signature returnType="String">
+    <Inputs>
+      <Argument name="log">
+        <Description>
+					The log object associated with the SailPointContext.
+        </Description>
+      </Argument>
+      <Argument name="context">
+        <Description>
+					A sailpoint.api.SailPointContext object that can be used to query
+					the database if necessary.
+        </Description>
+      </Argument>
+      <Argument name="entity" type="AbstractCertifiableEntity">
+        <Description>
+					The AbstractCertifiableEntity that is part of the certification.
+					Currently, this is either an Identity, ManagedAttribute, or Bundle.
+        </Description>
+      </Argument>
+      <Argument name="certification" type="Certification">
+        <Description>
+					The certification that this identity is part of.
+        </Description>
+      </Argument>
+      <Argument name="certContext" type="CertificationContext">
+        <Description>
+					The CertificationContext that is being used to generate the
+					certification.
+        </Description>
+      </Argument>
+      <Argument name="items" type="List">
+        <Description>
+					List of Certifiable items that are currently part of the
+					certification for this identity. Any items that should be excluded
+					from the certification should be deleted from this list and added
+					to the itemsToExclude list.
+        </Description>
+      </Argument>
+      <Argument name="itemsToExclude" type="List">
+        <Description>
+					A List of Certifiable items that should not be included in the
+					certification. This list will be empty when the rule is executed
+					and any items that should not be part of the certification should
+					be moved from the items list to the itemsToExclude list.
+        </Description>
+      </Argument>
+    </Inputs>
+    <Returns>
+      <Argument name="explanation" type="String">
+        <Description>
+					An optional explanation describing why the items were excluded.
+        </Description>
+      </Argument>
+    </Returns>
+  </Signature>
+  <Source>
+		
+
+			import sailpoint.object.*;
+			import sailpoint.api.certification.DataOwnerCertifiableEntity.DataItem;
+
+			import org.apache.commons.logging.Log;
+			import org.apache.commons.logging.LogFactory;
+
+			//goes through file and adds owners to entitlements in IdentityIQ
+			Log log = LogFactory.getLog("rule.SIEMPlugin.ExclusionRule");
+
+			log.debug("Start SIEMGroupMembershipExclusionRule");
+
+			//switched to ID, though still not used...
+			String applicationId = "%%GROUP_APPLICATION_ID%%";
+			String entsToKeepName = "%%GROUP_TYPE%%";
+			String entsToKeepValue = "%%GROUP_VALUE%%";
+
+			// the entity dataItem contains the ID of the ManagedAttribute
+			DataItem dataItem = entity.getDataItem();
+			// get the ManagedAttribute by ID
+			ManagedAttribute mgdAtt = context.getObjectById(ManagedAttribute.class, dataItem.getId());
+
+			// only proceed if we actually found a ManagedAttribute
+			if (mgdAtt != null) {
+			  // only proceed if ManagedAttribute has a certInclude ExtendedAttribute value
+			  if (entsToKeepName.equalsIgnoreCase(mgdAtt.getAttribute()) &amp;&amp; entsToKeepValue.equalsIgnoreCase(mgdAtt.getValue()) &amp;&amp; applicationId.equalsIgnoreCase(mgdAtt.getApplicationId())) {
+				  log.debug("Match found: " + mgdAtt.getValue());
+				  //Note: We can match applicationName and displayablename as well.
+			  } else {
+				  log.debug("Exclude: " + mgdAtt.getValue());
+				  itemsToExclude.addAll(items);
+			  }
+			}
+
+			for (Object b: itemsToExclude) {
+			   items.remove(b); // mustn't modify list during iteration above..
+			}
+			log.debug("Finish SIEMGroupMembershipExclusionRule");
+			return null;
+		
+		</Source>
+</Rule>

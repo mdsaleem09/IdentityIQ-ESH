@@ -1,0 +1,193 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="CreateRoleChangeEvent">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+
+  import java.util.ArrayList;
+  import java.util.Collection;
+  import java.util.HashMap;
+  import java.util.List;
+  import java.util.Map;
+
+  import sailpoint.object.ProvisioningPlan;
+  import sailpoint.object.Application;
+  import sailpoint.object.Attributes;
+  import sailpoint.object.Bundle;
+  import sailpoint.object.Filter;
+  import sailpoint.object.Filter.LeafFilter;
+  import sailpoint.object.Profile;
+  import sailpoint.object.ProvisioningPlan.AccountRequest;
+  import sailpoint.object.ProvisioningPlan.AttributeRequest;
+  import sailpoint.object.RoleChangeEvent;
+  import sailpoint.tools.Util;
+
+
+  public static Map getAppWiseEntitlements(List&lt;String&gt; itRoles) {
+    Map retMap = new  HashMap();
+    try {
+      
+      if( itRoles == null || !(Util.nullSafeSize(itRoles) &gt; 0)) return retMap;
+      
+      for(String itRoleName : itRoles) {
+        Bundle itbundle = context.getObjectByName(Bundle.class, itRoleName);
+        System.out.println(" itbundle : "+itbundle);
+        if(itbundle == null) continue;
+        List&lt;Profile&gt; profiles = itbundle.getProfiles();
+        for(Profile pfObj : profiles ) {
+          Application application = pfObj.getApplication();
+
+          List&lt;Filter&gt; constraints = pfObj.getConstraints();
+          for(LeafFilter filterobj : constraints) {
+            String property = filterobj.getProperty();
+            String key = application.getName()+":"+property;
+            List entvals = (List) filterobj.getValue();
+            if(Util.nullSafeSize(entvals) &gt; 0) {
+
+              if(retMap.containsKey(key)) {
+                entvals.addAll((Collection) retMap.get(key));
+              }
+
+              retMap.put(key, entvals);
+
+            }
+
+          }
+        }
+        context.decache(itbundle);
+      }
+    }catch(Exception e) {
+      System.out.println(" Error in getAppWiseEntitlements() : "+e.getMessage());
+    }
+
+    return retMap;
+  }
+
+
+  public static List buildAccountRequsts(Map appMap, boolean isRemove) {
+
+    List accReqList = new ArrayList();
+    try {
+
+      System.out.println(" isRemove : "+isRemove);
+      System.out.println(" appMap : "+appMap);
+      for(String key : appMap.keySet()) {
+        String appName = key.split(":")[0].trim();
+        String attr = key.split(":")[1].trim();
+
+        System.out.println(" appName : "+appName);
+        System.out.println(" attr : "+attr);
+        AccountRequest acctReq = new AccountRequest();
+
+        if(isRemove) {
+          acctReq.setApplication(appName);
+          acctReq.add(new AttributeRequest(attr, ProvisioningPlan.Operation.Remove, appMap.get(key)));
+        }else{
+          acctReq.setApplication(appName);
+        }
+
+        accReqList.add(acctReq);
+      }
+    }catch(Exception e) {
+      System.out.println(" Error in buildPlan() : "+e.getMessage());
+    }
+
+    return accReqList;
+  }
+
+
+  public static  ProvisioningPlan buildPlan(List acctReqList, String roleName){
+    ProvisioningPlan plan = new ProvisioningPlan();
+    plan.setAccountRequests(acctReqList);
+    try {
+      Attributes attrs = new Attributes();
+      Map map = new HashMap();
+      map.put("source", "RoleChangePropagation");
+      attrs.setMap(map);
+      plan.setArguments(attrs);
+      AccountRequest acctReqIIQ = new AccountRequest();
+      acctReqIIQ.setApplication("IIQ");
+      acctReqIIQ.setOperation(AccountRequest.Operation.Modify);
+      acctReqIIQ.add(new AttributeRequest("assignedRoles", ProvisioningPlan.Operation.Add, roleName));
+
+      plan.add(acctReqIIQ);
+
+    }catch(Exception e) {
+      System.out.println(" Error in buildPlan() : "+e.getMessage());
+    }
+
+    return plan;
+  }
+
+
+  public static void createRoleChangeEvent(List removeITList, List addITList, String roleName) {
+
+    try {
+      Bundle bundleObj = context.getObjectByName(Bundle.class, roleName);
+      if(bundleObj != null) {
+        RoleChangeEvent rce = new RoleChangeEvent();
+        rce.setBundleDeleted(false);
+        rce.setBundleId(bundleObj.getId());
+        rce.setBundleName(roleName);
+
+
+        System.out.println(" removeITList : "+removeITList);
+        System.out.println(" addITList : "+addITList);
+
+        Map addEntMap = getAppWiseEntitlements(addITList);
+        System.out.println(" addEntMap : "+addEntMap);
+
+        Map removeEntMap = getAppWiseEntitlements(removeITList);
+        System.out.println(" removeEntMap : "+removeEntMap);
+
+        List addAcctReqList = buildAccountRequsts(addEntMap, false);
+        System.out.println(" addAcctReqList : "+addAcctReqList);
+
+        List removeAcctReqList = buildAccountRequsts(removeEntMap, true);
+        System.out.println(" removeAcctReqList : "+removeAcctReqList);
+
+        List allAcctReqs = new ArrayList();
+
+        if(Util.nullSafeSize(addAcctReqList) &gt; 0) {
+          allAcctReqs.addAll(addAcctReqList);
+        }
+
+        if(Util.nullSafeSize(removeAcctReqList) &gt; 0) {
+          allAcctReqs.addAll(removeAcctReqList);
+        }
+
+        if(Util.nullSafeSize(allAcctReqs) &gt; 0) {
+          ProvisioningPlan plan = buildPlan(allAcctReqs, roleName);
+          rce.setProvisioningPlan(plan);
+           System.out.println(" created RoleChangeEvent : "+rce.toXml());
+          context.saveObject(rce);
+          context.commitTransaction();
+        }
+
+      }
+
+    }catch(Exception e) {
+      System.out.println(" Error in createRoleChangeEvent() : "+e.getMessage());
+    }
+
+  }
+
+  /*List removeITList = new ArrayList();
+  removeITList.add("DemoJdbcApp-Engineering");
+  removeITList.add("DemoJdbcApp-Finance");
+
+  List addITList = null;
+ // addITList.add("DemoJdbcApp-Testing");
+
+  String roleName = "ESHIAM\\DemoGroupcommon";
+
+  //createRoleChangeEvent( removeITList, addITList, roleName);
+  
+  */
+
+
+
+
+
+  </Source>
+</Rule>

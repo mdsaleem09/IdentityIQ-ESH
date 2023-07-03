@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Capability PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Capability displayName="capability_identity_request_administrator" name="IdentityRequestAdministrator">
+  <Description>capability_desc_identity_request_administrator</Description>
+  <RightRefs>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessIdentityRequest"/>
+    <Reference class="sailpoint.object.SPRight" name="ViewIdentityRequest"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessReport"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessAttributeRequestStatusReport"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessAccountRequestStatusReport"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessPasswordManagementReport"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessEntitlementRequestStatusReport"/>
+  </RightRefs>
+</Capability>

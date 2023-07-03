@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE RequestDefinition PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<RequestDefinition executor="sailpoint.request.NativeIdentityChangePropagationRequestExecutor" name="Native Identity Change Propagation Request" retryInterval="60" retryMax="10" type="NativeIdentityChangePropagation">
+  <Attributes>
+    <Map>
+      <entry key="accountPropagators">
+        <value>
+          <List>
+            <Propagator className="sailpoint.api.nativeidentitychange.NativeIdentityChangeFormPropagator"/>
+            <Propagator className="sailpoint.api.nativeidentitychange.NativeIdentityChangeCorrelationConfigPropagator"/>
+            <Propagator className="sailpoint.api.nativeidentitychange.NativeIdentityChangeApplicationPropagator"/>
+            <Propagator className="sailpoint.api.nativeidentitychange.NativeIdentityChangeDynamicScopePropagator"/>
+            <Propagator className="sailpoint.api.nativeidentitychange.NativeIdentityChangePasswordPolicyHolderPropagator"/>
+            <Propagator className="sailpoint.api.nativeidentitychange.NativeIdentityChangeGroupDefinitionPropagator"/>
+            <Propagator className="sailpoint.api.nativeidentitychange.NativeIdentityChangeIdentityTriggerPropagator"/>
+            <Propagator className="sailpoint.api.nativeidentitychange.NativeIdentityChangeRolePropagatorCorrelationModel"/>
+            <Propagator className="sailpoint.api.nativeidentitychange.NativeIdentityChangeRulePropagator"/>
+            <Propagator className="sailpoint.api.nativeidentitychange.NativeIdentityChangePolicyPropagator"/>
+            <Propagator className="sailpoint.api.nativeidentitychange.AccountNativeIdentityChangeIdentityPropagator"/>
+          </List>
+        </value>
+      </entry>
+      <entry key="enablePartitioning" value="false"/>
+      <entry key="groupPropagators">
+        <value>
+          <List>
+            <Propagator className="sailpoint.api.nativeidentitychange.NativeIdentityChangeFormPropagator"/>
+            <Propagator className="sailpoint.api.nativeidentitychange.NativeIdentityChangeCorrelationConfigPropagator"/>
+            <Propagator className="sailpoint.api.nativeidentitychange.NativeIdentityChangeApplicationPropagator"/>
+            <Propagator className="sailpoint.api.nativeidentitychange.NativeIdentityChangeDynamicScopePropagator"/>
+            <Propagator className="sailpoint.api.nativeidentitychange.NativeIdentityChangePasswordPolicyHolderPropagator"/>
+            <Propagator className="sailpoint.api.nativeidentitychange.NativeIdentityChangeGroupDefinitionPropagator"/>
+            <Propagator className="sailpoint.api.nativeidentitychange.NativeIdentityChangeIdentityTriggerPropagator"/>
+            <Propagator className="sailpoint.api.nativeidentitychange.NativeIdentityChangeRolePropagatorCorrelationModel"/>
+            <Propagator className="sailpoint.api.nativeidentitychange.NativeIdentityChangeRulePropagator"/>
+            <Propagator className="sailpoint.api.nativeidentitychange.NativeIdentityChangePolicyPropagator"/>
+            <Propagator className="sailpoint.api.nativeidentitychange.GroupNativeIdentityChangeIdentityPropagator"/>
+          </List>
+        </value>
+      </entry>
+      <entry key="maxThreads" value="5"/>
+    </Map>
+  </Attributes>
+  <Description>
+      Request definition for propagating native identity change events.
+    </Description>
+</RequestDefinition>

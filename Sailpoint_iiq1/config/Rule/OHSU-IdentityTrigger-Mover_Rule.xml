@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="OHSU-IdentityTrigger-Mover Rule" type="IdentityTrigger">
+  <Description>This rule can be used for Certification Events that use rule triggers. The previousIdentity and newIdentity hold snapshots of the identity before the update has occurred and the state of the identity after the update, respectively.</Description>
+  <Signature returnType="boolean">
+    <Inputs>
+      <Argument name="log" type="org.apache.commons.logging.Log">
+        <Description>
+          The log object associated with the SailPointContext.
+        </Description>
+      </Argument>
+      <Argument name="context" type="sailpoint.api.SailPointContext">
+        <Description>
+          A sailpoint.api.SailPointContext object that can be used to query the database if necessary.
+        </Description>
+      </Argument>
+      <Argument name="previousIdentity">
+        <Description>
+          The identity before the refresh/aggregation (this will be null when an
+          identity is created).
+        </Description>
+      </Argument>
+      <Argument name="newIdentity">
+        <Description>
+          The identity after the refresh/aggregation (this will be null when an
+          identity is deleted).
+        </Description>
+      </Argument>
+    </Inputs>
+    <Returns>
+      <Argument name="result">
+        <Description>
+          A boolean describing the result of the rule.
+        </Description>
+      </Argument>
+    </Returns>
+  </Signature>
+  <Source>
+import sailpoint.object.Identity;
+import sailpoint.api.*;
+
+  System.out.println("Previous Identity"+previousIdentity.toXml());
+  System.out.println("Next Identity"+newIdentity.toXml());
+
+if(!(previousIdentity instanceof Identity) || !(newIdentity instanceof Identity)){
+return false;
+}
+if(newIdentity == null || newIdentity == void || !newIdentity.isCorrelated()){
+System.out.println("inside if Next Identity"+newIdentity);
+return false;
+}
+String previousManager="";
+String newManager="";
+if(previousIdentity.getAttribute("manager")!=null &amp;&amp; newIdentity.getAttribute("manager")!=null){
+previousManager            =      previousIdentity.getAttribute("manager");
+newManager           =      newIdentity.getAttribute("manager");
+System.out.println("Test-2:att2olVal"+att2olVal);
+System.out.println("Test-2:att2newVal"+att2newVal);
+}
+if(Util.isNotNullOrEmpty(previousManager) &amp;&amp; Util.isNotNullOrEmpty(newManager) &amp;&amp; !previousManager.equalsIgnoreCase(newManager)){
+System.out.println("return true");
+return true;
+}
+  </Source>
+</Rule>

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Build" type="BuildMap">
+  <Description>This rule is used by the delimited file connector to build a map representation of the delimited data.</Description>
+  <Signature returnType="Map"/>
+  <Source>System.out.println("Build Map Rule Called");</Source>
+</Rule>

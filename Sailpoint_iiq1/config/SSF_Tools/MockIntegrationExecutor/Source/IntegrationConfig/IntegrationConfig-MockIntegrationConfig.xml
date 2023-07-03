@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE IntegrationConfig PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<IntegrationConfig executor="sailpoint.services.standard.mockintegrationexecutor.MockIntegrationExecutor" name="MockIntegrationConfig" roleSyncStyle="none">
+  <Attributes>
+    <Map>
+      <entry key="assumeSuccessfulTicketOperations" value="false"/>
+      <entry key="customObjectName" value="MockIntegration"/>
+      <entry key="enableChangeRequest" value="true"/>
+      <entry key="operations" value="Create,Modify,Delete,Enable,Unlock,SetPassword"/>
+      <entry key="retryableErrors">
+        <value>
+          <List>
+            <String>Failed to connect to server</String>
+          </List>
+        </value>
+      </entry>
+      <entry key="simulatedLatency" value="1000"/>
+      <entry key="statusMap">
+        <value>
+          <Map>
+            <entry key="closed" value="committed"/>
+            <entry key="open" value="queued"/>
+            <entry key="retry" value="queued"/>
+          </Map>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+  <!-- Add applications here that should be provisioned via the IntegrationConfig.
+  <ManagedResources>
+    <ManagedResource>
+      <ApplicationRef>
+        <Reference class="sailpoint.object.Application" name="AD - DOM1"/>
+      </ApplicationRef>
+    </ManagedResource>
+  </ManagedResources>
+  -->
+</IntegrationConfig>

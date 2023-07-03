@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="set attribute for hybrid role" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+  import sailpoint.object.Identity;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+  import sailpoint.object.Filter;
+  import sailpoint.object.Profile;
+  
+  import java.util.*;
+ 
+//********************************************************************************
+//////////////////Rule Starts From Here
+
+  String roledisplayName=null;
+  String groupName=null;
+  
+String appName="Active Directory";
+  
+Application appObj=context.getObjectByName(Application.class,appName);
+Filter filter=Filter.eq("application.name",appName);
+QueryOptions opts=new QueryOptions();
+opts.addFilter(filter);
+opts.setCloneResults(true);
+
+Iterator it=context.search(ManagedAttribute.class,opts);
+while(it.hasNext())
+{
+ManagedAttribute ma=(ManagedAttribute)it.next();
+
+//if exists return the role else create the role 
+Bundle bundObj=context.getObjectByName(Bundle.class,ma.getDisplayableName());
+if(bundObj!=null)
+{
+      //bundObj.setAttribute("SAP",(boolean)true);
+  bundObj.setAttribute("BAP","BAPOne");
+    
+}
+   context.saveObject(bundObj);
+    context.commitTransaction();
+ 
+}
+  context.decache();
+ 
+
+
+  </Source>
+</Rule>

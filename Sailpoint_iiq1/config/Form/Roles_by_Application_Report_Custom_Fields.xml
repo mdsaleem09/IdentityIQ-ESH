@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Form PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Form hidden="true" name="Roles by Application Report Custom Fields" type="Report">
+  <Section columns="1" label="report_details_section_role_props" name="customProperties">
+    <Field displayName="rept_role_details_field_apps" helpKey="rept_role_details_help_apps" multi="true" name="applications" postBack="true" type="Application" value="ref:applications"/>
+    <Field displayName="rept_role_by_app_field_show_all_apps" dynamic="true" helpKey="rept_role_by_app_input_show_all_apps" name="showAllApps" postBack="true" type="boolean" value="ref:showAllApps">
+      <Attributes>
+        <Map>
+          <entry key="hidden">
+            <value>
+              <Script>
+                <Source>
+                      return !sailpoint.tools.Util.isEmpty(applications);
+                    </Source>
+              </Script>
+            </value>
+          </entry>
+        </Map>
+      </Attributes>
+    </Field>
+    <Field displayName="rept_role_by_app_field_inherit" dynamic="true" helpKey="rept_role_by_app_input_inherit" name="includeInherited" type="boolean" value="ref:includeInherited">
+      <Attributes>
+        <Map>
+          <entry key="hidden">
+            <value>
+              <Script>
+                <Source>
+                      
+                      return sailpoint.tools.Util.isEmpty(applications) &amp;&amp; (showAllApps == null || !showAllApps);
+                      
+                    </Source>
+              </Script>
+            </value>
+          </entry>
+        </Map>
+      </Attributes>
+    </Field>
+  </Section>
+</Form>

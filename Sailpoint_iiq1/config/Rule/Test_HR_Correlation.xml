@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Test_HR Correlation" type="Correlation">
+  <Description>Identity Correlation Rules are used to find identities to which new accounts can be attached.
+
+A correlation rule must return a Map with one of the specified Return arguments.</Description>
+  <Signature returnType="Map"/>
+  <Source>import java.util.*;
+
+Map map=new HashMap();
+
+System.out.println("account"+account.toXml());
+
+
+
+String empId=account.getAttribute("EmployeeID");
+
+
+
+System.out.println("EmployeeID"+empId);
+
+map.put("identityAttributeName","EmployeeID");
+
+map.put("identityAttributeValue",empId);
+
+return map;</Source>
+</Rule>

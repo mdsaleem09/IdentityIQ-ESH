@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Policy PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Policy certificationActions="Remediated,Mitigated,Delegated" configPage="entitlementPolicy.xhtml" executor="sailpoint.policy.EntitlementSODPolicyExecutor" name="Ent Sod Policy" state="Active" type="EntitlementSOD" typeKey="policy_type_entitlement_sod" violationOwnerType="Manager">
+  <PolicyAlert disabled="true" escalationStyle="none"/>
+  <Attributes>
+    <Map>
+      <entry key="sysDescriptions">
+        <value>
+          <Map>
+            <entry key="en_US"/>
+          </Map>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+  <GenericConstraints>
+    <GenericConstraint name="Ent Sod Rule" violationOwnerType="None">
+      <IdentitySelector>
+        <MatchExpression>
+          <MatchTerm name="memberOf" type="Entitlement" value="CN=AccountsPayable,OU=Groups,OU=Demo,DC=Eshiam,DC=com">
+            <ApplicationRef>
+              <Reference class="sailpoint.object.Application" name="Active- Directory"/>
+            </ApplicationRef>
+          </MatchTerm>
+        </MatchExpression>
+      </IdentitySelector>
+      <IdentitySelector>
+        <MatchExpression>
+          <MatchTerm name="memberOf" type="Entitlement" value="CN=AccountsReceivable,OU=Groups,OU=Demo,DC=Eshiam,DC=com">
+            <ApplicationRef>
+              <Reference class="sailpoint.object.Application" name="Active- Directory"/>
+            </ApplicationRef>
+          </MatchTerm>
+        </MatchExpression>
+      </IdentitySelector>
+    </GenericConstraint>
+  </GenericConstraints>
+</Policy>

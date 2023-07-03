@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction accountDisplayName="Ad User1" applicationName="SAP-Direct" identityDisplayName="Ad User1" identityName="Ad User1" integration="RocheSAPProvisionIntegrationModule" name="0000000037" nativeIdentity="Ad User1" operation="Create" source="LCM" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="accessRequestId" value="0000000110"/>
+      <entry key="planResult">
+        <value>
+          <ProvisioningResult status="failed">
+            <Errors>
+              <Message key="Error in com.roche.cidm.integration.SAPGRC.SAPGRCIntegrationExecutor Rule does not exist with the name : RocheRule-SAPProvisioning" type="Error"/>
+            </Errors>
+          </ProvisioningResult>
+        </value>
+      </entry>
+      <entry key="request">
+        <value>
+          <AccountRequest application="SAP-Direct" nativeIdentity="Ad User1" op="Create">
+            <Attributes>
+              <Map>
+                <entry key="attachmentConfigList"/>
+                <entry key="attachments"/>
+                <entry key="flow" value="AccessRequest"/>
+                <entry key="id" value="c0a8de017c251895817c7e4dd819408b"/>
+                <entry key="interface" value="LCM"/>
+                <entry key="operation" value="EntitlementAdd"/>
+                <entry key="provisioningTransactionId" value="c0a8de017c7e1116817c7e8391be0016"/>
+              </Map>
+            </Attributes>
+            <AttributeRequest displayValue="Test-Role" name="Roles" op="Add" value="Test-Role">
+              <Attributes>
+                <Map>
+                  <entry key="assignment" value="true"/>
+                </Map>
+              </Attributes>
+            </AttributeRequest>
+            <AttributeRequest name="password" op="Set">
+              <Attributes>
+                <Map>
+                  <entry key="secret" value="true"/>
+                </Map>
+              </Attributes>
+            </AttributeRequest>
+            <AttributeRequest name="Last name" op="Set" value="User1"/>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

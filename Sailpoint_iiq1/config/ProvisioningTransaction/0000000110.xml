@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction accountDisplayName="ESHIAM\Angela Bell" applicationName="Active- Directory" identityDisplayName="Angela Bell" identityName="Angela Bell" integration="Active- Directory" name="0000000110" nativeIdentity="CN=Angela Bell,OU=People,OU=Demo,DC=Eshiam,DC=com" operation="Modify" source="IdentityRefresh" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="planResult">
+        <value>
+          <ProvisioningResult status="failed">
+            <Errors>
+              <Message key="sailpoint.connector.InvalidConfigurationException: IQService must be configured correctly to perform provisioning operations." type="Error"/>
+            </Errors>
+          </ProvisioningResult>
+        </value>
+      </entry>
+      <entry key="request">
+        <value>
+          <AccountRequest application="Active- Directory" nativeIdentity="CN=Angela Bell,OU=People,OU=Demo,DC=Eshiam,DC=com" op="Modify">
+            <Attributes>
+              <Map>
+                <entry key="provisioningTransactionId" value="c0a8014682d412498182dd224e2a09ca"/>
+              </Map>
+            </Attributes>
+            <AttributeRequest name="givenName" op="Set" value="Angela1"/>
+            <AttributeRequest name="description" op="Set" value=""/>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

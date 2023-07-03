@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE EmailTemplate PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<EmailTemplate name="OHSU-EmailTemplate-JoinerNotification">
+  <Body> 
+    Dear Team,
+
+      This is to inform you that, the Joiner/ Account request(s) has been submitted and approved for the following user(s) in Active Directory.
+
+      UserName : $!identityDisplayName 
+
+      All the access for the user will be automatically assigned based on birthright roles.
+      
+   
+    
+  </Body>
+  <Description>
+    Email template used to notify user with his Active Directory Credentials
+  </Description>
+  <Signature>
+    <Inputs>
+      <Argument name="identityName" type="string">
+        <Description>identityName.</Description>
+      </Argument>
+      <Argument name="identityDisplayName" type="string">
+        <Description>identityNameDisplayName.</Description>
+      </Argument>
+    </Inputs>
+  </Signature>
+  <Subject>User $!identityDisplayName Joiner Completion Notification</Subject>
+</EmailTemplate>

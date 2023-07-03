@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Advance Policy Rule" type="Policy">
+  <Description>This rule is used to determine if a Policy has been violated.</Description>
+  <Signature returnType="PolicyViolation">
+    <Inputs>
+      <Argument name="log">
+        <Description>
+          The log object associated with the SailPointContext.
+        </Description>
+      </Argument>
+      <Argument name="context">
+        <Description>
+          A sailpoint.api.SailPointContext object that can be used to query the database if necessary.
+        </Description>
+      </Argument>
+      <Argument name="identity">
+        <Description>
+          The Identity being inspected.
+        </Description>
+      </Argument>
+      <Argument name="policy">
+        <Description>
+          The Policy being evaluated.
+        </Description>
+      </Argument>
+      <Argument name="constraint">
+        <Description>
+          The Constraint being evaluated.
+        </Description>
+      </Argument>
+    </Inputs>
+    <Returns>
+      <Argument name="violation">
+        <Description>
+          The PolicyViolation object.
+        </Description>
+      </Argument>
+    </Returns>
+  </Signature>
+  <Source>import sailpoint.object.Link;
+import sailpoint.object.Attributes;
+import sailpoint.object.Identity;
+import sailpoint.object.Link;
+import sailpoint.object.Policy;
+
+
+
+boolean hasAccountGeneral = false;
+    boolean hasOtherAdEnt = false;
+
+ Application application = context.getObjectByName(Application.class,"Active- Directory Demo");
+System.out.println("application Object"+application);
+
+if(application != null){
+    
+
+    IdentityService idService = new IdentityService(context);
+       List links  = idService.getLinks(identity,application);
+      for(Link link:links){
+System.out.println("link object:"+link);
+      
+ 
+      Object memberOfList =   link.getAttribute("memberOf");
+       if(memberOfList  instanceof List){
+System.out.println("memberOfList  :"+memberOfList);
+
+        for(String memberOf:memberOfList  ){
+        if(memberOf.equalsIgnoreCase("CN=AccountingGeneral,OU=Groups,OU=Demo,DC=Eshiam,DC=com")){
+         hasAccountGeneral = true;
+         }
+   else{
+     hasOtherAdEnt =true;
+           }
+}
+}
+}
+}
+
+
+
+PolicyViolation v =new PolicyViolation();
+if(hasAccountGeneral &amp;&amp; hasOtherAdEnt ){
+
+v.setActive(true);
+	v.setIdentity(identity);
+	v.setPolicy(policy);
+	v.setConstraint(constraint);
+	v.setDescription("hasAccountGeneral entitlement cannot be combined with other AD entitlements");
+	v.setStatus(sailpoint.object.PolicyViolation.Status.Open);
+}
+return v;</Source>
+</Rule>

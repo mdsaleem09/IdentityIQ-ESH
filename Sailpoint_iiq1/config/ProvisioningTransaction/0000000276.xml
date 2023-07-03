@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction accountDisplayName="Kelly Boyd" applicationName="Active- Directory" identityDisplayName="Kelly Boyd" identityName="Kelly Boyd" integration="Active- Directory" name="0000000276" nativeIdentity="Kelly Boyd" operation="Modify" source="UI" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="request">
+        <value>
+          <AccountRequest application="Active- Directory" nativeIdentity="Kelly Boyd" op="Modify" targetIntegration="Active- Directory">
+            <Attributes>
+              <Map>
+                <entry key="provisioningTransactionId" value="c0a801038620140a81862075c12800aa"/>
+              </Map>
+            </Attributes>
+            <AttributeRequest name="assignedRoles" op="Set" value="OHSU-Role"/>
+            <ProvisioningResult status="failed">
+              <Errors>
+                <Message key="Invalid name: Kelly Boyd, provided nativeIdentity is not a valid distinguishedName" type="Error"/>
+              </Errors>
+            </ProvisioningResult>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

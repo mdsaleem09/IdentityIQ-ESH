@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Capability PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Capability displayName="capability_policy_administrator" name="PolicyAdministrator">
+  <Description>capability_desc_policy_administrator</Description>
+  <RightRefs>
+    <Reference class="sailpoint.object.SPRight" name="ViewPolicy"/>
+    <Reference class="sailpoint.object.SPRight" name="ManagePolicy"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessIdentityRiskModel"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessApplicationRiskModel"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessPolicyViolation"/>
+    <Reference class="sailpoint.object.SPRight" name="ViewIdentity"/>
+    <Reference class="sailpoint.object.SPRight" name="MonitorIdentityActivity"/>
+    <Reference class="sailpoint.object.SPRight" name="ViewRole"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessReport"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessCertificationDecisionReport"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessMitigationReport"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessViolationReport"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessIdentityRiskReport"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessRemediationProgressReport"/>
+  </RightRefs>
+</Capability>

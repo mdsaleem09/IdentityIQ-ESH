@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="date rule" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+  import sailpoint.object.Identity;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+  import sailpoint.tools.Util;
+  import java.text.SimpleDateFormat;
+  import java.util.Calendar;
+  import java.util.Date;
+  
+  
+  String extendDate="";
+  List results = new ArrayList();
+  QueryOptions options = new QueryOptions();
+  Filter filters =  Filter.notnull("mailBoxExtendDate").Filter.eq("mailBoxExtendRequested","Approved"));
+  List identities = context.getObjects(Identity.class,options);
+  String currentDate = new SimpleDateFormat("MM/dd/yyyy").format(new Date());  
+  SimpleDateFormat sf = new SimpleDateFormat("MM/dd/yyyy");
+  for(Identity identity:identities){
+    //grab extendDate
+  extendDate = identity.getAttribute("mailBoxExtendDate");
+    
+    //convert date
+    if(extendDate!=null){
+      String manager = "";
+      String mail = "";
+      Date extDate = sf.parse(extendDate);
+      Date todayDate = sf.parse(currentDate);
+      if(Util.getDaysDifference(new Date(),termDate) &lt;=5){
+        if(identity.getManager()!=null &amp;&amp; identity.getManager().getAttribute("email")!=null)
+        manager = identity.getManager().getAttribute("email");
+        mail = identity.getAttribute("email");
+        EmailTemplate emailTemplate = context.getObjectByName(EmailTemplate.class,"MailBox ExpirationRemainder");
+        EmailOptions options = new EmailOptions();
+        options.setTo(mail);
+        options.setCc(manager);
+        Map args = new HashMap();
+        args.put("identityName",identity.getName());
+        args.put("displayName",identity.getDisplayName());
+        args.put("workItemName","Expiring MailBox");
+        args.put("daysUntilExpire","5");
+        options.setVariable(args);
+        context.sendEmailNotification(emailTemplate,options);
+      }else if(Util.getDaysDifference(new Date(),termDate) &lt;= 0){
+        //sent mail has expired today
+        EmailTemplate emailTemplate = context.getObjectByName(EmailTemplate.class,"MailBox Expired");
+        EmailOptions options = new EmailOptions();
+        options.setTo(mail);
+        options.setCc(manager);
+        Map args = new HashMap();
+        args.put("identityName",identity.getName());
+        args.put("displayName",identity.getDisplayName());
+        args.put("workItemName","Expired");
+        options.setVariable(args);
+        context.sendEmailNotification(emailTemplate,options);
+        //setting expired to mailboxExtendRequested
+        identity.setAttribute("mailBoxExtendRequested","Expired");
+        context.saveObject(identity);
+        context.commitTransaction();
+        
+      }
+    }
+    return results.add(identity.getName());
+  }
+            
+
+        
+  
+  
+  
+  
+      
+        /*
+ // String mailExpiry="1696528793";
+ 
+  
+  
+     String strTermDate="31-01-2023";
+      //String strTermDate = (String) newIdentity.getAttribute("termination Date");
+     // logger.debug("strTermDate : "+strTermDate);
+      SimpleDateFormat sf = new SimpleDateFormat("dd-MM-yyyy");
+      Date termDate = sf.parse(strTermDate);
+    //  logger.debug(" termDate : "+termDate);
+      int diff = Util.getDaysDifference(new Date(),termDate);
+    
+     // return diff;
+      //logger.debug(" diff : "+diff);
+      if(diff &lt; 0){
+        return "trigger joiner";
+        
+        leaverTriggerFlg = true;
+      }
+  
+  return "no trigger";
+  
+  /*
+ String startDate = "2012/01/25";
+ 
+  String hiredate="";
+  Date startdate;
+   if(Util.isNotNullOrEmpty(startDate)){
+    SimpleDateFormat dt = new SimpleDateFormat("yyyy/mm/dd"); 
+    Date date = dt.parse(startDate); 
+     SimpleDateFormat dt1 = new SimpleDateFormat("dd/MM/yyyy");
+    hiredate = dt1.format(date);
+    startdte = dt1.parse(hiredate);
+   
+   
+   }
+
+return startdte;
+*/
+  
+  
+  </Source>
+</Rule>

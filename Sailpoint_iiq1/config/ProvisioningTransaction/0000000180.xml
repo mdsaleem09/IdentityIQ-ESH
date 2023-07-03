@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction accountDisplayName="CN=stejob1,OU=Disable,OU=People,OU=Demo,DC=Eshiam,DC=com" applicationName="Active- Directory" identityDisplayName="Jobs" identityName="stejob1" integration="Active- Directory" name="0000000180" nativeIdentity="CN=stejob1,OU=Disable,OU=People,OU=Demo,DC=Eshiam,DC=com" operation="Disable" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="request">
+        <value>
+          <AccountRequest application="Active- Directory" nativeIdentity="CN=stejob1,OU=Disable,OU=People,OU=Demo,DC=Eshiam,DC=com" op="Disable">
+            <Attributes>
+              <Map>
+                <entry key="oldNativeIdentity" value="CN=stejob1,OU=People,OU=Demo,DC=Eshiam,DC=com"/>
+                <entry key="provisioningTransactionId" value="c0a8010285b010dc8185cfc926f714c2"/>
+                <entry key="uuid" value="{7609f236-df10-4f8b-b26b-57fcc3f89aeb}"/>
+              </Map>
+            </Attributes>
+            <ProvisioningResult status="failed">
+              <Errors>
+                <Message key="Error(s) reported back from the IQService - Error occurred while disabling the account CN=stejob1,OU=Disable,OU=People,OU=Demo,DC=Eshiam,DC=comFailed to connect to the server for CN=stejob1,OU=Disable,OU=People,OU=Demo,DC=Eshiam,DC=com:There is no such object on the server. 0000208D: NameErr: DSID-03100238, problem 2001 (NO_OBJECT), data 0, best match of: &#x9;'OU=Disable,OU=People,OU=Demo,DC=Eshiam,DC=com' . HRESULT:[0x80072030] Possible reasons for failure include a) The Domain Controller is currently not reachable b) The object has either been moved or renamed c) The object has been deleted &#xa; Please Ensure the data has been aggregated before performing the operation " type="Error"/>
+              </Errors>
+            </ProvisioningResult>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

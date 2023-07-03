@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction accountDisplayName="ESHIAM\Rita Wheeler" applicationName="Active- Directory" identityDisplayName="Rita Wheeler" identityName="Rita Wheeler" integration="Active- Directory" name="0000000210" nativeIdentity="CN=Rita Wheeler,OU=People,OU=Demo,DC=Eshiam,DC=com" operation="Modify" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="request">
+        <value>
+          <AccountRequest application="Active- Directory" nativeIdentity="CN=Rita Wheeler,OU=People,OU=Demo,DC=Eshiam,DC=com" op="Modify">
+            <Attributes>
+              <Map>
+                <entry key="provisioningTransactionId" value="c0a8010286011a9e81860a4aa6660e27"/>
+              </Map>
+            </Attributes>
+            <AttributeRequest name="password" op="Set"/>
+            <ProvisioningResult status="failed">
+              <Errors>
+                <Message key="Unknown Host WIN-42SFB7PG899" type="Error"/>
+              </Errors>
+            </ProvisioningResult>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

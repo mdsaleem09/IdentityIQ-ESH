@@ -1,0 +1,568 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="ActiveDirectory_Correlation" type="Correlation">
+  <Description>Identity Correlation Rules are used to find identities to which new accounts can be attached.
+
+A correlation rule must return a Map with one of the specified Return arguments.</Description>
+  <Signature returnType="Map">
+    <Inputs>
+      <Argument name="log" type="org.apache.commons.logging.Log">
+        <Description>
+          The log object associated with the SailPointContext.
+        </Description>
+      </Argument>
+      <Argument name="context" type="sailpoint.api.SailPointContext">
+        <Description>
+          A sailpoint.api.SailPointContext object that can be used to query the database if necessary.
+        </Description>
+      </Argument>
+      <Argument name="environment" type="Map">
+        <Description>
+          Arguments passed to the aggregation task.
+        </Description>
+      </Argument>
+      <Argument name="application">
+        <Description>
+          Application being aggregated.
+        </Description>
+      </Argument>
+      <Argument name="account">
+        <Description>
+          A sailpoint.object.ResourceObject returned from the
+          collector.
+        </Description>
+      </Argument>
+      <Argument name="link">
+        <Description>
+          Existing link to this account.
+        </Description>
+      </Argument>
+    </Inputs>
+    <Returns>
+      <Argument name="identityName">
+        <Description>
+          The name of an Identity object.
+        </Description>
+      </Argument>
+      <Argument name="identity">
+        <Description>
+          A fully resolved Identity object if the rule wants
+          to do its own queries to locate the identity.
+        </Description>
+      </Argument>
+      <Argument name="identityAttributeName">
+        <Description>
+          The name of the extended attribute that can be used
+          to locate an existing identity.
+        </Description>
+      </Argument>
+      <Argument name="identityAttributeValue">
+        <Description>
+          The value of the named extended attribute that can be used
+          to locate an existing identity. This attribute is used
+          together with the identityAttributeName argument.
+        </Description>
+      </Argument>
+    </Returns>
+  </Signature>
+  <Source>import java.util.ArrayList;
+import java.util.HashMap;
+import sailpoint.object.Identity;
+import sailpoint.object.QueryOptions;
+import sailpoint.object.Filter;
+
+import org.apache.log4j.Logger;
+import org.apache.log4j.Level;
+import sailpoint.tools.*;
+import sailpoint.object.*;
+import sailpoint.api.*;
+import java.util.*;
+import sailpoint.tools.Message;
+import sailpoint.tools.*;
+
+    
+	List identities = null;
+	Identity foundUser2 = null;
+   	Map map = new HashMap();
+    Identity foundUser = null;
+  
+
+  String accountFirstName = account.getStringAttribute("FirstName");
+  
+  String accountLastName =   account.getStringAttribute("LastName");
+   
+  String accountLast4SSN = account.getStringAttribute("Department");
+                          
+  
+ String empId=account.getAttribute("EmployeeID");
+  
+  
+
+  /*
+if(Util.isNotNullOrEmpty(empId)){
+
+System.out.println("acemp"+empId);
+
+map.put("identityAttributeName","EmployeeID");
+
+map.put("identityAttributeValue",empId);
+
+return map;
+  }
+  
+  
+ 
+        String empId=account.getAttribute("EmployeeID");
+        System.out.println("EmployeeID from Account:"+empId);
+        QueryOptions queryOption = new QueryOptions();
+        Filter[] filters = new Filter[1];
+        List filterList = new ArrayList();
+        filterList.add(Filter.eq("EmployeeID", empId));     
+        filters[0] = Filter.and(filterList);
+        queryOption.add(filters);
+        identities = context.getObjects(Identity.class, queryOption);
+        if( null != identities &amp;&amp; identities.size()==1) {            
+          foundUser = (Identity) identities.get(0);
+		      map.put("identity",foundUser);
+          System.out.println("Condition for ID match"+foundUser.getDisplayName());
+		      return map;
+		   } 
+
+*/
+  
+
+	//String accountBirthMonth = account.getStringAttribute("personal_birthMonth");
+  // String accountBirthDay = account.getStringAttribute("personal_birthDay");
+	
+
+        /*Logger log = Logger.getLogger("ohsu.rule.AdCorrelation");
+        log.trace("Searching for identity by 5 attributes.");
+        log.trace("firstName is:  "+ accountFirstName);
+        log.trace("lastName is:  "+ accountLastName);
+        log.trace("accountLast4SSN is:  "+ accountLast4SSN);	
+       // log.trace("birthDay is:  "+ accountBirthMonth);
+        //log.trace("last4SSN is:  "+ accountBirthDay);
+        */
+        
+  
+  
+	//Condition for 100% match
+  
+        QueryOptions queryOption1 = new QueryOptions();
+        Filter[] filters1 = new Filter[1];
+        List filterList1 = new ArrayList();
+        filterList1.add(Filter.eq("firstname", accountFirstName));
+        filterList1.add(Filter.eq("lastname", accountLastName));		
+		    filterList1.add(Filter.eq("department", accountLast4SSN));
+        //filterList1.add(Filter.eq("birthMonth", accountBirthMonth));		
+		    //filterList1.add(Filter.eq("birthDay", accountBirthDay));    
+        filters1[0] = Filter.and(filterList1);
+        queryOption1.add(filters1);
+        identities = context.getObjects(Identity.class, queryOption1);
+        if( null != identities &amp;&amp; identities.size()==1) {            
+          foundUser = (Identity) identities.get(0);
+		      map.put("identity",foundUser);
+          System.out.println("Condition for 100% match"+foundUser.getDisplayName());
+		      return map;
+		    } 
+  
+  
+		   //Condtion for 99% Match  
+	    queryOption2 = new QueryOptions();
+        Filter[] filters2 = new Filter[1];
+        List filterList2 = new ArrayList();
+        filterList2.add(Filter.eq("firstname", accountLastName));
+        filterList2.add(Filter.eq("lastname", accountFirstName));
+		    filterList2.add(Filter.eq("department", accountLast4SSN));
+       // filterList2.add(Filter.eq("birthMonth", accountbirthMonth));
+		   // filterList2.add(Filter.eq("birthDay", accountbirthDay));
+        filters2[0] = Filter.and(filterList2);
+        queryOption2.add(filters2);
+        identities = context.getObjects(Identity.class, queryOption2);
+	      if( null != identities &amp;&amp; identities.size()==1) {
+           foundUser = (Identity) identities.get(0);
+		       map.put("identity",foundUser);
+           System.out.println("Condition for 99% match");
+		   return map;
+		}
+	   
+	   
+
+  
+  	      //Condition for 98% match
+        queryOption3 = new QueryOptions();
+        Filter[] filters3 = new Filter[1];
+        List filterList3 = new ArrayList();
+        filterList3.add(Filter.eq("firstname", accountFirstName));
+        filterList3.add(Filter.eq("lastname", accountLastName));
+       // filterList3.add(Filter.eq("birthMonth", accountBirthMonth));
+		//filterList3.add(Filter.eq("birthDay", accountBirthDay));
+		//if account last4ssn is null we are correlating 
+		  if(Util.isNullOrEmpty(accountLast4SSN ) ) {
+		    filters3[0] = Filter.and(filterList3);
+            queryOption3.add(filters3);
+            identities = context.getObjects(Identity.class, queryOption3);
+	        if( null != identities &amp;&amp; identities.size()==1) {
+            foundUser = (Identity) identities.get(0);
+			map.put("identity",foundUser);
+             System.out.println("Condition for 98% match");
+			return map;
+			}
+		  }
+  
+  if (Util.isNotNullOrEmpty(accountLast4SSN ) ) {
+		      
+
+		   filters3[0] = Filter.and(Filter.isnull("department"));
+    
+      queryOption3.add(filters3);
+      identities = context.getObjects(Identity.class, queryOption3);
+	    if( null != identities &amp;&amp; identities.size()==1) {
+       foundUser = (Identity) identities.get(0);
+		   map.put("identity",foundUser);
+         System.out.println("Condition for 98% match");
+		return map;
+		 }
+		}
+    
+    
+    
+    
+    
+		
+		
+  
+		
+		
+  
+  //Method for FirstName Matching
+    public boolean isFirstNameMatching(String accountFirstName){
+		boolean isMatching = false;
+		QueryOptions options = new QueryOptions();
+		Filter[] filter = new Filter[1];
+		List filterList = new ArrayList();
+		filterList.add(Filter.eq("firstname",accountFirstName));
+		filter[0] = Filter.and(filterList);
+		options.add(filter);
+		List identities = context.getObjects(Identity.class,options);
+		if(null != identities){
+		  if(identities.size()&gt;0){
+		     isMatching = true;
+		   }     
+    } 
+       
+       return isMatching;
+    }
+    
+
+  
+  //Method for LastName Matching
+	public boolean isLastNameMatching(String accountLastName){
+		boolean isMatching = false;
+		QueryOptions options = new QueryOptions();
+		Filter[] filter = new Filter[1];
+		List filterList = new ArrayList();
+		filterList.add(Filter.eq("lastname",accountLastName));
+		filter[0] = Filter.and(filterList);
+		options.add(filter);
+		List identities = context.getObjects(Identity.class,options);
+		if(null != identities){
+		  if(identities.size()&gt;0){
+		    isMatching = true;
+		  }
+        } 
+          
+
+    return isMatching;
+    }
+  
+  
+  	public boolean isLast4SSNValidMatching(String accountLast4SSN){
+        boolean isMatching = false;
+        if (Util.isNotNullOrEmpty(accountLast4SSN ) ) {
+        QueryOptions options = new QueryOptions();
+		    Filter[] filter = new Filter[1];
+		    List filterList = new ArrayList();
+        filterList.add(Filter.eq("firstname", accountFirstName));
+        //filterList.add(Filter.eq("lastname", accountLastName));
+        filterList.add(Filter.isnull("department"));
+		    filter[0] = Filter.and(filterList);
+        options.add(filter);
+        identities = context.getObjects(Identity.class, options);
+	      if( null != identities &amp;&amp; identities.size()==1) {
+            isMatching =true;
+		   }
+		}		
+                
+
+	 return isMatching;
+        }	 
+  
+  
+  public boolean areTwoOrMoreFalse(boolean firstNameMatches, boolean lastNameMatches, boolean last4SSNMatches){
+    
+    boolean twoorMoreAttributes = false;
+		int count=0;
+    
+    if(firstNameMatches == false)
+			count++;
+		if(lastNameMatches == false)
+			count++;
+		if(last4SSNMatches == false)
+			count++;
+    
+		//if(birthDayMatches == false)
+		//	count++;
+		//if(birthMonthMatches == false)
+		//	count++;
+			
+   
+	    if(count&gt;=2){
+			twoorMoreAttributes = true;
+	    }
+		
+     return twoorMoreAttributes;
+	}
+
+  
+ /* public Map sendToStaging(String id){
+    Identity idObj  =  context.getObjectByName(Identity.class,id);
+	      map.put("identity",idObj); 
+	    
+	    //Updating into custom object for review
+       
+	      Custom custom = context.getObjectByName(Custom.class,"Staging Obj");
+        List links = new ArrayList();
+        links.add(account.getDisplayName());
+        custom.put("stagingLinks",links);
+        context.saveObject(custom);
+        context.commitTransaction();
+       
+	      return map;
+
+
+}
+*/
+  
+  
+ 
+		
+		
+  
+	
+   
+   //Calling the Methods to Match
+     boolean firstNameMatches = isFirstNameMatching(accountFirstName);
+     boolean lastNameMatches = isLastNameMatching(accountLastName);
+     boolean last4SSNMatches = isLast4SSNValidMatching(accountLast4SSN);
+     boolean twoOrMoreAttributesNotMatch = areTwoOrMoreFalse(firstNameMatches,lastNameMatches,last4SSNMatches);
+    // boolean birthDayMatches = isBirthDayMatching(accountBirthDay);
+    // boolean birthMonthMatches = isBirthMonthMatching(accountBirthMonth);
+    // boolean isLast4SSNValid = isLast4SSNValidMatching(accountlast4SSN);
+ 
+ 
+ 
+     
+	 //if Atleast One Attribute FirstName,LastName,BirthDay,BirthMonth does not match &amp; Last4SSN is Null or Empty ) OR Two or More Attributes Does not Match 
+	 //This condition is for range matchingScore0 to &lt;=49
+      
+	 //if((((firstNameMatches == false || lastNameMatches == false || birthDayMatches == false || birthMonthMatches == false) &amp;&amp; (Util.isNullOrEmpty("accountLast4ssn") || (isLast4SSNMatching == true ))&amp;&amp; areTwoOrMoreFalse == true){
+        //IT will try to create New Identity Cube without correlating
+     //   return map;
+     //}
+       
+      
+  
+
+  
+  
+       //if ((firstNameMatches == false || lastNameMatches == false) &amp;&amp; (Util.isNullOrEmpty(accountLast4SSN) || (last4SSNMatches == true )) &amp;&amp; (twoOrMoreAttributesNotMatch == true) ) {
+        // if ((firstNameMatches == false &amp;&amp; lastNameMatches == false) &amp;&amp; (Util.isNullOrEmpty(accountLast4SSN) || (last4SSNMatches == true )) || twoOrMoreAttributesNotMatch == true){
+  ArrayList links =null;
+  if(firstNameMatches == false &amp;&amp; lastNameMatches == false){
+  System.out.println("inside firstName and last name does not match condition ");
+         return map;
+    
+       } 
+     else{
+ 
+	      //This will cover the matchScore from 50-97
+        System.out.println("inside Staging condition ");
+        String id = "Staging_"+application.getName();
+        Identity idObj  =  context.getObjectByName(Identity.class,id);
+       if(idObj == null){
+         System.out.println("Creating Staging Object:");
+       idObj = new Identity();
+       idObj.setName(id);
+       idObj.setFirstname("Staging_");
+       idObj.setLastname(application.getName());
+       context.saveObject(idObj);
+       }
+       System.out.println("Adding to  Staging Object:");
+        map.put("identity",idObj); 
+       return map;
+     }
+  
+  
+  /*
+	      //Updating into custom object for review
+         links = new ArrayList();
+	      Custom custom = context.getObjectByName(Custom.class,"Staging_Custom");
+        String appName=application.getName();
+        custom.put("appName",appName);
+        if( custom.get(appName)!=null){
+           links = custom.get(appName);
+        }
+        
+       //links.add(account.getDisplayName());
+       
+        Map child = new HashMap();
+       child.put("accountName",account.getDisplayName());
+       child.put("First Name",accountFirstName);
+       child.put("Last Name",accountLastName);
+
+       links.add(child);
+       
+        custom.put(appName,links);
+       
+      
+        context.saveObject(custom);
+       context.commitTransaction();
+      
+       return map;
+        }
+  
+       
+       /*TaskResult result = context.getObjectByName(TaskResult.class,"TestHR Account Aggregation");
+       System.out.println("result1:"+result.toXml());
+       String trMsg = "Staging Accounts are: "+ links.size();
+       result.addMessage("Staging Accounts "+trMsg);
+       
+       
+       //result.addMessage(new Message(Message.Type.Info,trMsg, null)); 
+       System.out.println("result2:"+result.toXml());
+       context.saveObject(result);
+       context.commitTransaction();
+       */
+       
+       
+       
+        
+	    
+     
+       
+       
+       /*
+     Identity idObj  =  context.getObjectByName(Identity.class,"Staging Identity");
+	      map.put("identity",idObj); 
+	    
+	    //Updating into custom object for review
+       
+	      Custom custom = context.getObjectByName(Custom.class,"Staging Obj");
+       if(custom!=null){
+        List links = custom.get("stagingLinks");
+        links.add(account.getAttribute("Name"));
+        custom.put("stagingLinks",links);
+        context.saveObject(custom);
+        context.commitTransaction();
+       
+	      return map;
+	        
+	      
+           } 
+           
+       
+       
+       
+        
+  
+ 
+    
+	
+
+
+    //Method for isBirthDayMatching 
+	public boolean isBirthDayMatching(String accountBirthDay){
+		boolean isMatching = false;
+		QueryOptions options = new QueryOptions();
+		Filter[] filter = new Filter[1];
+		List filterList = new ArrayList();
+		filterList.add(Filter.eq("birthDay",accountFirstName));
+		filter[0] = Filter.and(filterList);
+		options.add(filter);
+		List identities = context.getObjects(Identity.class,options);
+		if(null != identities){
+		   if(identities.size()&gt;0){
+		    isMatching = true;
+		   }
+        } 
+    return isMatching;
+    }
+	
+	//Method for isBirthMonthMatching 
+	public boolean isBirthMonthMatching(String accountBirthMonth){
+		boolean isMatching = false;
+		QueryOptions options = new QueryOptions();
+		Filter[] filter = new Filter[1];
+		List filterList = new ArrayList();
+		filterList.add(Filter.eq("birthMonth",accountFirstName));
+		filter[0] = Filter.and(filterList);
+		options.add(filter);		
+		List identities = context.getObjects(Identity.class,options);
+		if(null != identities){
+		  if(identities.size()==1){
+		    isMatching = true;
+		  }
+        } 
+    return isMatching;
+    }
+    
+    
+	//Method for Checking isLast4SSNValidMatching 
+	public boolean isLast4SSNValidMatching(String accountlast4SSN){
+        boolean isMatching = false;
+        if (Util.isNotNullOrEmpty(accountLast4SSN ) ) {
+        QueryOptions options = new QueryOptions();
+		Filter[] filter = new Filter[1];
+		List filterList = new ArrayList();
+        filterList3.add(Filter.eq("firstname", accountFirstName));
+        filterList3.add(Filter.eq("lastname", accountLastName));
+        filterList3.add(Filter.eq("birthMonth", accountBirthMonth));
+		filterList3.add(Filter.eq("birthDay", accountBirthDay));
+        filterList3.add(Filter.or(Filter.isnull("last4SSN"),Filter.isempty("last4SSN")));
+		filters3[0] = Filter.and(filterList3);
+        queryOption3.add(filters3);
+        identities = context.getObjects(Identity.class, queryOption3);
+	      if( null != identities &amp;&amp; identities.size()==1) {
+            isMatching =true;
+		   }
+		}		
+	 return isMatching;
+        }	  
+
+     //Method for Checking Two Or More Attirbutes Matching 
+	public boolean areTwoOrMoreFalse(boolean firstNameMatches, boolean lastNameMatches, boolean last4SsnMatches, boolean birthDayMatches, boolean  birthMonthMatches){
+		int count=0;
+  		if(firstNameMatches == false)
+			count++;
+		if(lastNameMatches == false)
+			count++;
+		if(last4SSNMatches ==false)
+			count++;
+		if(birthDayMatches == false)
+			count++;
+		if(birthMonthMatches == false)
+			count++;
+			
+	    if(count&gt;=2){
+			return true;
+	    }
+		else{
+			return false;
+		}
+	}
+
+		*/
+  
+  </Source>
+</Rule>

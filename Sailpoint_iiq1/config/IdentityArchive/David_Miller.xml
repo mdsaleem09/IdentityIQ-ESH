@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE IdentityArchive PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<IdentityArchive name="David Miller" sourceId="c0a8010286011a9e81860d48c743189d">
+  <Archive>&lt;?xml version='1.0' encoding='UTF-8'?&gt;
+&lt;!DOCTYPE Identity PUBLIC "sailpoint.dtd" "sailpoint.dtd"&gt;
+&lt;Identity correlated="true" created="1675260118853" id="c0a8010286011a9e81860d48c743189d" lastRefresh="1675260118878" lock="b937fde207b2410f86af976f0ebfb076|1676960914965|1676961214965|HR - System Account Aggregation" modified="1676886553713" name="David Miller" needsRefresh="true"&gt;
+  &lt;Attributes&gt;
+    &lt;Map&gt;
+      &lt;entry key="EmployeeID" value="david01"/&gt;
+      &lt;entry key="demoCenter" value="Information Technology"/&gt;
+      &lt;entry key="department" value="Information Technology"/&gt;
+      &lt;entry key="displayName" value="David Miller"/&gt;
+      &lt;entry key="email" value="David.Miller@eshiam.com"/&gt;
+      &lt;entry key="firstname" value="David"/&gt;
+      &lt;entry key="lastname" value="Miller"/&gt;
+      &lt;entry key="networkID" value="David.Miller"/&gt;
+      &lt;entry key="startDat"&gt;
+        &lt;value&gt;
+          &lt;Date&gt;1675260118874&lt;/Date&gt;
+        &lt;/value&gt;
+      &lt;/entry&gt;
+      &lt;entry key="triggerSnapshots"&gt;
+        &lt;value&gt;
+          &lt;Map&gt;
+            &lt;entry key="ManagerTransfer"/&gt;
+          &lt;/Map&gt;
+        &lt;/value&gt;
+      &lt;/entry&gt;
+    &lt;/Map&gt;
+  &lt;/Attributes&gt;
+  &lt;AttributeMetaDatas&gt;
+    &lt;AttributeMetaData attribute="inactive" source="HR - System:inactiveIdentity"/&gt;
+    &lt;AttributeMetaData attribute="displayName" source="HR - System:Name"/&gt;
+    &lt;AttributeMetaData attribute="networkID" source="HR - System:NetworkID"/&gt;
+    &lt;AttributeMetaData attribute="department" source="HR - System:Department"/&gt;
+    &lt;AttributeMetaData attribute="demoCenter" source="HR - System:Department"/&gt;
+    &lt;AttributeMetaData attribute="startDat" source="HR - System:AppRule: startDate HR - System$startDate"/&gt;
+    &lt;AttributeMetaData attribute="email" source="HR - System:EmailAddress"/&gt;
+    &lt;AttributeMetaData attribute="firstname" source="HR - System:GivenName"/&gt;
+    &lt;AttributeMetaData attribute="lastname" source="HR - System:Surname"/&gt;
+    &lt;AttributeMetaData attribute="EmployeeID" source="HR - System:EmployeeID"/&gt;
+  &lt;/AttributeMetaDatas&gt;
+  &lt;Links&gt;
+    &lt;Link created="1675260118854" displayName="David Miller" id="c0a8010286011a9e81860d48c746189e" lastRefresh="1675260118854" modified="1675260118858" identity="david01"&gt;
+      &lt;ApplicationRef&gt;
+        &lt;Reference class="sailpoint.object.Application" id="c0a891017bb91c9d817bba09a7b80094" name="HR - System"/&gt;
+      &lt;/ApplicationRef&gt;
+      &lt;Attributes&gt;
+        &lt;Map&gt;
+          &lt;entry key="Department" value="Information Technology"/&gt;
+          &lt;entry key="EmailAddress" value="David.Miller@eshiam.com"/&gt;
+          &lt;entry key="EmployeeID" value="david01"/&gt;
+          &lt;entry key="GivenName" value="David"/&gt;
+          &lt;entry key="Name" value="David Miller"/&gt;
+          &lt;entry key="NetworkID" value="David.Miller"/&gt;
+          &lt;entry key="Surname" value="Miller"/&gt;
+          &lt;entry key="inactiveIdentity" value="FALSE"/&gt;
+          &lt;entry key="manager" value="1a"/&gt;
+        &lt;/Map&gt;
+      &lt;/Attributes&gt;
+    &lt;/Link&gt;
+  &lt;/Links&gt;
+&lt;/Identity&gt;
+</Archive>
+</IdentityArchive>

@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Capability PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Capability displayName="capability_certification_administrator" name="CertificationAdministrator">
+  <Description>capability_desc_certification_administrator</Description>
+  <RightRefs>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessReport"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessManagerCertificationReport"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessApplicationOwnerCertificationReport"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessAdvancedCertificationReport"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessCertificationDecisionReport"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessApplicationCentricCertificationReport"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessCertificationSignoffReport"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessTargetedAccessReviewReport"/>
+    <Reference class="sailpoint.object.SPRight" name="CertifyAllCertifications"/>
+    <Reference class="sailpoint.object.SPRight" name="ViewCertifications"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessCertifications"/>
+    <Reference class="sailpoint.object.SPRight" name="CertificationCampaignsWidget"/>
+  </RightRefs>
+</Capability>

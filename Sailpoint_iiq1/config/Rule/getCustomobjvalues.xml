@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="getCustomobjvalues">
+  <Source>
+///This rule is used to get identityObject By using his Name
+  import sailpoint.object.Identity;
+  import sailpoint.object.*;
+  
+  
+  
+  
+     Link  idObject1=context.getObjectById(Link.class,"c0a891017bb91c9d817bbaa993130395");
+  return idObject1.getApplicationName();
+  </Source>
+</Rule>

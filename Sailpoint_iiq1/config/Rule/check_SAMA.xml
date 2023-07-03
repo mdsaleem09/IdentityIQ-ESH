@@ -1,0 +1,208 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="check SAMA" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+  import sailpoint.api.*;
+  import sailpoint.object.*;
+  import java.util.*;
+  import java.text.*;
+  import sailpoint.tools.Util;
+  import java.sql.*;  
+
+  
+  public boolean checkUsername(String name){
+    Application application=context.getObjectByName(Application.class,"JDBC");
+
+    Filter f = Filter.and(Filter.eq("links.nativeIdentity",name),Filter.and(Filter.eq("links.application.name",application.getName())));
+    QueryOptions qo = new QueryOptions();
+    qo.add(f);
+
+    List ids = context.getObjects(Identity.class,qo);
+    if(ids.size()&gt;0) return true;
+    else return false;
+  }
+  
+
+  
+  Identity identity=context.getObjectByName(Identity.class,"James Smith");
+
+  //String firstName="Abcdefghijklmnopqrst";
+  String firstName="Abcdefgh";
+
+ // String lastName="Zyxwvutsrqponmlkjihg";
+  String lastName="Zyxwvuts";
+
+  String userName="";
+  boolean foundNoUser=true;
+  int j=45;
+
+  List list = new ArrayList();
+
+ 
+  //while(foundNoUser){
+  //*********************************************lastname + firstname********************************************//
+ /*
+  if(firstName!=null){
+    if(lastName.length()&gt;=12){
+      for(int i=0;i&lt;12;i++){        
+        if(i&lt;=lastName.length()) userName=lastName.substring(0,(12-i))+firstName.substring(0,i);         
+        list.add(userName);
+        //if(!checkUsername(userName)) foundNoUser=false;
+      }
+      
+      
+    }
+    
+    
+   
+    else{   
+      //else block for 8 characters
+      //it will check till first 4 letters of firstName
+      for(int i=0;i&lt;12;i++){
+         //if(firstName.length()&gt;) userName= firstName.substring(0,i+1);
+        
+        //it will check from 5  letter of firstName
+        if(i&lt;=firstName.length()) userName=lastName+firstName.substring(0,i);
+        if(userName.length()&gt;12) userName=lastName.substring(0,(12-i))+firstName.substring(0,i);   
+        if(i&gt;firstName.length()) userName=userName.substring(0,(12-i))+firstName;
+         list.add(userName);
+        //if(!checkUsername(userName)) foundNoUser=false;
+       
+       }
+    }
+  }
+  
+ 
+  
+  
+  
+  
+    /*********************************************firstname + lastname********************************************
+  if(lastName!=null){
+    if(firstName.length()&gt;=12){
+      for(int i=0;i&lt;12;i++){
+        userName=firstName.substring(0,(12-i))+lastName.substring(0,i);
+        list.add(userName);
+        //if(!checkUsername(userName)) foundNoUser=false;
+      }
+    }
+    else{
+      //else block for 8 characters
+       for(int i=0;i&lt;12;i++){
+         if(i&lt;=lastName.length()) userName=firstName.substring(0,(firstName.length()-i))+lastName.substring(0,i);
+        //if(i&lt;=lastName.length()) userName=firstName+lastName.substring(0,i);
+        if(userName.length()&gt;12) userName=firstName.substring(0,(12-i))+lastName.substring(0,i);
+        if(i&gt;lastName.length())  userName=userName.substring(0,(12-i))+lastName;
+         list.add(userName);
+        //if(!checkUsername(userName)) foundNoUser=false;
+      }
+    }
+  }
+  
+  return list;
+  
+  
+    //********************************************adding single digit numbers(1-9)********************************************
+  if(j&lt;=9){
+    //lastname + firstname
+    if(firstName!=null){
+      if(lastName.length()&gt;=12){
+        for(int i=0;i&lt;11;i++){
+          userName=lastName.substring(0,(12-i))+firstName.substring(0,i)+j.toString();
+          //list.add(userName);
+          //if(!checkUsername(userName)) foundNoUser=false;
+          //else j++;
+        }
+      }
+      else{
+        for(int i=0;i&lt;10;i++){
+          if(i&lt;firstName.length()) userName=lastName+firstName.substring(0,i)+j.toString();
+          if(userName.length()&gt;12) userName=lastName.substring(0,(11-i))+firstName.substring(0,i)+j.toString();
+          if(i&gt;firstName.length()) userName=userName.substring(0,(11-i))+firstName+j.toString();
+        //  list.add(userName);
+          //if(!checkUsername(userName)) foundNoUser=false;
+          //else j++;
+        }
+      }
+    }
+
+    //firstname + lastname
+    if(lastName!=null){
+      if(firstName.length()&gt;=12){
+        for(int i=0;i&lt;11;i++){
+          userName=firstName.substring(0,(12-i))+lastName.substring(0,i)+j.toString();
+         // list.add(userName);
+          //if(!checkUsername(userName)) foundNoUser=false;
+          //else j++;
+        }
+      }
+      else{
+        for(int i=0;i&lt;=10;i++){
+          if(i&lt;=lastName.length()) userName=firstName+lastName.substring(0,i)+j.toString();
+          if(userName.length()&gt;12) userName=firstName.substring(0,(11-i))+lastName.substring(0,i)+j.toString();
+          if(i&gt;lastName.length())  userName=userName.substring(0,(11-i))+lastName+j.toString();
+           //list.add(userName);
+          //if(!checkUsername(userName)) foundNoUser=false;
+          //else j++;
+        }
+      }
+    }
+  }
+
+  */
+  
+  //adding more than single digit numbers(&gt;9)
+  if(j&gt;9){
+    if(firstName!=null){
+      if(lastName.length()&gt;=12){
+        for(int i=0;i&lt;(12-(j.toString().length()));i++){
+          userName=lastName.substring(0,(11-i))+firstName.substring(0,i)+j.toString();
+          list.add(userName);
+          //if(!checkUsername(userName)) foundNoUser=false;
+          //else j++;
+        }
+      }
+      else{
+         for(int i=0;i&lt;(12-j.toString().length());i++){
+          if(i&lt;=firstName.length()) userName=lastName+firstName.substring(0,i)+j.toString();
+          if(userName.length()&gt;12) userName=lastName.substring(0,(12-(j.toString().length())-i))+firstName.substring(0,i)+j.toString();
+          if(i&gt;firstName.length()) userName=userName.substring(0,(12-j.toString().length()-i))+firstName+j.toString();
+          list.add(userName);
+          //if(!checkUsername(userName)) foundNoUser=false;
+          //else j++;
+        }
+      }
+    }
+    
+    
+    if(lastName!=null){
+      if(firstName.length()&gt;=12){
+        for(int i=0;i&lt;(12-(j.toString().length()));i++){
+          userName=firstName.substring(0,(11-i))+lastName.substring(0,i)+j.toString();
+          list.add(userName);
+          //if(!checkUsername(userName)) foundNoUser=false;
+          //else j++;
+        }
+      }
+      else{
+        for(int i=0;i&lt;(12-j.toString().length());i++){
+          if(i&lt;=lastName.length()) userName=firstName+lastName.substring(0,i)+j.toString();
+          if(userName.length()&gt;12) userName=firstName.substring(0,(12-(j.toString().length())-i))+lastName.substring(0,i)+j.toString();
+          if(i&gt;lastName.length()) userName=userName.substring(0,(12-j.toString().length()-i))+lastName+j.toString();
+          list.add(userName);
+          //if(!checkUsername(userName)) foundNoUser=false;
+          //else j++;
+        }
+      }
+    }
+  }
+
+
+  
+  return list;
+  
+
+  
+  </Source>
+</Rule>

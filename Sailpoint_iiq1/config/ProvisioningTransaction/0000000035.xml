@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction applicationName="DemoJdbcApp" identityDisplayName="Allen Burton" identityName="Allen Burton" integration="DemoJdbcApp" name="0000000035" operation="Create" source="LCM" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="accessRequestId" value="0000000099"/>
+      <entry key="planResult">
+        <value>
+          <ProvisioningResult status="failed">
+            <Errors>
+              <Message key="BeanShell script error: bsh.EvalError: Sourced file: inline evaluation of: ``import java.sql.ResultSet;   import java.sql.Statement;   import java.sql.Connec . . . '' : Error in method invocation: Method addAll(java.lang.String) not found in class'java.util.ArrayList' : at Line: 63 : in file: inline evaluation of: ``import java.sql.ResultSet;   import java.sql.Statement;   import java.sql.Connec . . . '' : entCount .addAll ( val ) &#xa; BSF info: JDBC-Create Provisioning Rule 2 at line: 0 column: columnNo" type="Error"/>
+            </Errors>
+          </ProvisioningResult>
+        </value>
+      </entry>
+      <entry key="request">
+        <value>
+          <AccountRequest application="DemoJdbcApp" op="Create">
+            <Attributes>
+              <Map>
+                <entry key="attachmentConfigList"/>
+                <entry key="attachments"/>
+                <entry key="flow" value="AccessRequest"/>
+                <entry key="id" value="c0a8de017c251895817c35690a4a1214"/>
+                <entry key="interface" value="LCM"/>
+                <entry key="operation" value="EntitlementAdd"/>
+                <entry key="provisioningTransactionId" value="c0a8de017c251895817c547ed0a02b4d"/>
+              </Map>
+            </Attributes>
+            <AttributeRequest displayValue="Developer" name="GroupValue" op="Add" value="Developer">
+              <Attributes>
+                <Map>
+                  <entry key="assignment" value="true"/>
+                </Map>
+              </Attributes>
+            </AttributeRequest>
+            <AttributeRequest name="FirstName" op="Set" value="Allen"/>
+            <AttributeRequest name="LastName" op="Set" value="Burton"/>
+            <AttributeRequest name="EmailAddress" op="Set" value="Allen.Burton@sailpointdemo.com"/>
+            <AttributeRequest name="NetworkID" op="Set" value="Allen.Burton"/>
+            <AttributeRequest name="Name" op="Set" value="Allen Burton"/>
+            <ProvisioningResult status="failed">
+              <Errors>
+                <Message key="BeanShell script error: bsh.EvalError: Sourced file: inline evaluation of: ``import java.sql.ResultSet;   import java.sql.Statement;   import java.sql.Connec . . . '' : Error in method invocation: Method addAll(java.lang.String) not found in class'java.util.ArrayList' : at Line: 63 : in file: inline evaluation of: ``import java.sql.ResultSet;   import java.sql.Statement;   import java.sql.Connec . . . '' : entCount .addAll ( val ) &#xa; BSF info: JDBC-Create Provisioning Rule 2 at line: 0 column: columnNo" type="Error"/>
+              </Errors>
+            </ProvisioningResult>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

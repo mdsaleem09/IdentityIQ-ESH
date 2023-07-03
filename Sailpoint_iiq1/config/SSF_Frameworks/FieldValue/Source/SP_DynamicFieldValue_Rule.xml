@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="SP Dynamic Field Value Rule" type="FieldValue">
+  <Description>
+        This rule uses information in the field that calls the rule to dynamically
+        call a method in the library SPCONF Field Value Rules Library. Each field
+        that calls this rule must have a corresponding information in the Custom object
+        "SPCONF Field Value Mappings Custom"
+    </Description>
+  	<ReferencedRules>
+	    <Reference class="sailpoint.object.Rule" name="SPCONF Field Value Rules Library"/>	    
+	    <Reference class="sailpoint.object.Rule" name="SP Field Value Rules Library"/>
+    </ReferencedRules>
+  <Signature returnType="Object"/>
+  <Source>
+	<![CDATA[
+
+		import org.apache.commons.logging.Log;
+        import org.apache.commons.logging.LogFactory;
+        import sailpoint.api.SailPointContext;
+        import sailpoint.object.Custom;
+        import sailpoint.tools.GeneralException;
+        import sailpoint.object.Script;     
+
+        import java.util.List;
+
+    private Log logger = LogFactory.getLog("rule.SP.FieldValue.RulesLibrary");
+    
+    Object returnVal=null;
+
+        logger.trace("Enter Field Value Selector");
+        logger.trace("Have field: " + field);
+
+        try
+        {
+            Custom mappingObj = context.getObjectByName(Custom.class, "SPCONF Field Value Mappings Custom");
+            String fieldName = field.getName();
+            String appName = field.getApplication();
+            String templateOp = field.getTemplate();
+            String op = "Create";
+            if (templateOp != null) {
+                op = templateOp;
+            }
+            if (mappingObj != null && mappingObj.get(appName) != null) {
+                Object appMapping = mappingObj.get(appName);
+                List<Field> listField = appMapping;
+                Field selectedField = null;
+                for (Field f : listField) {
+                    if (f.getName() != null && f.getName().equals(fieldName)) {
+                        selectedField = f;
+                        break;
+                    }
+                }
+
+                if (selectedField != null) {
+                    switch (selectedField.getType().toLowerCase()) {
+                        case "attribute":
+                            returnVal = getIdentityAttribute(context, identity, op, fieldName, selectedField.getValue().toString(), selectedField.getDefaultValueAsString());
+                            break;
+                        case "rule":
+                            returnVal = getRuleResult(context, identity, (Object)selectedField.getValue(), selectedField.getDefaultValueAsString(), op);
+                            break;
+                        case "velocity":
+                            returnVal = getVelocityResult(selectedField.getValue(), identity);
+                            break;
+                        default:
+                            throw new GeneralException("Invalid option in Field Value");
+                    }
+                }
+            }
+            else{
+                    //For legacy compatibility
+                    returnVal = executeLegacy(context,identity,field).toString();
+                }
+        }
+        catch (GeneralException err){logger.error("Error in SP Dynamic Field Value Rule " + err.getMessage());}
+
+        logger.trace("Result: " + returnVal);
+        logger.trace("Exit Field Value Selector");
+
+        return returnVal;
+	
+	]]>
+	</Source>
+</Rule>

@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Group Aggregation Refresh Rule" type="GroupAggregationRefresh">
+  <Description>This rule is used to set the owner or modify the account group before it is persisted to the database.</Description>
+  <Signature returnType="Object">
+    <Inputs>
+      <Argument name="log">
+        <Description>
+          The log object associated with the SailPointContext.
+        </Description>
+      </Argument>
+      <Argument name="context">
+        <Description>
+          A sailpoint.api.SailPointContext object that can be used to query the database if necessary.
+        </Description>
+      </Argument>
+      <Argument name="environment" type="Map">
+        <Description>
+          Arguments passed to the aggregation task.
+        </Description>
+      </Argument>
+      <Argument name="obj" type="ResourceObject">
+        <Description>
+          A sailpoint.object.ResourceObject generated from the application
+          and the ProvisioningPlan's ObjectRequest.
+        </Description>
+      </Argument>
+      <Argument name="accountGroup" type="ManagedAttribute">
+        <Description>
+          The account group being refreshed.
+        </Description>
+      </Argument>
+      <Argument name="groupApplication" type="Application">
+        <Description>
+          Application being aggregated.
+        </Description>
+      </Argument>
+    </Inputs>
+    <Returns>
+      <Argument name="accountGroup" type="ManagedAttribute">
+        <Description>
+          The refreshed account group object.
+        </Description>
+      </Argument>
+    </Returns>
+  </Signature>
+  <Source>import java.util.*;
+Map map = new HashMap();
+System.out.println("accountGroup"+accountGroup);
+System.out.println("accountGroupDisplayName"+accountGroup.getDisplayName());
+System.out.println("accountGroupValue"+accountGroup.getValue());
+String desc=obj.getAttribute("sAMAccountName");
+System.out.println("Description:"+desc);
+map.put("en_US",desc);
+ accountGroup.setAttribute("sysDescriptions",map);
+return accountGroup;</Source>
+</Rule>

@@ -1,0 +1,586 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="AfterCreate-Powershell-PROD" type="ConnectorAfterCreate">
+  <Attributes>
+    <Map>
+      <entry key="ObjectOrientedScript" value="true"/>
+      <entry key="disabled" value="false"/>
+      <entry key="extension" value=".ps1"/>
+      <entry key="program" value="powershell.exe"/>
+      <entry key="timeout" value="120"/>
+    </Map>
+  </Attributes>
+  <Description>
+    This is an IQService After script -
+    if provisioning was success,
+    creates home directory 
+    and then sets permissions (modify for sAMAccountName)
+  </Description>
+  <Signature>
+    <Inputs>
+      <Argument name="log">
+        <Description>
+
+
+          The log object associated with the SailPointContext.
+
+        </Description>
+      </Argument>
+      <Argument name="context">
+        <Description>
+
+
+          A sailpoint.api.SailPointContext object that can be used to query the database if necessary.
+
+
+        </Description>
+      </Argument>
+      <Argument name="plan">
+        <Description>
+
+          The ProvisioningPlan object on its way to the Connector.
+
+
+        </Description>
+      </Argument>
+      <Argument name="application">
+        <Description>
+
+
+          The application object that references this before/after script.
+
+        </Description>
+      </Argument>
+    </Inputs>
+  </Signature>
+  <Source>
+  
+
+
+
+  # FUNCTIONS
+
+  ###############################################################################################################################
+
+ 
+
+  #sets up logging with log4net dll
+
+
+  function Configure-Logging([String]$configFile, [String]$loggerName) {
+
+    $log = [log4net.LogManager]::GetLogger($loggerName);
+
+    $xmlConfigurator = [log4net.Config.XmlConfigurator]::ConfigureAndWatch($configFile);
+
+    return $log;
+
+  }
+
+ 
+
+  #get AccountRequest object in environment variable
+
+  function Get-AccountRequest() {
+
+    $log.Debug("entering Get-AccountRequest");
+
+    $obj = $null;
+
+   
+
+    try {
+
+      $sReader = New-Object IO.StringReader([String] $env:Request);
+
+        $xmlReader = [System.Xml.XmlTextReader] ( [SailPoint.Utils.xml.XmlUtil]::getReader($sReader) );
+
+        $obj = New-Object SailPoint.Utils.objects.AccountRequest($xmlReader);
+
+      if ($log.IsDebugEnabled) {
+
+        $log.DebugFormat("account request: {0}" , $obj.toXml());
+
+      }
+
+    } catch [Exception] {
+
+      $log.ErrorFormat("error while getting account request - {0}", $_.Exception.Message);
+
+    }
+
+      $log.Debug("exiting Get-AccountRequest");
+
+   
+
+    return $obj;
+
+  }
+
+ 
+
+  #get ServiceResult object in environment variable
+
+  function Get-ServiceResult() {
+
+    $log.Debug("entering Get-ServiceResult");
+
+    $obj = $null;
+
+   
+
+    try {
+
+      $sReader = New-Object IO.StringReader([String] $env:Result);
+
+      $xmlReader = [Xml.XmlTextReader] ( [SailPoint.Utils.xml.XmlUtil]::getReader($sReader) );
+
+      $obj = New-Object SailPoint.Utils.objects.ServiceResult($xmlReader);
+
+      if ($log.IsDebugEnabled) {
+
+        $log.DebugFormat("service result: {0}" , $obj.toXml());
+
+      }
+
+    } catch [Exception] {
+
+      $log.ErrorFormat("error while getting account request - {0}", $_.Exception.Message);
+
+    }
+
+      $log.Debug("exiting Get-ServiceResult");
+
+    return $obj;
+
+  }
+
+ 
+
+  #if we have a non-null result...check it...otherwise, return false
+
+  function Test-ProvisioningResult([sailpoint.Utils.objects.ServiceResult] $result) {
+
+    $log.Debug("entering Test-ProvisioningResult");
+
+   
+
+    #assume no success
+
+    $value = $false;
+
+   
+
+    if ($result) {
+
+      $log.Debug("we had a service result object");
+
+      if ($result.Errors.Count -eq 0) {
+
+        $log.Debug("we had no provisioning errors");
+
+        #we have success!
+
+        $value = $true;
+
+      } else {
+
+        $log.ErrorFormat("we had {0} provisioning errors!", $result.Errors.Count);
+
+      }
+
+    } else {
+
+      $log.Debug("we had a null service result object");
+
+    }
+
+   
+
+      $log.DebugFormat("return value is: {0}", $value);
+
+    $log.Debug("exiting Test-ProvisioningResult");
+
+    return $value;
+
+  }
+
+ 
+
+  #if we have a non-null account request...check it for our value...otherwise, return nothing
+
+  function Get-AttributeValueFromAccountRequest([sailpoint.Utils.objects.AccountRequest] $request, [String] $targetAttribute) {
+
+    $log.DebugFormat("entering Get-AttributeFromAccountRequest for attribute {0}", $targetAttribute);
+
+   
+
+    $value = $null;
+
+   
+
+    if ($request) {
+
+      $log.Debug("we had an account request object");
+
+      foreach ($attrib in $request.AttributeRequests) {
+
+        if ($attrib.Name -eq $targetAttribute) {
+
+          $log.Debug("we found a match!");
+
+          $value = $attrib.Value;
+
+          break;
+
+        }
+
+      }
+
+      log.Debug("we did not find that attribute...");
+
+    } else {
+
+      $log.Debug("we had a null account request object");
+
+    }
+
+   
+
+      $log.DebugFormat("return value is: {0}", $value);
+
+    $log.Debug("exiting Get-AttributeFromAccountRequest");
+
+    return $value;
+
+  }
+
+ 
+
+  #this returns a DirectoryInfo object if successful
+
+  function New-HomeDirectory([String] $fullPath) {
+
+    $log.DebugFormat("entering New-HomeDirectory for fullPath {0}", $fullPath);
+
+    $value = New-Item -Path $fullPath -ItemType Directory;
+
+    $log.Debug("exiting New-HomeDirectory");
+
+    return $value;
+
+  }
+
+ 
+
+  #utility method for checking if directory exists
+
+  #we look for any type (not just container (folder) since any object existence with this exact path and name would be of concern
+
+  function Test-HomeDirectory([String] $fullPath) {
+
+    $log.DebugFormat("entering Test-HomeDirectory for fullPath {0}", $fullPath);
+
+    $value = Test-Path -Path $fullPath -PathType Any
+
+    $log.DebugFormat("return value is {0}", $value);
+
+    $log.Debug("exiting Test-HomeDirectory");
+
+    return $value;
+
+  }
+
+ 
+
+
+  function Set-HomeDirectoryPermissions([String] $homeDirectory, [String] $sAMAccountName, [String] $domainName) {
+
+    $log.DebugFormat("entering Set-HomeDirectoryPermissions for homeDirectory {0} and sAMAccountName {1}", $homeDirectory, $sAMAccountName);
+
+   
+
+    $colRights = [Security.AccessControl.FileSystemRights]::Modify;
+
+ 
+
+    #note you have to do a binary OR here to get both object container inheritance
+
+    #which is how you get permissiongs on all child objects in the folder hierarchy
+
+    $InheritanceFlag = [Security.AccessControl.InheritanceFlags]::ObjectInherit -bor [Security.AccessControl.InheritanceFlags]::ContainerInherit;
+
+    $PropagationFlag = [Security.AccessControl.PropagationFlags]::None;
+
+ 
+
+    $objType =[Security.AccessControl.AccessControlType]::Allow;
+
+ 
+
+    #if domainName is needed, pass it in, otherwise leave it as blank string
+
+    $objUser = New-Object Security.Principal.NTAccount($domainName, $sAMAccountName);
+
+    $log.DebugFormat("ntAccount found was {0}", $objUser.Value);
+
+   
+
+    $objACE = New-Object Security.AccessControl.FileSystemAccessRule($objUser, $colRights, $InheritanceFlag, $PropagationFlag, $objType);
+
+    if ($log.IsDebugEnabled) { $log.DebugFormat("access control entry will be {0}", ($objACE | Format-List | Out-String)); }
+
+ 
+
+    $objACL = Get-ACL $homeDirectory;
+
+    if ($log.IsDebugEnabled) { $log.DebugFormat("current ACL for {0} is {1}", $homeDirectory, ($objACL | Format-List | Out-String)); }
+
+ 
+
+      Try{
+
+   
+
+    $objACL.AddAccessRule($objACE);
+
+      }catch{$log.DebugFormat("acl set failure on {0} and ojbacl variable is {1}",$homeDirectory, ($objACL | Format-List | Out-String));}
+
+ 
+
+    if ($log.IsDebugEnabled) { $log.DebugFormat("ACL to be set on {0} is {1}", $homeDirectory, ($objACL | Format-List | Out-String)); }
+
+ 
+
+    if ($log.IsDebugEnabled) { $log.DebugFormat("this is the actual(incase of permission failure) objACE for security flag:{0}", ($objACE | Formtat-List | Out-String));}
+
+ 
+
+     
+
+    #passthru means it returns a System.Security.AccessControl.FileSecurity object if successful
+
+    $aclSetResult = Set-ACL -Path $homeDirectory -AclObject $objACL -Passthru;
+
+   
+
+    $objACL = Get-ACL $homeDirectory;
+
+    if ($log.IsDebugEnabled) { $log.DebugFormat("actual ACL for {0} is now {1}", $homeDirectory, ($objACL | Format-List | Out-String)); }
+
+   
+
+    if ($log.IsDebugEnabled) { $log.DebugFormat("acl set result was {0}", ($aclSetResult | Format-List | Out-String)); }
+
+    $log.Debug("exiting Set-HomeDirectoryPermissions");
+
+ 
+
+         
+
+    return $aclSetResult;
+
+  }
+
+
+
+
+
+
+
+  ###############################################################################################################################
+
+  # BODY
+
+  # setup instructions (for each iqService host that could run the script):
+
+  #   =update the path to Utils.dll (can be an unqualified path like "Utils.dll") since script is copied to iqService folder for execution
+
+  #   =update path to log4net.dll (can be unqualified if you put it in the iqService folder)
+
+  #     ==if you download log4net from internet, be sure to "unblock" the dll file (in file properties)!
+
+  #   =update path to log4net.config (can be like previous two file paths)
+
+  #   =update the log4net.config contents to be as you wish (there's a file path in there for the log, as well as log level - see the config file for more info)
+
+  #   =make sure Utils.dll, log4net.dll, log4net.config are all in teh iqService folder on each iqService host
+
+  #   =be sure the account that runs IQService has appropriate permissions to create directories and set permissions on them
+
+  ###############################################################################################################################
+
+ 
+
+  #iiq 6.3p3 release (SailPoint.Utils)
+
+  Add-Type -Path "C:\SailPoint\IQService\Utils.dll";
+
+
+
+  #.net 4.0 release (log4net 1.2.13)
+
+
+
+  $log4netDLL = "C:\SailPoint\IQService\Utils.dll\log4net.dll";
+  $log4netConfigFile = "log4net.config";
+
+  $log4netLoggerName = "root";
+
+  Add-Type -Path $log4netDLL;
+
+  $log = Configure-Logging $log4netConfigFile $log4netLoggerName
+
+
+
+  #import AD cmdlets
+
+  Import-Module activeDirectory
+
+
+
+  # group sAMAccountName
+
+  $mailGroup = "none";
+
+
+
+  $log.Debug("entering after create script (powershell)");
+
+
+
+  $requestObject = Get-AccountRequest;
+
+  $resultObject = Get-ServiceResult;
+
+
+
+  if (Test-ProvisioningResult $resultObject) {
+
+    $log.Debug("we had a provisioning success - proceeding");
+
+    $homeDirectory = Get-AttributeValueFromAccountRequest $requestObject "homeDirectory";
+
+    $sAMAccountName = Get-AttributeValueFromAccountRequest $requestObject "sAMAccountName";
+
+
+
+    
+    if (Test-HomeDirectory($homeDirectory)) {
+
+      $log.DebugFormat("we found that {0} already exists - create script will not handle already-present directories! exit code 130", $homeDirectory);
+
+      Exit 130;
+
+    } 
+    else {
+
+      $log.DebugFormat("we did not find a homeDirectory at location {0} (so we will proceed)", $homeDirectory);
+
+      $newDirectory = New-HomeDirectory $homeDirectory;
+
+    }
+
+
+
+    
+    Start-Sleep -s 10
+
+
+
+    if ($newDirectory) {
+
+      $log.Debug("we are done with creating the directory...now setting permissions");
+
+      #passing blank value for domain
+
+      $aclResult = Set-HomeDirectoryPermissions $homeDirectory $sAMAccountName "";
+
+
+
+
+
+
+
+      if (Test-HomeDirectory($homeDirectory)) {
+
+        Start-Sleep -s 5
+
+
+
+
+
+        $log.Debug("we are done with setting permissions...onto group add");
+
+
+
+        $log.Debug("done with group add");
+
+
+      } else {
+
+        $log.Debug("we had an issue setting permissions - exit code 120");
+
+        Exit 120;
+
+      }
+
+      $log_info = Get-ACL $homeDirectory;
+
+
+
+      if($log_info.Access.Count -ge 5) {
+
+
+
+        $log.Debug("permissions set as planned");
+
+      } else {
+
+        $log.Error("There is an issue with folder permission setting - exit code 163");
+
+        $sAMAccountName | Out-File C:\IQService\permissions_log.txt -Append;
+
+
+
+      }
+
+
+
+
+
+    } 
+    else {
+      $log.DebugFormat("Unable to get home directory from AD, probabbly because there is no location assigned. we had an issue creating the folder {0} and thus can't set permissions...exit code 110");
+
+    }
+
+
+
+
+
+
+
+
+
+    
+  } 
+  else {
+
+    $log.Error("we had a provisioning failure - unable to proceed - exit code 100");
+
+    Exit 100;
+
+  }
+
+
+
+  $log.Debug("exiting after create script (powershell)");
+
+
+
+
+
+
+  </Source>
+</Rule>

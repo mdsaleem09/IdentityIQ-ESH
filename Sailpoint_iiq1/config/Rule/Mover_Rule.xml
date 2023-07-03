@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Mover Rule" type="IdentityTrigger">
+  <Description>This rule can be used for Certification Events that use rule triggers. The previousIdentity and newIdentity hold snapshots of the identity before the update has occurred and the state of the identity after the update, respectively.</Description>
+  <Signature returnType="boolean">
+    <Inputs>
+      <Argument name="log" type="org.apache.commons.logging.Log">
+        <Description>
+          The log object associated with the SailPointContext.
+        </Description>
+      </Argument>
+      <Argument name="context" type="sailpoint.api.SailPointContext">
+        <Description>
+          A sailpoint.api.SailPointContext object that can be used to query the database if necessary.
+        </Description>
+      </Argument>
+      <Argument name="previousIdentity">
+        <Description>
+          The identity before the refresh/aggregation (this will be null when an
+          identity is created).
+        </Description>
+      </Argument>
+      <Argument name="newIdentity">
+        <Description>
+          The identity after the refresh/aggregation (this will be null when an
+          identity is deleted).
+        </Description>
+      </Argument>
+    </Inputs>
+    <Returns>
+      <Argument name="result">
+        <Description>
+          A boolean describing the result of the rule.
+        </Description>
+      </Argument>
+    </Returns>
+  </Signature>
+  <Source>import sailpoint.object.*;
+import sailpoint.api.*;
+
+
+  return true;
+  System.out.println("Previous Identity"+previousIdentity.toXml());
+  System.out.println("Next Identity"+newIdentity.toXml());
+
+if(!(previousIdentity instanceof Identity) || !(newIdentity instanceof Identity))
+{
+return false;
+}
+  if(newIdentity == null || newIdentity == void || !newIdentity.isCorrelated())
+  {
+      System.out.println("inside if Next Identity"+newIdentity);
+
+    return false;
+  }
+String att1oldVal ="";
+String att1newValue="";
+String att2olVal="";
+String att2newVal="";
+/*
+if(previousIdentity.getAttribute("department")!=null &amp;&amp; newIdentity.getAttribute("department")!=null)
+{
+att1oldVal          =   previousIdentity.getAttribute("department");
+att1newValue        =   newIdentity.getAttribute("department");
+System.out.println("Test-1:att1oldVal "+att1oldVal);
+System.out.println("Test-1:att1newValue "+att1newValue);
+}
+*/
+
+if(previousIdentity.getAttribute("manager")!=null &amp;&amp; newIdentity.getAttribute("manager")!=null)
+{
+att2olVal            =      previousIdentity.getAttribute("manager");
+att2newVal           =      newIdentity.getAttribute("manager");
+System.out.println("Test-2:att2olVal"+att2olVal);
+System.out.println("Test-2:att2newVal"+att2newVal);
+}
+if(att1oldVal!=null &amp;&amp; att1newValue!=null  &amp;&amp;  !att1oldVal.equalsIgnoreCase(att1newValue) || att2olVal!=null &amp;&amp; att2newVal!=null &amp;&amp; !att2olVal.equalsIgnoreCase(att2newVal))
+{
+System.out.println("return true");
+return true;
+}</Source>
+</Rule>

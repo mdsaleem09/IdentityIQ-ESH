@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Custom PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Custom name="SPCONF Field Value Mappings Custom">
+    <!--  Enter the Application name
+                    Type:
+                        - attribute:  Will fetch a Identity attribute based on the name.
+                        - velocity: Will generate a string based on the Apache Velocity lib - The available variable is identity 
+                        - rule: Call a custom rule by method name in the SPCONF Field Value or inline as script
+                    Key: Name of the Application Attribute
+                    Value: Map to the attribute, rule name or formatted string as described in the Type
+                            - Source/Script can be used in rule and velocity to include multi line code
+            -->
+  <Attributes>
+    <Map>
+      <entry key="AD">
+        <value>
+          <List>
+            <Field name="sn" type="attribute" value="lastname"/>
+            <Field name="givenName" type="attribute" value="firstname"/>
+            <Field name="mail" type="rule" value="getCustomEmail"/>
+            <Field name="department" type="velocity" value="$identity.getStringAttribute(&quot;department&quot;)"/>
+            <Field defaultValue="Corporate HQ" name="physicalDeliveryOfficeName" type="rule" value="getCustomOffice"/>
+            <Field name="sAMAccountName" type="velocity">
+              <Value>
+                <Script>
+                  <Source>
+                    #if($identity.getLastname().length() > 2)
+                        $identity.getFirstname()$identity.getLastname().substring(0,2)
+                    #else
+                        $identity.getFirstname()$identity.getLastname()
+                    #end
+                  </Source>
+                </Script>
+              </Value>
+            </Field>
+            <Field name="distinguishedName" type="rule">
+              <Value>
+                <Script>
+                  <Source>
+                    return "CN=" + identity.getName() + ",OU=" + identity.getStringAttribute("department") + ",OU=Employees,DC=Domain,DC=Local";
+                  </Source>
+                </Script>
+              </Value>
+            </Field>
+            <Field name="displayName" type="rule">
+              <Value>
+                <Script>
+                  <Source>
+                    return identity.getDisplayableName();
+                  </Source>
+                </Script>
+              </Value>
+            </Field>
+            <Field name="description" type="rule">
+              <Value>
+                <Script>
+                  <Source>
+                    String val = "Provisioned " + identity.getDisplayableName() + " on " + new Date();
+                    return val;
+                  </Source>
+                </Script>
+              </Value>
+            </Field>
+          </List>
+        </value>
+      </entry>
+      <entry key="MyDB">
+        <value>
+          <List>
+            <Field name="username" type="velocity" value="$identity.name"/>
+            <Field name="forename" type="attribute" value="firstname"/>
+            <Field name="surname" type="attribute" value="lastname"/>
+            <Field name="dept" type="attribute" value="department"/>
+            <Field defaultValue="Corporate HQ" name="office" type="rule" value="getCustomOffice"/>
+          </List>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</Custom>

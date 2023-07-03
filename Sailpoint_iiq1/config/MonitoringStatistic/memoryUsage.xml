@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE MonitoringStatistic PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<MonitoringStatistic displayName="monitor_stat_label_memory_usage" name="memoryUsage" type="JVM" value="call:getUsedMemory" valueType="long">
+  <Attributes>
+    <Map>
+      <entry key="valueRenderer" value="megabytes"/>
+    </Map>
+  </Attributes>
+  <Description>The amount of memory (in bytes) actively in use by the application server's Java virtual machine</Description>
+</MonitoringStatistic>

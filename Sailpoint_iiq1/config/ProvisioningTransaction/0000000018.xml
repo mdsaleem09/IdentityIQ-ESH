@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction accountDisplayName="CN=Mark Allen,OU=People,OU=Demo,DC=Eshiam,DC=com" applicationName="Active Directory" integration="Active Directory" name="0000000018" nativeIdentity="CN=Mark Allen,OU=People,OU=Demo,DC=Eshiam,DC=com" operation="Modify" source="IdentityRefresh" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="request">
+        <value>
+          <AccountRequest application="Active Directory" nativeIdentity="CN=Mark Allen,OU=People,OU=Demo,DC=Eshiam,DC=com" op="Modify" targetIntegration="Active Directory">
+            <Attributes>
+              <Map>
+                <entry key="provisioningTransactionId" value="c0a801067bee1cc9817c073be5d10a77"/>
+              </Map>
+            </Attributes>
+            <AttributeRequest name="groups" op="Add" value="CN=AccountsPayable,OU=Groups,OU=Demo,DC=Eshiam,DC=com"/>
+            <AttributeRequest name="memberOf" op="Add" value="CN=AccountsReceivable,OU=Groups,OU=Demo,DC=Eshiam,DC=com"/>
+            <ProvisioningResult status="failed">
+              <Errors>
+                <Message key="Errors returned from IQService. &quot;Failed to update attributes for identity CN=Mark Allen,OU=People,OU=Demo,DC=Eshiam,DC=com. The specified directory service attribute or value does not exist.&#xa;&quot;" type="Error"/>
+              </Errors>
+            </ProvisioningResult>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

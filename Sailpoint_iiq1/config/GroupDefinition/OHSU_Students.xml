@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE GroupDefinition PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<GroupDefinition indexed="true" name="OHSU_Students" private="true">
+  <Description/>
+  <GroupFilter>
+    <CompositeFilter operation="AND">
+      <Filter ignoreCase="true" operation="EQ" property="links.application.id" value="c0a891017bb91c9d817bba09a7b80094"/>
+    </CompositeFilter>
+  </GroupFilter>
+  <Owner>
+    <Reference class="sailpoint.object.Identity" name="spadmin"/>
+  </Owner>
+</GroupDefinition>

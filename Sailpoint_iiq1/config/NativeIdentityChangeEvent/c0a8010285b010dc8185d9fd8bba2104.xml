@@ -1,0 +1,3 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE NativeIdentityChangeEvent PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<NativeIdentityChangeEvent applicationId="c0a891017bb91c9d817bba3e0bfc02ba" launched="1674399555416" linkId="c0a801038535168a818539089f260310" newNativeIdentity="CN=Tiffany Alvarez,OU=Disable,OU=Demo,DC=Eshiam,DC=com" oldNativeIdentity="CN=Tiffany Alvarez,OU=People,OU=Demo,DC=Eshiam,DC=com" status="Completed" type="Account" uuid="{3a8f84df-5e1b-443d-8b2a-6eae715139f9}"/>

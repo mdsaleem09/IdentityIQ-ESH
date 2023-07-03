@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Manager-OHSU" type="ManagerCorrelation">
+  <Description>A rule called to help IdentityIQ take a value from the mapped manager field and map it to an existing IdentityIQ identity.
+
+Just like identity correlation, the rule needs to return a map that contains some values that will guide the correlator on how to try to find the identity.  It can also do the lookup manually and just returned the identity.</Description>
+  <Signature returnType="Map"/>
+  <Source>import sailpoint.object.*;
+import java.util.Map;
+import java.util.HashMap;
+import sailpoint.object.*;
+import sailpoint.api.*;
+
+
+
+
+
+
+
+Map map=new HashMap();
+
+
+
+
+String managerName=link.getAttribute("Manager");
+
+if(managerName!=null)
+{
+  String a = managerName.split("\\|")[1];
+Filter filter = Filter.eq("displayName",a);
+Identity id = context.getUniqueObject(Identity.class,filter);
+map.put("identity",id);
+}
+  System.out.println("7777manager "map);
+return map;</Source>
+</Rule>

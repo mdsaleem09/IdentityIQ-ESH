@@ -1,0 +1,3 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Classification PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Classification displayName="Okta IdP" name="IDP_OKTA" origin="CAM" type="cloud"/>

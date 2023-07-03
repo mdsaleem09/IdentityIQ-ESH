@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE EmailTemplate PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<EmailTemplate name="Sunset Expiration Reminder">
+  <Body>#if ($role)Role $role #{else}Entitlement $entitlement #{end}belonging to $requestee which was requested by $requestor will be removed on $sunsetDate
+  </Body>
+  <Description>
+    Email Template for notifying the requestee and requestor when a Role or Entitlement is about to be sunsetted.
+  </Description>
+  <Signature>
+    <Inputs>
+      <Argument name="requestor" type="string">
+        <Description>The Identity of the original request to sunset the role or entitlement</Description>
+      </Argument>
+      <Argument name="requestee" type="string">
+        <Description>The Identity that the role or entitlement belongs to</Description>
+      </Argument>
+      <Argument name="role" type="string">
+        <Description>The name of the role</Description>
+      </Argument>
+      <Argument name="entitlement" type="string">
+        <Description>The name of the entitlement</Description>
+      </Argument>
+      <Argument name="sunsetDate" type="date">
+        <Description>The date that the role or entitlement will be removed on</Description>
+      </Argument>
+    </Inputs>
+  </Signature>
+  <Subject>Access Expiration Reminder</Subject>
+</EmailTemplate>

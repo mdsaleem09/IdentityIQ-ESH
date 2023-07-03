@@ -1,0 +1,312 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="OHSU Joiner Rules Library">
+  <Source>
+   import sailpoint.object.Application;
+   import sailpoint.api.SailPointContext;
+   import org.apache.commons.logging.Log;
+   import org.apache.commons.logging.LogFactory;
+   import sailpoint.object.Filter;
+   import sailpoint.object.Link;
+   import sailpoint.workflow.WorkflowContext;
+   import sailpoint.object.Workflow;
+   import java.util.ArrayList;
+   import java.util.List;
+   import java.util.Arrays;
+   import java.util.Map;
+   import java.util.HashMap;
+   import sailpoint.object.Identity;
+   import sailpoint.object.ManagedAttribute;
+   import sailpoint.api.Provisioner; 
+   import sailpoint.tools.GeneralException;
+   import sailpoint.tools.Util;
+   import sailpoint.object.Custom;
+   import sailpoint.api.IdentityService;
+   import sailpoint.object.*;
+   import sailpoint.object.ProvisioningPlan.AccountRequest;
+   import sailpoint.object.ProvisioningPlan.AttributeRequest;
+   import sailpoint.object.ProvisioningPlan.Operation;
+  
+     
+  
+  import sailpoint.object.Identity;
+        import sailpoint.object.Link;
+        import sailpoint.object.Application;
+        import sailpoint.object.ProvisioningPlan;
+        import sailpoint.object.ProvisioningPlan.AccountRequest;
+        import sailpoint.object.ProvisioningPlan.AttributeRequest;
+        import sailpoint.api.Provisioner;
+        import sailpoint.object.Bundle;
+  
+  
+  
+  public ProvisioningPlan getDynamicJoinerPlan(SailPointContext context, String identityName, Workflow workflow){
+		System.out.println("Enter getDynamicJoinerPlan");
+		
+		Identity identity = context.getObjectByName(Identity.class, identityName);
+		
+		ProvisioningPlan plan = getDynamicJoinerPlan (context, identity, workflow);
+		
+		return plan;
+	}
+	
+	public ProvisioningPlan getDynamicJoinerPlan(SailPointContext context, Identity identity, Workflow workflow){
+		System.out.println("Enter getDynamicJoinerPlan2");
+		
+		ProvisioningPlan plan = null;
+		Custom mappingObj = getJoinerMappingObject(context);
+		
+		if (mappingObj != null){
+			String assignmentType = mappingObj.get("Birthright Assignment Type");
+			
+			if ("Default Roles".equalsIgnoreCase(assignmentType)){
+				
+				plan = new ProvisioningPlan();
+				plan.setIdentity(identity);
+				
+				List assignments = mappingObj.get("Default Assignments");
+				
+				if (assignments == null || assignments.size() &lt; 1){
+					logger.warn("Nothing to assign.  Return null.");
+					return null;
+				}
+				
+        
+        	if (Util.nullSafeSize(assignments) &gt; 0 ){
+					AccountRequest acctReq = new AccountRequest(AccountRequest.Operation.Modify, "IIQ", null, identity.getName());
+					acctReq.add(new AttributeRequest("assignedRoles", ProvisioningPlan.Operation.Set, assignments));
+					plan.add(acctReq);
+				}
+        /*
+				if (Util.nullSafeSize(assignments) &gt; 0 ){
+        String nativeId = getNativeIdentity(context, app, identity);
+        System.out.println("nativeId value"+nativeId);
+			  AccountRequest accReqRole = new AccountRequest();
+        accReqRole.setApplication("IIQ");
+        accReqRole.setNativeIdentity(nativeId);
+        accReqRole.setOp(ProvisioningPlan.ObjectOperation.Modify);
+        accReqRole.add(new AttributeRequest("assignedRoles",ProvisioningPlan.Operation.Set,assignments));
+				plan.add(acctReq);
+				} 
+        */
+        
+			}
+		}
+		
+		plan.setComments("Adding Joiner Access");
+		
+		System.out.println("Set plan identity " + identity);
+		plan.setIdentity(identity);
+		
+		System.out.println("Exit getDynamicJoinerPlan: " + plan.toXml());
+		return plan;
+	}
+  
+  
+    public String getNativeIdentity(SailPointContext context, String appName, Identity identity){
+		System.out.println("Enter getNativeIdentity");
+		String nativeId = "";
+		
+		Application app = context.getObjectByName(Application.class, appName);
+		
+		Schema schema = app.getAccountSchema();
+		String niField = schema.getIdentityAttribute();
+		
+		System.out.println("The native id field is: " + niField);
+		
+		List templates = app.getTemplates();
+		Template updateTemp = null;
+		
+		if (templates != null &amp;&amp; templates.size() &gt; 0){
+			System.out.println("loop the templates");
+			
+			for (Template temp : templates){
+				Template.Usage usage = temp.getUsage();
+				if (usage.equals(Template.Usage.Create)){
+					System.out.println("Set to create template in case no update");
+					updateTemp = temp;
+					break;
+				}
+			}
+			
+			if (updateTemp != null){
+			
+				List fields = updateTemp.getFields();
+				
+				if (fields != null &amp;&amp; fields.size() &gt; 0){
+					for (Field field : fields){
+						System.out.println("Get field name");
+						String fieldName = field.getName();
+						String displayName = field.getDisplayName();
+						
+						if (niField.compareTo(fieldName) == 0){
+							Rule rule = field.getFieldRule();
+							
+							HashMap params = new HashMap();
+						
+							params.put("context", context);
+							params.put("identity", identity);
+							params.put("field", field);
+							
+							try {
+								System.out.println("Run the rule");
+								nativeId = context.runRule(rule, params);
+							} catch (Exception re){
+								System.out.println("*** EXCEPTION RUNNING RULE/SCRIPT: " + re.toString());
+								continue;
+							}
+						}		
+					}
+				}
+			}
+		}
+		
+		
+		System.out.println("Exit getNativeIdentity: " + nativeId);
+		return nativeId;
+	}
+  
+  public Custom getJoinerMappingObject(SailPointContext context){
+		System.out.println("Enter getJoinerMappingObject");
+		
+		Custom mappingObj = context.getObjectByName(Custom.class, "SPCONF Joiner Mappings Custom");
+		System.out.println("Exit getJoinerMappingObject: " + mappingObj);
+		return mappingObj;
+	}
+  
+  
+  
+	/*
+  
+  public boolean validateIgnioScimInputs(WorkflowContext wfcontext,SailPointContext context,Map inputMap){         
+		 boolean flag = true;
+		 String flow = inputMap.get("flow");
+  	 if(Util.isNullOrEmpty(flow)) {	
+	        wfcontext.setVariable("errstr","Invalid input: flow value provided is null or empty");
+	       	flag = false;
+		   } 
+		else if(flow.equalsIgnoreCase("Eshiam SCIM AD Group Addition")){
+            flag = validateIdentity(wfcontext,context,inputMap);
+		}
+       else {
+         System.out.println("invalid flow variable:");
+	        wfcontext.setVariable("errstr","Invalid input: flow value provided is invalid - " +  flow);
+	       	flag = false;
+		}
+		return flag;
+		}
+    
+		
+		public boolean validateIdentity(WorkflowContext wfcontext,SailPointContext context,Map inputMap)
+		{
+      System.out.println("inside Validate Identity");
+		boolean flag=true;
+		Identity idObj=null;
+		String identityName=inputMap.get("identityName");
+		String nativeIdentity="";
+		  Filter filter=Filter.and(Filter.eq("displayName",identityName),Filter.eq("inactive",false));
+		       idObj=context.getUniqueObject(Identity.class,filter);
+			  if(idObj==null)
+			  {
+          System.out.println("Inside idObj"+idObj);
+			  			 wfcontext.setVariable("errstr","Invalid input: identity is not found");
+
+			  flag=false;
+			  }
+			 
+                
+			  
+			       /*  Application appObj=context.getObjectByName(Application.class,appName);
+					 IdentityService idService=new IdentityService(context);
+					 List linkObj=idService.getLinks(idObj,appObj);
+          
+					 if(linkObj.Util.nullSafesize()==0)
+					        {
+				
+							     System.out.println("application is not found:");
+							
+										 wfcontext.setVariable("errstr","Invalid input: application is not found");
+            							       flag=false;
+
+
+					        } 
+                  
+          
+		          
+        
+      							return flag;
+
+		
+		}
+		
+		
+		
+		public  String addADGroupToUser(WorkflowContext wfcontext,SailPointContext context,Map inputMap){
+          		String identityName=inputMap.get("identityName");
+			   String ADGroupName = inputMap.get("ADGroupName");
+               String nativeIdentity="";
+		       Filter filter=Filter.and(Filter.eq("displayName",identityName),Filter.eq("inactive",false));
+		      Identity idObj=context.getUniqueObject(Identity.class,filter);
+             String applicationName = "Active Directory";
+			 String value="";
+			 
+      if(idObj!=null)
+      {
+			  Application appObj=context.getObjectByName(Application.class,applicationName);
+					 IdentityService idService=new IdentityService(context);
+					 List linkObj=idService.getLinks(idObj,appObj);
+					 if(Util.nullSafeSize(linkObj)&gt;0)
+					 {
+					 
+			                for(Link link:linkObj)
+							{
+                        if(link!=null)
+                        {
+							nativeIdentity=link.getNativeIdentity();
+                        }
+							}
+							
+							
+        if(Util.isNotNullOrEmpty(ADGroupName)) {
+    	    QueryOptions query = new QueryOptions();
+	        query.add(Filter.and(Filter.eq("application.name",  applicationName ),Filter.like("displayName",ADGroupName)));
+	        Iterator result = context.search(ManagedAttribute.class, query);
+	        
+	        while (result.hasNext()){
+                ManagedAttribute managedAttribute = (ManagedAttribute)result.next();
+               System.out.println("ma"+managedAttribute.toXml());
+               	if(managedAttribute != null &amp;&amp; managedAttribute.getAttribute("sAMAccountName").equalsIgnoreCase(ADGroupName)){
+                    value = managedAttribute.getValue();
+                }
+				}
+				}
+           }  
+    }
+								 
+					ProvisioningPlan plan=new ProvisioningPlan();
+					     plan.setIdentity(idObj);
+						  	AccountRequest request = new AccountRequest();
+                            request.setApplication(applicationName);
+						    request.setOperation(ProvisioningPlan.AccountRequest.Operation.Modify);
+							request.setNativeIdentity(nativeIdentity);
+							request.add(new AttributeRequest("memberOf",ProvisioningPlan.Operation.Add, value));
+							plan.add(request);
+							System.out.println("plan value :"+plan.toXml());
+           	
+	  	try{
+		  	Provisioner provisioner = new Provisioner(context);
+		  	provisioner.execute(plan);
+		  	context.saveObject(idObj);
+			context.commitTransaction();
+	
+		  	return null;
+		}
+           catch(GeneralException e){
+			return "Error while adding group "+e.getMessage();
+		}
+    }
+  */
+    
+    
+  </Source>
+</Rule>

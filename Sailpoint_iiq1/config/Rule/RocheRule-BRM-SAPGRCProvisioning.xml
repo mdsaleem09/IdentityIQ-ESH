@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="RocheRule-BRM-SAPGRCProvisioning">
+  <Signature returnType="String">
+    <Inputs>
+      <Argument name="log">
+        <Description>
+          The log object associated with the SailPointContext.
+        </Description>
+      </Argument>
+      <Argument name="context">
+        <Description>
+          A sailpoint.api.SailPointContext object that can be used to query the database if necessary.
+        </Description>
+      </Argument>
+      <Argument name="plan"/>
+      <Argument name="user"/>
+      <Argument name="url"/>
+      <Argument name="password"/>
+    </Inputs>
+  </Signature>
+  <Source>
+  import java.util.HashMap;
+  import java.util.Map;
+  import sailpoint.object.ProvisioningPlan;
+  import sailpoint.object.ProvisioningResult;
+  import org.apache.commons.logging.Log;
+  import org.apache.commons.logging.LogFactory;
+
+ // private static Log log = LogFactory.getLog("com.roche.rule.RocheRule-BRM-SAPGRCProvisioning");
+
+  System.out.println(" Start Rule RocheRule-SAPProvisioning");
+
+  ProvisioningResult provisioningResult = new ProvisioningResult();
+  try{
+          System.out.println("integration plan"+plan);
+
+      System.out.println("plan in SAP"+plan.toXml());
+
+
+   // log.debug(" plan : "+plan);
+   //// log.debug("user :"+user);
+   // log.debug("url : "+url);
+   // String pwd = context.decrypt(password);
+    
+   //need to implement actual logic here once webservice is available.    
+
+    provisioningResult.setStatus(ProvisioningResult.STATUS_COMMITTED);
+	
+	// for now returning Success always.
+	System.out.println("****success");
+       System.out.println(" provisioningResult : "+provisioningResult.toXml());
+
+    return provisioningResult;
+
+  }catch(Exception e){
+    provisioningResult.setStatus(ProvisioningResult.STATUS_FAILED);
+    provisioningResult.addError(" Error in rule RocheRule-SAPProvisioning :"+e.getMessage());
+  }
+
+
+
+  //log.debug(" provisioningResult : "+provisioningResult.toXml());
+
+  //log.debug(" End Rule RocheRule-SAPProvisioning");
+
+
+  return provisioningResult;
+
+  </Source>
+</Rule>

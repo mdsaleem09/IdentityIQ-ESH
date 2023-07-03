@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Sign_Off_Approver_Rule" type="CertificationSignOffApprover">
+  <Description>This rule is run when the certification is signed off to determine who (if anyone) needs to approve the certification decisions.  If this returns a non-null identity, the certification is forwarded to the returned identity.</Description>
+  <Signature returnType="Map">
+    <Inputs>
+      <Argument name="log" type="org.apache.commons.logging.Log">
+        <Description>
+          The log object associated with the SailPointContext.
+        </Description>
+      </Argument>
+      <Argument name="context" type="sailpoint.api.SailPointContext">
+        <Description>
+          A sailpoint.api.SailPointContext object that can be used to query the database if necessary.
+        </Description>
+      </Argument>
+      <Argument name="certification">
+        <Description>
+          The sailpoint.object.Certification that was signed.
+        </Description>
+      </Argument>
+      <Argument name="certifier">
+        <Description>
+          The sailpoint.object.Identity that signed the certification.
+        </Description>
+      </Argument>
+    </Inputs>
+    <Returns>
+      <Argument name="identityName">
+        <Description>
+        The name of the Identity that should approve the certification.  Either
+        this or 'identity' should be non-null if certification sign off approval
+        is desired.
+        </Description>
+      </Argument>
+      <Argument name="identity">
+        <Description>
+        The Identity that should approve the certification.  Either this or
+        'identityName' should be non-null if certification sign off approval
+        is desired.
+        </Description>
+      </Argument>
+    </Returns>
+  </Signature>
+  <Source>HashMap map = null;
+int noOfSignOffs = certification.getSignOffHistory().size();
+
+if(null != noOfSignOffs &amp;&amp; noOfSignOffs &lt; 2 )
+{
+map = new HashMap();
+map.put("identityName","Barbara Wilson");
+}
+return map;</Source>
+</Rule>

@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ManagedAttribute PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ManagedAttribute aggregated="true" attribute="memberOf" displayName="ESHIAM\Corporate-VPN" hash="ac1be673e8d4e96da2d3a3d2105f18cb94ee9346" lastRefresh="1674550835445" requestable="true" type="group" uuid="{fd7d40ea-47e8-47ba-86a8-f9b261a2c863}" value="CN=Corporate-VPN,OU=Groups,OU=Demo,DC=Eshiam,DC=com">
+  <ApplicationRef>
+    <Reference class="sailpoint.object.Application" name="Active- Directory"/>
+  </ApplicationRef>
+  <Attributes>
+    <Map>
+      <entry key="GroupScope" value="Global"/>
+      <entry key="GroupType" value="Security"/>
+      <entry key="cn" value="Corporate-VPN"/>
+      <entry key="msDS-PrincipalName" value="ESHIAM\Corporate-VPN"/>
+      <entry key="objectSid" value="S-1-5-21-2379072024-2618563348-3591105667-1350"/>
+      <entry key="objectguid" value="{fd7d40ea-47e8-47ba-86a8-f9b261a2c863}"/>
+      <entry key="sAMAccountName" value="Corporate-VPN"/>
+      <entry key="sysDescriptions"/>
+    </Map>
+  </Attributes>
+</ManagedAttribute>

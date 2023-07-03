@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction accountDisplayName="ESHIAM\Automation_Test" applicationName="Active- Directory" integration="Active- Directory" name="0000000144" nativeIdentity="CN=Automation_Test,OU=Groups,OU=Demo,DC=Eshiam,DC=com" operation="Create" source="GroupManagement" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="request">
+        <value>
+          <ObjectRequest application="Active- Directory" nativeIdentity="CN=Automation_Test,OU=Groups,OU=Demo,DC=Eshiam,DC=com" op="Create" targetIntegration="Active- Directory" type="group">
+            <Attributes>
+              <Map>
+                <entry key="provisioningTransactionId" value="c0a80103848b129b81848e7fe7e402c1"/>
+              </Map>
+            </Attributes>
+            <AttributeRequest name="distinguishedName" op="Set" value="CN=Automation_Test,OU=Groups,OU=Demo,DC=Eshiam,DC=com"/>
+            <AttributeRequest name="sAMAccountName" op="Set" value="ESHIAM\Automation_Test"/>
+            <AttributeRequest name="GroupType" op="Set" value="Security"/>
+            <AttributeRequest name="GroupScope" op="Set" value="Global"/>
+            <AttributeRequest name="sysAttribute" op="Set" value="memberOf"/>
+            <AttributeRequest name="sysDisplayName" op="Set" value="ESHIAM\Automation_Test"/>
+            <AttributeRequest name="sysDescriptions" op="Set">
+              <Value>
+                <Map>
+                  <entry key="en_US"/>
+                </Map>
+              </Value>
+            </AttributeRequest>
+            <AttributeRequest name="sysOwner" op="Set" value=""/>
+            <AttributeRequest name="sysRequestable" op="Set">
+              <Value>
+                <Boolean>true</Boolean>
+              </Value>
+            </AttributeRequest>
+            <AttributeRequest name="sysManagedAttributeType" op="Set" value="group"/>
+            <AttributeRequest name="sysClassifications" op="Set"/>
+            <AttributeRequest name="sysIiqElevatedAccess" op="Set">
+              <Value>
+                <Boolean>true</Boolean>
+              </Value>
+            </AttributeRequest>
+            <ProvisioningResult status="failed">
+              <Errors>
+                <Message key="Exception occurred while executing the RPCRequest: Errors returned from IQService. &quot;A device attached to the system is not functioning. 00000523: SysErr: DSID-031A12C8, problem 22 (Invalid argument), data 0 . HRESULT:[0x8007001F]&quot;" type="Error"/>
+              </Errors>
+            </ProvisioningResult>
+          </ObjectRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

@@ -1,0 +1,102 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="JDBC-Delete Provisioning rule" type="JDBCOperationProvisioning">
+  <Description>This rule is used by the JDBC connector to do provisioning of the data .</Description>
+  <Signature returnType="ProvisioningResult"/>
+  <Source>import java.sql.ResultSet;
+import java.sql.Statement;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Types;
+import sailpoint.api.SailPointContext;  
+import sailpoint.object.Identity;
+import sailpoint.object.*;  
+import sailpoint.object.ProvisioningPlan;
+import sailpoint.object.ProvisioningPlan.AccountRequest;
+import sailpoint.object.ProvisioningPlan.AttributeRequest;
+import oracle.jdbc.OracleTypes;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import sailpoint.object.ProvisioningResult;
+
+public String getAttributeRequestValue(AccountRequest acctReq, String attribute) {
+    if ( acctReq != null ) {
+      AttributeRequest attrReq = acctReq.getAttributeRequest(attribute);
+      if ( attrReq != null ) {
+        return attrReq.getValue();
+      }
+    }
+    return null;
+  }
+  ProvisioningResult provresult = new ProvisioningResult();
+ 
+  String user = " ";
+ 
+  String emplID = " ";
+ 
+ 
+  if ( plan != null ) {
+  System.out.println("Plan in delete provisioning rule" + plan.toXml());
+  List accRequests = plan.getAccountRequests();
+  if ( ( accRequests != null ) &amp;&amp; ( accRequests.size() &gt; 0 ) ) {
+  for(AccountRequest accRequest : accRequests) {
+ 
+       user = plan.getNativeIdentity();
+            Identity identity = context.getObjectByName(Identity.class, user);
+   
+            emplID = identity.getAttribute("EmployeeID");
+ 
+ 
+         
+
+    try
+{
+ 
+  Statement statement=connection.createStatement();
+   System.out.println("Statement created.....");
+   
+   
+   
+   
+       if(AccountRequest.Operation.Modify.equals(accRequest.getOperation())) {
+       String result1 ="";
+       String result2 ="";      
+       
+       PreparedStatement st=connection.prepareStatement("delete from test.jdbcusers   where EmployeeID=?");
+
+
+ 
+     st.setString(1, emplID);
+   
+     
+                    st.executeUpdate();
+ 
+ 
+           
+           
+                                     provresult.setStatus(ProvisioningResult.STATUS_COMMITTED);
+									 System.out.println("Plan after execution in delete provisoning rule"+plan.toXml());
+                            System.out.println("provresult " +provresult );
+
+                 
+     
+      }
+      }
+
+     catch (Exception e) {
+                               System.out.println("JDBCApplication Create Error e: " +e);    
+    }finally { 
+
+      try{ 
+         if (connection != null) 
+     connection.close(); 
+      }catch (SQLException e) { 
+         e.printStackTrace(); 
+              } 
+      }      
+    }  
+    }
+  }
+  return provresult;</Source>
+</Rule>

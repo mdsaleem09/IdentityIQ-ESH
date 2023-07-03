@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Hybrid Entitlements Testing" type="GroupAggregationRefresh">
+  <Description>This rule is used to set the owner or modify the account group before it is persisted to the database.</Description>
+  <Signature returnType="Object"/>
+  <Source>import sailpoint.api.ManagedAttributer;
+import sailpoint.object.ManagedAttribute;
+
+  System.out.println("accountGroup1 "+accountGroup.toXml());
+
+ManagedAttribute ma=ManagedAttributer.get(context,groupApplication,false,accountGroup.getAttribute(),accountGroup.getValue());
+if(ma!=null)
+{
+  System.out.println("maObj 1"+ma.toXml());
+
+  System.out.println("accountGroup2 "+accountGroup.toXml());
+  
+  
+
+  System.out.println("new Entitlement "+ma.getAttribute("newEntitlement"));
+
+
+
+if(ma.getAttribute("newEntitlement")==null || ma.getAttribute("newEntitlement")==false)
+{
+System.out.println("inside if ");
+//ma.setRequestable(false);
+accountGroup.setRequestable(false);
+//ma.setAttribute("newEntitlement",true);
+accountGroup.setAttribute("newEntitlement",true);
+}
+context.saveObject(accountGroup);
+context.commitTransaction();
+}</Source>
+</Rule>

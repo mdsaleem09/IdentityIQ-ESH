@@ -1,0 +1,5 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Capability PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Capability displayName="capability_system_administrator" name="SystemAdministrator">
+  <Description>capability_desc_system_administrator</Description>
+</Capability>

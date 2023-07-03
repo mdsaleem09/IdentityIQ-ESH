@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE IdentityTrigger PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<IdentityTrigger disabled="true" handler="sailpoint.api.WorkflowTriggerHandler" name="Joiner" type="Create">
+  <Description>Process a new employee.</Description>
+  <HandlerParameters>
+    <Attributes>
+      <Map>
+        <entry key="businessProcess"/>
+        <entry key="identityProcessingThreshold"/>
+        <entry key="identityProcessingThresholdType"/>
+        <entry key="workflow" value="MyJoiner-ohsu"/>
+      </Map>
+    </Attributes>
+  </HandlerParameters>
+</IdentityTrigger>

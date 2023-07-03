@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction accountDisplayName="ESHIAM\Ad User3" applicationName="Active- Directory Demo" identityDisplayName="Ad User3" identityName="Ad User3" integration="Active- Directory Demo" name="0000000109" nativeIdentity="CN=Ad User3,OU=People,OU=Demo,DC=Eshiam,DC=com" operation="Modify" source="IdentityRefresh" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="request">
+        <value>
+          <AccountRequest application="Active- Directory Demo" nativeIdentity="CN=Ad User3,OU=People,OU=Demo,DC=Eshiam,DC=com" op="Modify">
+            <Attributes>
+              <Map>
+                <entry key="provisioningTransactionId" value="c0a8de0181b31dd08181d78484f70a27"/>
+              </Map>
+            </Attributes>
+            <AttributeRequest name="memberOf" op="Add" value="CN=All_Users,OU=Groups,OU=Demo,DC=Eshiam,DC=com"/>
+            <ProvisioningResult status="failed">
+              <Errors>
+                <Message key="Unknown Host WIN-1IOG6N814LM" type="Error"/>
+              </Errors>
+            </ProvisioningResult>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

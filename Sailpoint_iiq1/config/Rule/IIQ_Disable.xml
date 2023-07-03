@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="IIQ Disable" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import sailpoint.tools.Util;
+  import sailpoint.object.*;
+
+  List list = new ArrayList();
+  
+  
+  Identity id = context.getObject(Identity.class,"Margaret Garcia");
+ // String accStartDate = id.getStringAttribute("startDat");
+   Date st =  id.getAttribute("startDat");
+    return Util.getDaysDifference(new Date(),st);
+  
+  
+  //accStartDate =  "1669141800000";
+  if(Util.isNotNullOrEmpty(accStartDate)){
+    long longDate =Long.parseLong(accStartDate);
+    Date startDate = new Date(longDate);
+   
+    //IT will it startdate is equals or greater then current date it will return true
+    if(Util.getDaysDifference(new Date(),startDate) &gt;=0 ){
+      return false;
+    }
+    return true;
+    }
+  
+  
+  /*
+  
+ // String startDate = "1669141800000";
+  long l =Long.parseLong(startDate);
+  Date start = new Date(l);
+  String sta = 23/11/2022;
+  return Util.getDaysDifference(new Date(),sta);
+    
+  
+  
+  //startDate =  identity.getStringAttribute("startDate");
+  if(Util.isNotNullOrEmpty(startDate)){
+  SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+  Date startdt = dateFormat.parse(startDate);
+  */
+  
+    
+    
+ Date startDate = 1632913613533;
+ return Util.getDaysDifference(startDate,new Date());
+    
+    
+    
+    
+    
+    //IT will it startdate is equals or greater then current date it will return true
+   // if(Util.getDaysDifference(startDate,new Date()) &gt;=0 ){
+    //  return true;
+    //}
+    //return false;
+    
+ //}
+    
+    /*
+    
+  Calendar c = Calendar.getInstance();
+  Date currentDate = c.getTime();
+
+    list.add(startdt.toString());
+    list.add(currentDate.toString());
+//Determine whether currentDate is greater then or equal to startDate
+    return Util.isDateAfter(currentDate,startdt);;
+    boolean status =  Util.isDateAfter(currentDate,startdt);
+    if(status == true){
+      return false;
+      
+    }
+    else{
+      return true;
+    }
+      
+ // if(Util.isDateAfter(currentDate,startdt)){
+    
+ //  return true;
+ // }
+  
+ //return false;
+  }
+
+  </Source>
+</Rule>

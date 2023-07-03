@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Create GUID" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+import sailpoint.object.Filter;
+import sailpoint.object.*;
+
+
+String userName = account.getStringAttribute("Name");
+System.out.println("Inside Creation Rule:"+userName);
+
+boolean userExists = false;
+String strUserName = null;
+QueryOptions qo = new QueryOptions();
+qo.addFilter(Filter.eq("name",userName));
+Iterator users = context.search(Identity.class, qo);
+if (users.hasNext()) {
+userExists = true;
+}
+
+System.out.println("userExists :"+userExists);
+
+if(!userExists) {
+String strFirstName = account.getStringAttribute("FirstName");
+String strLastName = account.getStringAttribute("LastName");
+
+if(strFirstName != null &amp;&amp; strLastName != null){
+strUserName = strFirstName.substring(0,3)+strLastName.substring(0,3);
+}
+else if(strFirstName == null){
+strUserName = strLastName.trim();
+}
+else if(strLastName == null){
+strUserName = strFirstName.trim();
+}
+
+boolean isUnique = false;
+int intCount = 0;
+String strTemp = strUserName;
+if(strUserName != null) {
+while(!isUnique){
+isUnique = false;
+intCount = intCount+1;
+Identity searchedUser = null;
+searchedUser = context.getObjectByName(Identity.class,strTemp);
+
+if(searchedUser != null){
+strTemp = strUserName+intCount;
+}
+else{
+isUnique = true;
+strUserName = strTemp;
+}
+}
+strUserName = strUserName.toLowerCase();
+
+}
+  
+identity.setAttribute("GUID",strUserName);
+  
+}
+  
+System.out.println("Unique Id Generation"+strUserName);
+
+System.out.println("Global Unique ID"+GUID);
+  </Source>
+</Rule>

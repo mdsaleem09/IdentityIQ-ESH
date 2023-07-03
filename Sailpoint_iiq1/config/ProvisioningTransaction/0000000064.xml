@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction accountDisplayName="ESHIAM\Florence Johnston" applicationName="Active Directory" identityDisplayName="Florence Johnston" identityName="Florence Johnston" integration="Active Directory" name="0000000064" nativeIdentity="CN=Florence Johnston,OU=People,OU=Demo,DC=Eshiam,DC=com" operation="Disable" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="request">
+        <value>
+          <AccountRequest application="Active Directory" nativeIdentity="CN=Florence Johnston,OU=People,OU=Demo,DC=Eshiam,DC=com" op="Disable">
+            <Attributes>
+              <Map>
+                <entry key="provisioningTransactionId" value="c0a8de017c9e1023817ca2d481d40460"/>
+              </Map>
+            </Attributes>
+            <AttributeRequest name="AC_NewParent" op="Set" value="CN=Florence Johnston,OU=Disable-Users,OU=Demo,DC=Eshiam,DC=com"/>
+            <ProvisioningResult status="failed">
+              <Errors>
+                <Message key="Errors returned from IQService. &quot;Failed to update attributes for identity CN=Florence Johnston,OU=People,OU=Demo,DC=Eshiam,DC=com. Failed to connect to the server for CN=Florence Johnston,OU=Disable-Users,OU=Demo,DC=Eshiam,DC=com&quot;" type="Error"/>
+              </Errors>
+            </ProvisioningResult>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

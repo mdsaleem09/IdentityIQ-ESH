@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE RequestDefinition PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<RequestDefinition executor="sailpoint.request.ManagerCertificationPartitionRequestExecutor" name="Manager Certification Generation Partition" retryMax="20">
+  <Attributes>
+    <Map>
+      <entry key="errorAction" value="terminate"/>
+      <entry key="maxThreads" value="1"/>
+      <entry key="orphanAction" value="delete"/>
+    </Map>
+  </Attributes>
+</RequestDefinition>

@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction accountDisplayName="CN=elomus1,OU=People,OU=Demo,DC=Eshiam,DC=com" applicationName="Active- Directory" identityDisplayName="Musk" identityName="elomus1" integration="Active- Directory" name="0000000159" nativeIdentity="CN=elomus1,OU=People,OU=Demo,DC=Eshiam,DC=com" operation="Modify" source="RapidSetup" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="accessRequestId" value="0000000500"/>
+      <entry key="request">
+        <value>
+          <AccountRequest application="Active- Directory" nativeIdentity="CN=elomus1,OU=People,OU=Demo,DC=Eshiam,DC=com" op="Modify">
+            <Attributes>
+              <Map>
+                <entry key="provisioningTransactionId" value="c0a8010285b010dc8185c9fb5b731050"/>
+              </Map>
+            </Attributes>
+            <AttributeRequest displayValue="ESHIAM\Compensation" name="memberOf" op="Remove" value="CN=Compensation,OU=Groups,OU=Demo,DC=Eshiam,DC=com">
+              <Attributes>
+                <Map>
+                  <entry key="assignment" value="true"/>
+                </Map>
+              </Attributes>
+            </AttributeRequest>
+            <ProvisioningResult status="failed">
+              <Errors>
+                <Message key="Error(s) reported back from the IQService - Failed to update attributes for identity CN=elomus1,OU=People,OU=Demo,DC=Eshiam,DC=com. Failed to connect to the server for CN=elomus1,OU=People,OU=Demo,DC=Eshiam,DC=com:There is no such object on the server. 0000208D: NameErr: DSID-03100238, problem 2001 (NO_OBJECT), data 0, best match of: &#x9;'OU=People,OU=Demo,DC=Eshiam,DC=com' . HRESULT:[0x80072030] Possible reasons for failure include a) The Domain Controller is currently not reachable b) The object has either been moved or renamed c) The object has been deleted &#xa; Please Ensure the data has been aggregated before performing the operation " type="Error"/>
+              </Errors>
+            </ProvisioningResult>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

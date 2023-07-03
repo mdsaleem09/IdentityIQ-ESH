@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE IdentityArchive PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<IdentityArchive name="Staging_Oracle" sourceId="c0a8010686771a5e8186b6aa970d27f2">
+  <Archive>&lt;?xml version='1.0' encoding='UTF-8'?&gt;
+&lt;!DOCTYPE Identity PUBLIC "sailpoint.dtd" "sailpoint.dtd"&gt;
+&lt;Identity created="1678101878541" id="c0a8010686771a5e8186b6aa970d27f2" lock="f335b262b8214e52b79b52069c2bca12|1678101878591|1678102178591|TestHR-oracle-Account Aggregation" name="Staging_Oracle"&gt;
+  &lt;Attributes&gt;
+    &lt;Map&gt;
+      &lt;entry key="displayName" value="Staging_ Oracle"/&gt;
+      &lt;entry key="firstname" value="Staging_"/&gt;
+      &lt;entry key="lastname" value="Oracle"/&gt;
+      &lt;entry key="triggerSnapshots"&gt;
+        &lt;value&gt;
+          &lt;Map&gt;
+            &lt;entry key="Rule" value="Staging_Oracle"/&gt;
+          &lt;/Map&gt;
+        &lt;/value&gt;
+      &lt;/entry&gt;
+    &lt;/Map&gt;
+  &lt;/Attributes&gt;
+&lt;/Identity&gt;
+</Archive>
+</IdentityArchive>

@@ -1,0 +1,168 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="JDBC-Create Provisioning Rule 2" type="JDBCOperationProvisioning">
+  <Description>This rule is used by the JDBC connector to do provisioning of the data .</Description>
+  <Signature returnType="ProvisioningResult"/>
+  <Source>import java.sql.ResultSet;
+  import java.sql.Statement;
+  import java.sql.Connection;
+  import java.sql.DriverManager;
+  import java.sql.Types;
+  import sailpoint.api.SailPointContext;  
+  import sailpoint.object.Identity;
+  import sailpoint.object.*;  
+  import sailpoint.object.ProvisioningPlan;
+  import sailpoint.object.ProvisioningPlan.AccountRequest;
+  import sailpoint.object.ProvisioningPlan.AttributeRequest;
+  import oracle.jdbc.OracleTypes;
+  import java.sql.PreparedStatement;
+  import java.sql.SQLException;
+  import java.sql.Date;
+  import sailpoint.object.PasswordPolicy;
+  import sailpoint.api.PasswordGenerator;
+  import sailpoint.object.ProvisioningResult;
+  public String getAttributeRequestValue(AccountRequest acctReq, String attribute) {
+    if ( acctReq != null ) {
+      AttributeRequest attrReq = acctReq.getAttributeRequest(attribute);
+      if ( attrReq != null ) {
+        return attrReq.getValue();
+      }
+    }
+    return null;
+  }
+
+
+  ProvisioningResult provresult = new ProvisioningResult();
+  String user = " ";
+  String username = " ";
+  String emplID = " ";
+  String networkID=" ";
+  System.out.println("calling create ");
+  
+
+  if ( plan != null ) {
+    List accRequests = plan.getAccountRequests(); 
+
+    System.out.println("*******planOne" + plan.toXml());
+    if ( ( accRequests != null ) &amp;&amp; ( accRequests.size() &gt; 0 ) ) {
+      for(AccountRequest accRequest : accRequests) {
+        user = plan.getNativeIdentity();
+        Identity identity = context.getObjectByName(Identity.class, user);
+        emplID = identity.getAttribute("EmployeeID");
+        username = identity.getDisplayName();
+        networkID=identity.getAttribute("networkID");
+
+        List entCount = new ArrayList();
+
+        for(AttributeRequest attrReq :accRequest.getAttributeRequests()){
+          if(attrReq.getName().equals("GroupValue") &amp;&amp; (attrReq.getOperation().toString().equalsIgnoreCase("Add") || attrReq.getOperation().toString().equalsIgnoreCase("Set"))){
+            System.out.println("******Entered into attrIf :"+attrReq.getValue());
+            
+            Object valObj = attrReq.getValue();
+            
+            if(valObj instanceof List){
+               entCount.addAll(valObj);
+            }else{
+              
+              String val = valObj;
+              entCount.add(val);
+              
+            }
+           // entCount.add(attrReq.getValue());
+            System.out.println("*****entCount::::"+entCount);
+
+          }
+        }
+
+
+
+        try{
+          if(AccountRequest.Operation.Create.equals(accRequest.getOperation())) {
+            
+            
+            accRequest.setNativeIdentity(emplID);
+            
+             System.out.println("******entCount size::::"+entCount.size());
+            System.out.println("******entCount ::::"+entCount);
+            if(entCount.size()&lt;=1)
+            {
+              for(int i=0;i&lt;entCount.size();i++){
+              System.out.println("*******inside if  loop to insert single entitlement");
+
+
+
+              PreparedStatement st=connection.prepareStatement("INSERT INTO test.demotestusers VALUES(?,?,?,?,?,?,?)");
+
+              st.setString(1, username);
+              st.setString(2, getAttributeRequestValue(accRequest,"FirstName"));
+              st.setString(3, getAttributeRequestValue(accRequest,"LastName"));
+
+              // AttributeRequest attrReq = accRequest.getAttributeRequest("GroupId");
+              // st.setString(3,entCount.get(i));
+              st.setString(4,emplID);
+              st.setString(5, getAttributeRequestValue(accRequest,"EmailAddress"));
+              st.setString(6,networkID);
+              AttributeRequest attrReq = accRequest.getAttributeRequest("GroupValue");
+              st.setString(7,  entCount.get(i));
+              System.out.println("*******inside if plan"+plan.toXml());
+
+              st.executeUpdate();
+
+
+
+              provresult.setStatus(ProvisioningResult.STATUS_COMMITTED);
+              }
+
+            }
+            if(entCount.size() &gt; 1){
+              for(int i=0;i&lt;entCount.size();i++){
+                System.out.println("*******inside if &amp; for loop to insert multi entitlements");
+
+                PreparedStatement st=connection.prepareStatement("INSERT INTO test.demotestusers VALUES(?,?,?,?,?,?,?)");
+
+                st.setString(1, username);
+                st.setString(2, getAttributeRequestValue(accRequest,"FirstName"));
+                st.setString(3, getAttributeRequestValue(accRequest,"LastName"));
+
+                // AttributeRequest attrReq = accRequest.getAttributeRequest("GroupId");
+                // st.setString(3,entCount.get(i));
+                st.setString(4,emplID);
+                st.setString(5, getAttributeRequestValue(accRequest,"EmailAddress"));
+                st.setString(6,networkID);
+                st.setString(7,  entCount.get(i));
+
+                System.out.println("*******inside if &amp; for loop plan"+plan.toXml());
+
+                st.executeUpdate();
+
+
+
+
+                provresult.setStatus(ProvisioningResult.STATUS_COMMITTED);
+
+              }
+
+            }
+          }
+        } catch (Exception e) {
+          System.out.println("JDBCApplication Create Error e: " +e);
+        }finally {
+
+          try{
+            if (connection != null)
+              connection.close();
+          }catch (SQLException e) {
+            e.printStackTrace();
+          }
+        }  
+
+      }  
+    }
+  }
+
+  return provresult;
+
+
+
+  </Source>
+</Rule>

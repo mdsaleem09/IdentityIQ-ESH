@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Form PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Form hidden="true" name="Identity to Capabilities Report Form" type="Report">
+  <Section columns="1" label="report_identity_capabilities_form" name="customProperties">
+    <Field displayName="report_identity_capabilities_identities" helpKey="help_report_identity_capabilities_identities" multi="true" name="identities" type="Identity" value="ref:identities"/>
+    <Field displayName="report_identity_capabilities_include_empty_capabilities" helpKey="help_report_identity_capabilities_include_empty_caps" name="includeEmptyCapabilities" type="boolean" value="ref:includeEmptyCapabilities"/>
+    <Field displayName="report_identity_capabilities_exclude_indirect_caps" helpKey="help_report_identity_capabilities_exclude_indirect_caps" name="excludeIndirectCapabilities" type="boolean" value="ref:excludeIndirectCapabilities"/>
+    <Field displayName="report_identity_capabilities_exclude_workgroups" helpKey="help_report_identity_capabilities_exclude_workgroups" name="excludeWorkgroups" type="boolean" value="ref:excludeWorkgroups"/>
+  </Section>
+</Form>

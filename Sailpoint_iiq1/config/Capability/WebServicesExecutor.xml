@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Capability PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Capability displayName="capability_ws_executor" name="WebServicesExecutor">
+  <Description>capability_desc_ws_executor</Description>
+  <InheritedCapabilities>
+    <Reference class="sailpoint.object.Capability" name="SCIMExecutor"/>
+  </InheritedCapabilities>
+  <RightRefs>
+    <Reference class="sailpoint.object.SPRight" name="WebServices"/>
+    <Reference class="sailpoint.object.SPRight" name="PingWebService"/>
+    <Reference class="sailpoint.object.SPRight" name="GetConfigurationWebService"/>
+    <Reference class="sailpoint.object.SPRight" name="CheckRolePoliciesWebService"/>
+    <Reference class="sailpoint.object.SPRight" name="RolesAssignablePermitsWebService"/>
+    <Reference class="sailpoint.object.SPRight" name="ShowIdentityWebService"/>
+    <Reference class="sailpoint.object.SPRight" name="GetIdentityListWebService"/>
+    <Reference class="sailpoint.object.SPRight" name="CheckAuthorizationWebService"/>
+    <Reference class="sailpoint.object.SPRight" name="GetTaskResultStatusWebService"/>
+    <Reference class="sailpoint.object.SPRight" name="GetLinksWebService"/>
+    <Reference class="sailpoint.object.SPRight" name="CheckPasswordPolicyWebService"/>
+    <Reference class="sailpoint.object.SPRight" name="IdentityCreateWebService"/>
+    <Reference class="sailpoint.object.SPRight" name="AggregateAccountWebService"/>
+    <Reference class="sailpoint.object.SPRight" name="LaunchWorkflowWebService"/>
+    <Reference class="sailpoint.object.SPRight" name="CancelWorkflowWebService"/>
+    <Reference class="sailpoint.object.SPRight" name="RemoteLoginWebService"/>
+    <Reference class="sailpoint.object.SPRight" name="PasswordInterceptWebService"/>
+    <Reference class="sailpoint.object.SPRight" name="IdentityCreateOrUpdateWebService"/>
+    <Reference class="sailpoint.object.SPRight" name="GetWorkItemCountWebService"/>
+    <Reference class="sailpoint.object.SPRight" name="GetIdentityNameByLinkWebService"/>
+  </RightRefs>
+</Capability>

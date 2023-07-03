@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Form PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Form name="Eshiam Approver Identity selec Form" type="Workflow">
+  <Attributes>
+    <Map>
+      <entry key="pageTitle" value="Manager Selection Form"/>
+      <entry key="subtitle" value="Manual Action Required"/>
+      <entry key="title" value="Global Ad Account"/>
+    </Map>
+  </Attributes>
+  <Description>Approver and Identity Selection Form</Description>
+  <Button action="next" label="submit"/>
+  <Button action="cancel" label="Cancel"/>
+  <Section label="Global AD Account" name="eventDetails" type="datatable">
+    <Field displayName="identityName" name="identityName"/>
+  </Section>
+  <Button action="next" label="Continue"/>
+  <Button action="back" label="End Workflow"/>
+</Form>

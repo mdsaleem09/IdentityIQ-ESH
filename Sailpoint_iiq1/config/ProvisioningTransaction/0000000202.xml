@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction accountDisplayName="ESHIAM\Joseph Thompson" applicationName="Active- Directory" identityDisplayName="Joseph Thompson" identityName="Joseph Thompson" integration="Active- Directory" name="0000000202" nativeIdentity="CN=Joseph Thompson,OU=People,OU=Demo,DC=Eshiam,DC=com" operation="Modify" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="request">
+        <value>
+          <AccountRequest application="Active- Directory" nativeIdentity="CN=Joseph Thompson,OU=People,OU=Demo,DC=Eshiam,DC=com" op="Modify">
+            <Attributes>
+              <Map>
+                <entry key="provisioningTransactionId" value="c0a8d30185e912378185f316d38d5c06"/>
+              </Map>
+            </Attributes>
+            <AttributeRequest name="AC_NewParent" op="Set" value="OU=Standard,OU=User Accounts,DC=devuser,DC=devohsuit,DC=com"/>
+            <ProvisioningResult status="failed">
+              <Errors>
+                <Message key="adldap_suggestion_move_user" type="Info"/>
+              </Errors>
+            </ProvisioningResult>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="test role" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+  import sailpoint.object.Identity;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+  
+  
+ // String nameId = (String)assertionAttributes.get("nameId");
+  String nameId = "Susan Marti";
+
+            Identity ident;
+
+            if(nameId != null) {
+                // Lookup the identity based on nameId
+                ident = context.getObject(Identity.class, nameId);
+            }
+
+            return ident;
+  
+  
+  Bundle bund=new Bundle();
+  bund.setName("AD IT");
+  bund.setType("it");
+  bund.setDisplayName("AD IT Role");
+  context.saveObject(bund);
+  context.commitTransaction();
+  
+  
+  
+  </Source>
+</Rule>

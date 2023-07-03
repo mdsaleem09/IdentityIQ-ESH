@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction accountDisplayName="CN=Ad User8,OU=People,OU=Demo,DC=Eshiam,DC=com" applicationName="Active- Directory" identityDisplayName="Ad User8" identityName="Ad User8" integration="Active- Directory" name="0000000152" nativeIdentity="CN=Ad User8,OU=People,OU=Demo,DC=Eshiam,DC=com" operation="Create" source="LCM" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="accessRequestId" value="0000000479"/>
+      <entry key="request">
+        <value>
+          <AccountRequest application="Active- Directory" nativeIdentity="CN=Ad User8,OU=People,OU=Demo,DC=Eshiam,DC=com" op="Create" targetIntegration="Active- Directory">
+            <Attributes>
+              <Map>
+                <entry key="attachmentConfigList"/>
+                <entry key="attachments"/>
+                <entry key="flow" value="AccessRequest"/>
+                <entry key="id" value="c0a8010383391672818339e91c6a002f"/>
+                <entry key="interface" value="LCM"/>
+                <entry key="nativeIdUpdated">
+                  <value>
+                    <Boolean>true</Boolean>
+                  </value>
+                </entry>
+                <entry key="operation" value="EntitlementAdd"/>
+                <entry key="provisioningTransactionId" value="c0a8010285b010dc8185ba54dba3028e"/>
+              </Map>
+            </Attributes>
+            <AttributeRequest displayValue="ESHIAM\AccountsPayable" name="memberOf" op="Add" value="CN=AccountsPayable,OU=Groups,OU=Demo,DC=Eshiam,DC=com">
+              <Attributes>
+                <Map>
+                  <entry key="assignment" value="true"/>
+                </Map>
+              </Attributes>
+            </AttributeRequest>
+            <AttributeRequest name="objectType" op="Set" value="User"/>
+            <AttributeRequest name="sAMAccountName" op="Set" value="User8"/>
+            <AttributeRequest name="password" op="Set">
+              <Attributes>
+                <Map>
+                  <entry key="secret" value="true"/>
+                </Map>
+              </Attributes>
+            </AttributeRequest>
+            <AttributeRequest name="IIQDisabled" op="Set">
+              <Value>
+                <Boolean/>
+              </Value>
+            </AttributeRequest>
+            <AttributeRequest name="givenName" op="Set" value="Ad"/>
+            <AttributeRequest name="sn" op="Set" value="User8"/>
+            <AttributeRequest name="employeeId" op="Set" value="adUser08"/>
+            <AttributeRequest name="homeDirectory" op="Set" value="\\ohsu.edu\edu\UsersU101User8"/>
+            <AttributeRequest name="homeDrive" op="Set" value="C:"/>
+            <AttributeRequest name="msNPAllowDialin" op="Set" value="Not Set"/>
+            <AttributeRequest name="mailNickname" op="Set" value="User8"/>
+            <ProvisioningResult status="committed"/>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

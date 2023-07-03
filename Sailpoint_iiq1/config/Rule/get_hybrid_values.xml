@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="get hybrid values" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+   
+import sailpoint.object.Identity;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+  import sailpoint.object.Filter;
+  import sailpoint.object.Profile;
+  
+  import java.util.*;
+ import sailpoint.object.Identity;
+  import sailpoint.object.*;
+  import java.util.List;
+  import sailpoint.object.Custom;
+
+  String roledisplayName=null;
+  Filter filter=Filter.eq("application.name","Active Directory");
+QueryOptions opts=new QueryOptions();
+opts.addFilter(filter);
+Iterator it=context.search(ManagedAttribute.class,opts);
+while(it.hasNext())
+{
+ManagedAttribute ma=(ManagedAttribute)it.next();
+  if(ma!=null &amp;&amp; ma.getDisplayName()!=null)
+  {
+String groupName = (String) ma.getDisplayName();
+		            System.out.println("groupName"+groupName);
+		
+		Custom customObj = context.getObjectByName(Custom.class, "hybrid role names");
+		if(customObj != null &amp;&amp; null != customObj.get(groupName)) 
+    {
+            System.out.println("customObj"+customObj);
+      
+      roledisplayName= customObj.get(groupName);
+ return roledisplayName;			
+			
+		}
+  }
+}
+
+ 
+
+ 
+  </Source>
+</Rule>

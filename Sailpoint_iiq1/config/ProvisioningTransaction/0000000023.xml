@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction applicationName="JDBC-APPLICATION" identityDisplayName="Fred Reyes" identityName="Fred Reyes" integration="JDBC-APPLICATION" name="0000000023" operation="Create" source="LCM" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="accessRequestId" value="0000000040"/>
+      <entry key="planResult">
+        <value>
+          <ProvisioningResult status="failed">
+            <Errors>
+              <Message key="Rule: JDBC-Modify Provisioning Rule not found." type="Error"/>
+            </Errors>
+          </ProvisioningResult>
+        </value>
+      </entry>
+      <entry key="request">
+        <value>
+          <AccountRequest application="JDBC-APPLICATION" op="Create">
+            <Attributes>
+              <Map>
+                <entry key="attachmentConfigList"/>
+                <entry key="attachments"/>
+                <entry key="flow" value="AccessRequest"/>
+                <entry key="id" value="c0a801067bee1cc9817c01e6342e0454"/>
+                <entry key="interface" value="LCM"/>
+                <entry key="operation" value="EntitlementAdd"/>
+                <entry key="provisioningTransactionId" value="c0a8de017c251895817c25c3c93e0040"/>
+              </Map>
+            </Attributes>
+            <AttributeRequest displayValue="Finance" name="GroupId" op="Add" value="2">
+              <Attributes>
+                <Map>
+                  <entry key="assignment" value="true"/>
+                </Map>
+              </Attributes>
+            </AttributeRequest>
+            <AttributeRequest displayValue="Engineering" name="GroupId" op="Add" value="3">
+              <Attributes>
+                <Map>
+                  <entry key="assignment" value="true"/>
+                </Map>
+              </Attributes>
+            </AttributeRequest>
+            <AttributeRequest name="FirstName" op="Set" value="Fred"/>
+            <AttributeRequest name="LastName" op="Set" value="Reyes"/>
+            <AttributeRequest name="EmailAddress" op="Set" value="Fred.Reyes@sailpointdemo.com"/>
+            <AttributeRequest name="NetworkID" op="Set" value="Fred.Reyes"/>
+            <AttributeRequest name="Name" op="Set" value="Fred Reyes"/>
+            <AttributeRequest name="GroupId" op="Set" value="3"/>
+            <ProvisioningResult status="failed">
+              <Errors>
+                <Message key="Rule: JDBC-Modify Provisioning Rule not found." type="Error"/>
+              </Errors>
+            </ProvisioningResult>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

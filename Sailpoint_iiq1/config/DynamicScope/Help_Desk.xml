@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE DynamicScope PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<DynamicScope name="Help Desk">
+  <ApplicationRemoveControl>
+    <Reference class="sailpoint.object.Rule" name="Objects in Requestor's Authorized Scopes"/>
+  </ApplicationRemoveControl>
+  <ApplicationRequestControl>
+    <Reference class="sailpoint.object.Rule" name="Objects in Requestor's Authorized Scopes"/>
+  </ApplicationRequestControl>
+  <ManagedAttributeRemoveControl>
+    <Reference class="sailpoint.object.Rule" name="All Objects"/>
+  </ManagedAttributeRemoveControl>
+  <ManagedAttributeRequestControl>
+    <Reference class="sailpoint.object.Rule" name="All Objects"/>
+  </ManagedAttributeRequestControl>
+  <PopulationRequestAuthority allowAll="true"/>
+  <RoleRemoveControl>
+    <Reference class="sailpoint.object.Rule" name="Objects in Requestor's Authorized Scopes"/>
+  </RoleRemoveControl>
+  <RoleRequestControl>
+    <Reference class="sailpoint.object.Rule" name="Objects in Requestor's Authorized Scopes"/>
+  </RoleRequestControl>
+  <Selector>
+    <IdentitySelector>
+      <MatchExpression>
+        <MatchTerm name="capabilities" value="HelpDesk"/>
+      </MatchExpression>
+    </IdentitySelector>
+  </Selector>
+</DynamicScope>

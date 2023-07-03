@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="After Rule" type="WebServiceAfterOperationRule">
+  <Description>This rule is used by the  Web Services connector to update parsed resource object 
+and save connectorStatemap values.Create List of Objects  which will later converted to Resource object and save connectorStatemap values to the application object permanently. The returned map will hold key 'data' for resource object list and key 'connectorStateMap' for udpated attribute that need to be saved in the application.</Description>
+  <Signature returnType="Object">
+    <Inputs>
+      <Argument name="log">
+        <Description>
+          The log object associated with the SailPointContext.
+        </Description>
+      </Argument>
+      <Argument name="context">
+        <Description>
+          A sailpoint.api.SailPointContext object that can be used to query the database if necessary.
+        </Description>
+      </Argument>
+      <Argument name="application">
+        <Description>The application whose data file is being processed.</Description>
+      </Argument>
+      <Argument name="requestEndPoint">
+        <Description>The current request information contain header, body ,response object</Description>
+      </Argument>
+      <Argument name="processedResponseObject">
+        <Description>Response Object processed by the Web services connector</Description>
+      </Argument>
+      <Argument name="rawResponseObject">
+        <Description>Response Object returned from the end system</Description>
+      </Argument>
+      <Argument name="restClient">
+        <Description>REST Client Object</Description>
+      </Argument>
+    </Inputs>
+    <Returns>
+      <Argument name="Map which contains updated Account/Group List and connectorStateMap">
+        <Description>Update information Map which contains parsed list of accounts/groups and connectorStateMap</Description>
+      </Argument>
+    </Returns>
+  </Signature>
+  <Source>System.out.println("processedResponseObject"+processedResponseObject);
+
+System.out.println("requestEndPoint"+requestEndPoint);
+</Source>
+</Rule>

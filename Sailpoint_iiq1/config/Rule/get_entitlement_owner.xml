@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="get entitlement owner" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+  import sailpoint.object.Identity;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+  
+  
+  
+ // String appName="";
+  
+                      List l=new ArrayList();
+                     ManagedAttribute  ma=context.getObjectById(ManagedAttribute.class,"c0a891017bc41b9c817bc4b41bbd0022");
+                     
+                          
+  if(ma!=null)
+  {
+               l.add(ma.getOwner().getName());
+  }
+
+                         
+                       
+    return l;
+
+
+      
+  </Source>
+</Rule>

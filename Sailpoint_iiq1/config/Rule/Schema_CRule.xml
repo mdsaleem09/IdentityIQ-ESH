@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Schema CRule" type="ResourceObjectCustomization">
+  <Description>This rule is configured on the application and is called after the connector has build a ResourceObject from the native application data.
+
+Initially designed for non-rule based connectors to add SPPrivileged flag to an object, but could be used to do any transformations.</Description>
+  <Signature returnType="ResourceObject"/>
+  <Source>System.out.println("Inside Schema customization rule");
+System.out.println("Inside Aggregation customization rule"+object.toXml());
+</Source>
+</Rule>

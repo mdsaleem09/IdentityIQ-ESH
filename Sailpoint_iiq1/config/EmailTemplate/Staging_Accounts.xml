@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE EmailTemplate PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<EmailTemplate name="Staging Accounts">
+  <Body>
+    &lt;html&gt;
+    &lt;body style="font-family:Calibri; font-size:100%"&gt;
+
+    &lt;p&gt;Hello, &lt;/p&gt;
+
+    &lt;p&gt;Please be informed that the following Accounts are added to Staging Identity 
+    &lt;p&gt;
+    
+    &lt;p&gt;Application Name = $app    &lt;p&gt;
+    &lt;p&gt;Number of Staged Identities = $accounts.size()    &lt;p&gt;
+    
+    
+    &lt;table border="1|1"&gt;
+    
+    &lt;tr&gt;
+    &lt;th&gt;Account Name&lt;/th&gt;
+    &lt;th&gt;First Name&lt;/th&gt;
+    &lt;th&gt;Last Name&lt;/th&gt;
+    &lt;/tr&gt;
+
+    #foreach($account in $accounts)
+    &lt;tr&gt; 
+    &lt;td&gt; $account.get("accountName")&lt;/td&gt;
+    &lt;td&gt;$account.get("First Name")&lt;/td&gt;
+    &lt;td&gt;$account.get("Last Name")&lt;/td&gt;
+    &lt;/tr&gt;
+    #end
+   
+    &lt;/table&gt;
+
+    &lt;p&gt;
+    Thanks,&lt;/br&gt;
+    &lt;/p&gt;
+    &lt;/body&gt;
+    &lt;/html&gt;
+  </Body>
+  <Description>
+    Email template used to notify Admins for missing of users from Workday.
+  </Description>
+  <Signature>
+    <Inputs>
+      <Argument name="accounts" type="List">
+        <Description>Account's Username.</Description>
+      </Argument>
+      <Argument name="app" type="String">
+        <Description>Account's firstname.</Description>
+      </Argument>
+    </Inputs>
+  </Signature>
+  <Subject>List of Accounts that are added to staging identity</Subject>
+</EmailTemplate>

@@ -1,0 +1,124 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="single account aggregation" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+  
+import sailpoint.object.Application;  
+import sailpoint.object.Attributes;  
+import sailpoint.object.Custom;  
+import sailpoint.object.Filter;  
+import sailpoint.object.Identity;  
+import sailpoint.object.Link;  
+import sailpoint.object.QueryOptions;  
+import sailpoint.object.ResourceObject;  
+import sailpoint.object.TaskResult;  
+import sailpoint.object.Rule;  
+import sailpoint.connector.JDBCConnector;  
+import sailpoint.api.Aggregator;  
+import sailpoint.connector.Connector;  
+
+import org.apache.log4j.Logger;  
+import org.apache.log4j.Level;  
+
+try{
+
+	// Initialize the error message to nothing.  
+	String errorMessage = "";  
+String application="Active- Directory";
+String userDN="CN=Christine Long,OU=People,OU=Demo,DC=Eshiam,DC=com";
+	Application appObject = context.getObjectByName(Application.class, application);  
+	String appConnName = appObject.getConnector();  
+	System.out.println("Application " + application + " uses connector " + appConnName);  
+
+	Connector appConnector = sailpoint.connector.ConnectorFactory.getConnector(appObject, null);  
+	if (null == appConnector) {  
+		errorMessage = "Failed to construct an instance of connector [" + appConnName + "]";  
+		return errorMessage;  
+	}  
+	System.out.println("Connector instantiated, calling getObject() to read account details...");  
+
+	ResourceObject rObj = null;  
+	try {  
+
+		rObj = (ResourceObject) appConnector.getObject("account", userDN, null);  
+
+	} catch (sailpoint.connector.ObjectNotFoundException onfe) {  
+		errorMessage = "Connector could not find account: [" + userDN + "]";  
+		errorMessage += " in application  [" + application + "]";  
+		System.out.println(errorMessage);  
+		System.out.println(onfe);     
+		return errorMessage;  
+	}  
+
+	if (null == rObj) {  
+		errorMessage = "ERROR: Could not get ResourceObject for account: " + userDN;  
+		System.out.println(errorMessage);  
+		return errorMessage;  
+	}  
+
+	System.out.println("Got raw resourceObject: " + rObj.toXml());  
+
+	Rule customizationRule = appObject.getCustomizationRule();  
+	if (null != customizationRule) {  
+
+		System.out.println("Customization rule found for applicaiton " + application);     
+
+		try {  
+
+			// Pass the mandatory arguments to the Customization rule for the app.  
+			HashMap ruleArgs = new HashMap();  
+			ruleArgs.put("context",     context);  
+			ruleArgs.put("log",         aggLog);  
+			ruleArgs.put("object",      rObj);  
+			ruleArgs.put("application", appObject);  
+			ruleArgs.put("connector",   appConnector);  
+			ruleArgs.put("state",       new HashMap());  
+
+			// Call the customization rule just like a normal aggregation would.  
+			ResourceObject newRObj = context.runRule(customizationRule, ruleArgs, null);  
+
+			// Make sure we got a valid resourceObject back from the rule.    
+			if (null != newRObj) {  
+				rObj = newRObj;  
+				System.out.println("Got post-customization resourceObject: " + rObj.toXml());   
+			}      
+
+		} catch (Exception ex) {  
+			// Swallow any customization rule errors, the show must go on!  
+			System.out.println("Error while running Customization rule for " + application +" of userDN "+userDN);  
+
+		}    
+
+	}  
+
+	Attributes argMap = new Attributes();  
+	//argMap.put("promoteAttributes",       "true");  
+	//argMap.put("correlateEntitlements",   "true");  
+	//argMap.put("noOptimizeReaggregation", "true");  // Note: Set to false to disable re-correlation.  
+
+	// Consturct an aggregator instance.  
+	Aggregator agg = new Aggregator(context, argMap);  
+	if (null == agg) {  
+		errorMessage = "Null Aggregator returned from constructor.  Unable to Aggregate! "+application+"  of userDN"+userDN;  
+		System.out.println(errorMessage);  
+		return errorMessage;
+
+	}  
+
+	TaskResult taskResult = agg.aggregate(appObject, rObj);  
+	System.out.println("aggregation complete.");  
+
+	if (null == taskResult) {  
+		errorMessage = "ERROR: Null taskResult returned from aggregate() call.Unable to Aggregate! "+application+"  of userDN"+userDN;  
+		System.out.println(errorMessage);  
+		return errorMessage;  
+	}  
+}catch (GeneralException e){
+	System.out.println("Error while updating performing targeted aggregation " + e.getMessage());
+	return null;
+}
+return null; 
+  
+  </Source>
+</Rule>

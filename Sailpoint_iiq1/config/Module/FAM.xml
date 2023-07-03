@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Module PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Module description="ui_fam_module_desc" name="FAM">
+  <Attributes>
+    <Map>
+      <entry key="enabledConfigKey" value="famEnabled"/>
+      <entry key="healthCheckClass" value="sailpoint.fam.FAMHealthChecker"/>
+    </Map>
+  </Attributes>
+</Module>

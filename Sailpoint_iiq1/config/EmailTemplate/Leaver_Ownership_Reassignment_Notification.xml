@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE EmailTemplate PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<EmailTemplate name="Leaver Ownership Reassignment Notification">
+  <Body>
+   		 
+		#set($ctx = $spTools.class.forName("sailpoint.api.SailPointFactory").getMethod("getFactory", null).invoke(null,null).getCurrentContext())
+		#set($emailTools = $spTools.class.forName("sailpoint.rapidsetup.tools.EmailTools").getMethod("instance", null).invoke(null,null))
+		#set($reqType = $workflow.requestType)
+		#set($styleSheet = $emailTools.getEmailSection($ctx, "styleSheet"))
+		#set($headerTemplate = $emailTools.getEmailSection($ctx, "headerTemplate"))
+		#set($footerTemplate = $emailTools.getEmailSection($ctx, "footerTemplate"))
+		&lt;html&gt;
+		&lt;head&gt;
+		&lt;meta charset="UTF-8"&gt;	    
+		#if( $styleSheet )
+		$styleSheet
+		#end
+		&lt;/head&gt;
+	    	&lt;body&gt;
+	    	#if( $headerTemplate )
+			$headerTemplate
+			#end
+			&lt;br/&gt;    
+			#if ( $ownershipMap )
+			    Dear $recipientDisplayName,&lt;br/&gt;
+			    &lt;p&gt;IdentityIQ access for '$refIdentityDisplayName' has been reassigned: &lt;/p&gt;
+			    &lt;p&gt;The following IdentityIQ artifacts have been reassigned to you. &lt;/p&gt;
+			    &lt;ul&gt;
+			    #foreach ($mapEntry in $ownershipMap.entrySet())
+    				&lt;li&gt;$mapEntry.key - $mapEntry.value&lt;/li&gt;
+			    #end 
+			    &lt;/ul&gt;  
+			#end
+			#if ($dynamicAppContent)
+			&lt;table&gt;
+			#foreach( $key in $dynamicAppContent.keySet() )
+			&lt;tr&gt;&lt;td&gt;$key&lt;/td&gt;&lt;td&gt;$dynamicAppContent.get($key)&lt;/td&gt;&lt;/tr&gt;
+			#end
+			&lt;/table&gt;
+			#end	
+			#if( $footerTemplate )
+			$footerTemplate
+			#end
+			&lt;/body&gt;
+		&lt;/html&gt;
+				
+    </Body>
+  <Description>
+      Email Template for notifying the Manager that an Identity had ownerships during Leaver process
+    </Description>
+  <Signature>
+    <Inputs>
+      <Argument name="workflow" type="Workflow">
+        <Description>The Workflow object being executed.</Description>
+      </Argument>
+      <Argument name="refIdentityDisplayName" type="string">
+        <Description>The name of the Identity that is registering.</Description>
+      </Argument>
+      <Argument name="recipientDisplayName" type="string">
+        <Description>The display name of the Identity that is registering.</Description>
+      </Argument>
+    </Inputs>
+  </Signature>
+  <Subject>User '$refIdentityDisplayName' #if($emailSubject) $emailSubject #else Ownership #end reassignments</Subject>
+</EmailTemplate>

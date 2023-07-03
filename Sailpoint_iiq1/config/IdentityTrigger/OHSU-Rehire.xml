@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE IdentityTrigger PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<IdentityTrigger disabled="true" handler="sailpoint.api.WorkflowTriggerHandler" name="OHSU-Rehire" type="Rule">
+  <Owner>
+    <Reference class="sailpoint.object.Identity" name="spadmin"/>
+  </Owner>
+  <HandlerParameters>
+    <Attributes>
+      <Map>
+        <entry key="businessProcess"/>
+        <entry key="identityProcessingThreshold"/>
+        <entry key="identityProcessingThresholdType"/>
+        <entry key="workflow" value="OHSU-Rehire"/>
+      </Map>
+    </Attributes>
+  </HandlerParameters>
+  <TriggerRule>
+    <Reference class="sailpoint.object.Rule" name="OHSU-Leaver-Trigger"/>
+  </TriggerRule>
+</IdentityTrigger>

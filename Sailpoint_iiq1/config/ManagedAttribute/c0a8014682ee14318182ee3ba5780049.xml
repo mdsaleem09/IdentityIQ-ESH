@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ManagedAttribute PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ManagedAttribute aggregated="true" attribute="GroupValue" displayName="UATAccess" hash="b4ba3a84df60f4aa0e9a9c8da62f2994bbf484e3" lastRefresh="1661854262648" requestable="true" type="Group" value="UATAccess">
+  <ApplicationRef>
+    <Reference class="sailpoint.object.Application" name="Active- DemoJdbcApp"/>
+  </ApplicationRef>
+  <Attributes>
+    <Map>
+      <entry key="Description" value="eng"/>
+      <entry key="GroupName" value="UATAccess"/>
+    </Map>
+  </Attributes>
+</ManagedAttribute>

@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction applicationName="JDBC" identityDisplayName="Karen Hall" identityName="Karen Hall" integration="JDBC" name="0000000112" operation="Create" source="LCM" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="accessRequestId" value="0000000353"/>
+      <entry key="planResult">
+        <value>
+          <ProvisioningResult status="failed">
+            <Errors>
+              <Message key="The application script threw an exception: java.lang.NullPointerException: Null Pointer in Method Invocation BSF info: JDBC-Create Provisioning Rule 2 at line: 0 column: columnNo" type="Error"/>
+            </Errors>
+          </ProvisioningResult>
+        </value>
+      </entry>
+      <entry key="request">
+        <value>
+          <AccountRequest application="JDBC" op="Create">
+            <Attributes>
+              <Map>
+                <entry key="provisioningTransactionId" value="c0a82be683151525818315c86f0e0031"/>
+              </Map>
+            </Attributes>
+            <AttributeRequest name="GroupValue" op="Set" value="DevAccess"/>
+            <AttributeRequest name="FirstName" op="Set" value="Karen"/>
+            <AttributeRequest name="LastName" op="Set" value="Hall"/>
+            <AttributeRequest name="EmailAddress" op="Set" value="Karen.Hall@eshiam.com"/>
+            <AttributeRequest name="NetworkID" op="Set" value="Karen.Hall"/>
+            <AttributeRequest name="Name" op="Set" value="Karen Hall"/>
+            <ProvisioningResult status="failed">
+              <Errors>
+                <Message key="The application script threw an exception: java.lang.NullPointerException: Null Pointer in Method Invocation BSF info: JDBC-Create Provisioning Rule 2 at line: 0 column: columnNo" type="Error"/>
+              </Errors>
+            </ProvisioningResult>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

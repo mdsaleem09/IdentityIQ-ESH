@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="delete workgroups" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+
+  import sailpoint.object.Filter;
+
+  import sailpoint.object.Link;
+
+  import sailpoint.object.QueryOptions;
+
+  import sailpoint.api.Terminator;
+ import sailpoint.object.Identity;
+  QueryOptions qoLinks = new QueryOptions();
+
+  qoLinks.addFilter(Filter.eq("workgroup",true));
+
+  Terminator terminator = new Terminator(context);
+
+  terminator.setTrace(true);
+
+  terminator.deleteObjects(Identity.class, qoLinks);
+                   
+
+</Source>
+</Rule>

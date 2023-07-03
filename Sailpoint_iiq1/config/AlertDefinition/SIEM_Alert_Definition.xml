@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE AlertDefinition PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<AlertDefinition displayName="SIEM Alert Definition" name="SIEM Alert Definition">
+  <ActionConfig actionType="NOTIFICATION">
+    <Attributes>
+      <Map>
+        <entry key="emailTemplate" value="Alert Notification"/>
+        <entry key="identityEmailRecipient">
+          <value>
+            <List>
+              <String>siemservice</String>
+            </List>
+          </value>
+        </entry>
+      </Map>
+    </Attributes>
+  </ActionConfig>
+  <Description>General alert definition for SIEM Plugin related Alerts</Description>
+  <AlertMatchConfig>
+    <AlertMatchExpression and="true">
+      <AlertMatchTerm name="siem" value="siem">
+        <SourceRef>
+          <Reference class="sailpoint.object.Application" name="SIEM Application"/>
+        </SourceRef>
+      </AlertMatchTerm>
+    </AlertMatchExpression>
+  </AlertMatchConfig>
+  <Owner>
+    <Reference class="sailpoint.object.Identity" name="siemservice"/>
+  </Owner>
+</AlertDefinition>

@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE IdentityTrigger PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<IdentityTrigger handler="sailpoint.api.WorkflowTriggerHandler" name="AD-Enable" type="Rule">
+  <Owner>
+    <Reference class="sailpoint.object.Identity" name="spadmin"/>
+  </Owner>
+  <HandlerParameters>
+    <Attributes>
+      <Map>
+        <entry key="businessProcess"/>
+        <entry key="identityProcessingThreshold" value="1"/>
+        <entry key="identityProcessingThresholdType" value="fixed"/>
+        <entry key="workflow" value="AD-Disable"/>
+      </Map>
+    </Attributes>
+  </HandlerParameters>
+  <TriggerRule>
+    <Reference class="sailpoint.object.Rule" name="IIQ-Enable"/>
+  </TriggerRule>
+</IdentityTrigger>

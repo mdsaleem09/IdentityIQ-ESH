@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="launch workflow from rule" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+  import java.util.Date;
+
+        import sailpoint.api.RequestManager;
+        import sailpoint.object.Attributes;
+        import sailpoint.object.Identity;
+        import sailpoint.object.Request;
+        import sailpoint.object.RequestDefinition;
+        import sailpoint.object.Workflow;
+        import sailpoint.tools.GeneralException;
+        import sailpoint.workflow.StandardWorkflowHandler;
+        import sailpoint.tools.LocalDateTime;
+        import org.apache.log4j.Logger;
+        import org.apache.log4j.Level;
+  
+        String identityName="elomus1";
+        String workflowName = "Scramble-Password";
+        String caseName     = "Run '" + workflowName + "' for: " + identityName;
+        String requesterId  = "spadmin";
+
+        Workflow eventWorkflow = context.getObject(Workflow.class, workflowName);
+        if (null == eventWorkflow) {
+        logger.error("Could not find a workflow named: " + workflowName);
+        throw new GeneralException("Invalid worklfow: " + workflowName);
+        }
+
+        // Simulate the request being submitted by a user. Default: spadmin.
+        Identity id = context.getObjectByName(Identity.class, requesterId);
+        if (null == id) {
+        logger.error("Could not find a requester Identity: " + requesterId);
+        throw new GeneralException("Invalid identity: " + requesterId);
+        }
+
+        // Ask the Request Processor to start the workflow 35 minutes from now.
+        // Append the time stamp to the workflow case name to ensure it's unique.
+       // long launchTime = System.currentTimeMillis() + (35 * 60 * 1000);
+ 
+                               
+        long launchTime = System.currentTimeMillis()+(1000*60*60*48);
+        caseName = caseName + "(" + launchTime + ")";
+        // Build out a map of arguments to pass to the Request Scheduler.
+        Attributes reqArgs = new Attributes();
+        reqArgs.put(StandardWorkflowHandler.ARG_REQUEST_DEFINITION, sailpoint.request.WorkflowRequestExecutor.DEFINITION_NAME);
+        reqArgs.put(sailpoint.workflow.StandardWorkflowHandler.ARG_WORKFLOW, workflowName);
+        reqArgs.put(sailpoint.workflow.StandardWorkflowHandler.ARG_REQUEST_NAME, caseName);
+        reqArgs.put( "requestName", caseName );            
+
+        // Build a map of arguments to pass to the Workflow case when it launches.
+        Attributes wfArgs = new Attributes();
+        wfArgs.put("identityName",    identityName);
+        wfArgs.put("workflow",        eventWorkflow.getName());
+
+        reqArgs.putAll(wfArgs);
+
+        // Use the Request Launcher to schedule the workflow reqeust.  This requires
+        // a Request object to store the properties of the request item.
+        Request req = new Request();
+        RequestDefinition reqdef = context.getObject(RequestDefinition.class, "Workflow Request");
+        req.setDefinition(reqdef);
+        req.setEventDate( new Date( launchTime ) );
+        req.setOwner(id);
+        req.setName(caseName);
+        req.setAttributes( reqdef, reqArgs );
+
+        // Schedule the work flow via the request manager.
+        RequestManager.addRequest(context, req);
+
+        //logger.debug("End Step.ScheduleAzureADLicenseAssignmentWorkflow");
+  
+  
+  </Source>
+</Rule>

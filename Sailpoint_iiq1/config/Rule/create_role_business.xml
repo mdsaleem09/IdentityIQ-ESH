@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="create role business" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+  import sailpoint.object.Identity;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+  
+  
+  Bundle bund=new Bundle();
+  bund.setName("AD Bus");
+  bund.setType("business");
+  bund.setDisplayName("AD Business Role");
+  context.saveObject(bund);
+  context.commitTransaction();
+  
+  
+  
+  </Source>
+</Rule>

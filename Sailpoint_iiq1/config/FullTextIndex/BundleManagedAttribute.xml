@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE FullTextIndex PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<FullTextIndex lastRefresh="1678387579677" name="BundleManagedAttribute">
+  <Attributes>
+    <Map>
+      <entry key="classes" value="BundleManagedAttribute"/>
+      <entry key="fields">
+        <value>
+          <List>
+            <FullTextField indexed="true" name="objectClass" stored="true"/>
+            <FullTextField name="id" stored="true"/>
+            <FullTextField analyzed="true" indexed="true" name="name"/>
+            <FullTextField analyzed="true" indexed="true" name="displayableName"/>
+            <FullTextField analyzed="true" indexed="true" name="description"/>
+            <FullTextField indexed="true" name="assignedScope.path"/>
+            <FullTextField indexed="true" name="type"/>
+            <FullTextField indexed="true" name="owner.id"/>
+            <FullTextField indexed="true" name="owner.name"/>
+            <FullTextField name="owner.displayName" stored="true"/>
+            <FullTextField analyzed="true" indexed="true" name="classifications.classification.id"/>
+            <FullTextField analyzed="true" indexed="true" name="classifications.classification.name"/>
+            <FullTextField analyzed="true" indexed="true" name="classifications.classification.displayName"/>
+            <FullTextField indexed="true" name="iiqElevatedAccess"/>
+            <FullTextField name="defaultDescription" stored="true"/>
+            <FullTextField ignored="true" name="disabled"/>
+            <FullTextField name="riskScoreWeight" stored="true"/>
+            <FullTextField analyzed="true" indexed="true" name="profile.sourceApplication.name"/>
+            <FullTextField analyzed="true" indexed="true" name="profile.sourceApplication.id"/>
+            <FullTextField analyzed="true" indexed="true" name="profile.value"/>
+            <FullTextField analyzed="true" indexed="true" name="profile.displayValue"/>
+            <FullTextField analyzed="true" indexed="true" name="profile.attribute"/>
+            <FullTextField analyzed="true" indexed="true" name="profile.type"/>
+            <FullTextField indexed="true" name="application.id"/>
+            <FullTextField analyzed="true" indexed="true" name="application.name"/>
+            <FullTextField indexed="true" name="application.icon"/>
+            <FullTextField analyzed="true" indexed="true" name="application.description"/>
+            <FullTextField indexed="true" name="application.assignedScope.path"/>
+            <FullTextField indexed="true" name="application.owner.id"/>
+            <FullTextField indexed="true" name="attribute"/>
+            <FullTextField indexed="true" name="value"/>
+            <FullTextField indexed="true" name="requestable"/>
+          </List>
+        </value>
+      </entry>
+      <entry key="includeTargets" value="true"/>
+      <entry key="indexer" value="BundleManagedAttributeIndexer"/>
+    </Map>
+  </Attributes>
+</FullTextIndex>

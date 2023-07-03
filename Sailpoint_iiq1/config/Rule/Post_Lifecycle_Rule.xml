@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Post Lifecycle Rule" type="PostLifecycle">
+  <Source>
+  import sailpoint.object.Application;
+  import sailpoint.object.Identity;
+  import sailpoint.api.IdentityService;
+  import sailpoint.object.Link;
+  import sailpoint.tools.Util;
+
+  /*
+  Identity identity = context.getObjectByName(Identity.class,identityName);
+  identity.setAttribute("isBlocked",(boolean)true);
+  return identity;
+  identity.setAttribute("End Date","leaver");
+  context.saveObject(identity);
+  context.commitTransaction();
+  
+  
+  
+    
+     * Example of a PostLifecycle Rule.  
+     * Params passed into the rule are:
+     *    identityName - String - name of the identity that was processed
+     *    requestType - String - type of the request (for example, joiner, mover or leaver)
+     *    project - ProvisioningProject - ProvisioningProject for for this request (may be null 
+     *              if no provisioning plans were run immediately)
+   
+    
+  !Util.isEmpty(links)   &amp;&amp; 
+  */
+  
+  
+  //Setting Joiner Flag to processed
+   
+      Identity identity = context.getObjectByName(Identity.class,identityName);
+      identity.setAttribute("joinerFlag","processed");
+      context.saveObject(identity);
+      context.commitTransaction();
+     if (identity!=null) context.decache(identity);
+    
+  
+  /*
+    String strEndDate="";
+  
+    Application application = context.getObjectByName(Application.class,"HMC");
+    
+    Identity identity = context.getObjectByName(Identity.class,identityName);
+  
+     if(identity!=null){
+     IdentityService idService = new IdentityService(context);
+     List links = idService.getLinks(identity,application);
+       if(!Util.isEmpty(links) &amp;&amp; links.size()==1){
+         for(Link link:links){
+      link.setAttribute("isBlocked",(boolean)true);
+       link.setAttribute("End Date",Util.dateToString(new Date()));   
+           //return link;
+      //identity.setAttribute("endDate",Util.dateToString(new Date(),"dd/mm/yyyy));  
+       
+       context.saveObject(link);
+       context.commitTransaction();
+       }
+       }
+     }
+  if (application!=null) context.decache(application);
+  if (identity!=null) context.decache(identity);
+  
+  
+  */
+  
+  </Source>
+</Rule>

@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Policy PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Policy certificationActions="Remediated,Mitigated,Delegated" configPage="sodpolicy.xhtml" executor="sailpoint.policy.SODPolicyExecutor" name="Role Sod" state="Inactive" type="SOD" typeKey="policy_type_sod" violationOwnerType="Manager">
+  <PolicyAlert disabled="true" escalationStyle="none"/>
+  <Attributes>
+    <Map>
+      <entry key="sysDescriptions">
+        <value>
+          <Map>
+            <entry key="en_US"/>
+          </Map>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+  <Owner>
+    <Reference class="sailpoint.object.Identity" name="spadmin"/>
+  </Owner>
+  <SODConstraints>
+    <SODConstraint disabled="true" name="sod rule" violationOwnerType="None">
+      <Attributes>
+        <Map>
+          <entry key="taskResultId" value="c0a8de017db91807817dbebdab3505f7"/>
+        </Map>
+      </Attributes>
+    </SODConstraint>
+    <SODConstraint name="new rule" violationOwnerType="None"/>
+  </SODConstraints>
+</Policy>

@@ -1,0 +1,3 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE RequestDefinition PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<RequestDefinition executor="sailpoint.request.IdentityTriggerRequestExecutor" name="Identity Trigger Request" retryMax="20"/>

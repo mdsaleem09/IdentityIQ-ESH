@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction applicationName="JDBC-APPLICATION" identityDisplayName="Judith Tucker" identityName="Judith Tucker" integration="JDBC-APPLICATION" name="0000000021" operation="Create" source="LCM" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="accessRequestId" value="0000000034"/>
+      <entry key="planResult">
+        <value>
+          <ProvisioningResult status="failed">
+            <Errors>
+              <Message key="BeanShell script error: bsh.EvalError: Sourced file: inline evaluation of: ``import java.sql.ResultSet; import java.sql.Statement; import java.sql.Connection . . . '' : Error in method invocation: Method equalsIgnoreCase(java.lang.String) not found in class'sailpoint.object.ProvisioningPlan$Operation' : at Line: 52 : in file: inline evaluation of: ``import java.sql.ResultSet; import java.sql.Statement; import java.sql.Connection . . . '' : .equalsIgnoreCase ( &quot;Add&quot; ) &#xa; BSF info: JDBC-Modify Provisioning Rule at line: 0 column: columnNo" type="Error"/>
+            </Errors>
+          </ProvisioningResult>
+        </value>
+      </entry>
+      <entry key="request">
+        <value>
+          <AccountRequest application="JDBC-APPLICATION" op="Create">
+            <Attributes>
+              <Map>
+                <entry key="attachmentConfigList"/>
+                <entry key="attachments"/>
+                <entry key="flow" value="AccessRequest"/>
+                <entry key="id" value="c0a801067bee1cc9817c01e6342e0454"/>
+                <entry key="interface" value="LCM"/>
+                <entry key="operation" value="EntitlementAdd"/>
+                <entry key="provisioningTransactionId" value="c0a8de017c0e1b5f817c1379a6f00392"/>
+              </Map>
+            </Attributes>
+            <AttributeRequest displayValue="Finance" name="GroupId" op="Add" value="2">
+              <Attributes>
+                <Map>
+                  <entry key="assignment" value="true"/>
+                </Map>
+              </Attributes>
+            </AttributeRequest>
+            <AttributeRequest displayValue="Engineering" name="GroupId" op="Add" value="3">
+              <Attributes>
+                <Map>
+                  <entry key="assignment" value="true"/>
+                </Map>
+              </Attributes>
+            </AttributeRequest>
+            <AttributeRequest name="FirstName" op="Set" value="Judith"/>
+            <AttributeRequest name="LastName" op="Set" value="Tucker"/>
+            <AttributeRequest name="EmailAddress" op="Set" value="Judith.Tucker@sailpointdemo.com"/>
+            <AttributeRequest name="NetworkID" op="Set" value="Judith.Tucker"/>
+            <AttributeRequest name="Name" op="Set" value="Judith Tucker"/>
+            <AttributeRequest name="GroupId" op="Set" value="3"/>
+            <ProvisioningResult status="failed">
+              <Errors>
+                <Message key="BeanShell script error: bsh.EvalError: Sourced file: inline evaluation of: ``import java.sql.ResultSet; import java.sql.Statement; import java.sql.Connection . . . '' : Error in method invocation: Method equalsIgnoreCase(java.lang.String) not found in class'sailpoint.object.ProvisioningPlan$Operation' : at Line: 52 : in file: inline evaluation of: ``import java.sql.ResultSet; import java.sql.Statement; import java.sql.Connection . . . '' : .equalsIgnoreCase ( &quot;Add&quot; ) &#xa; BSF info: JDBC-Modify Provisioning Rule at line: 0 column: columnNo" type="Error"/>
+              </Errors>
+            </ProvisioningResult>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

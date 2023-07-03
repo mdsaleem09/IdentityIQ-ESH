@@ -1,0 +1,5 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE MessageTemplate PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<MessageTemplate name="Policy Violation Details">
+  <Text>A violation of policy '$policyName' rule '$constraintName' was detected on user '$identityName'.</Text>
+</MessageTemplate>

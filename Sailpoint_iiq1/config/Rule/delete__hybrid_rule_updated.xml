@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="delete  hybrid rule updated" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+  import sailpoint.object.Identity;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+  import sailpoint.object.Filter;
+  import sailpoint.object.Profile;
+  
+  import java.util.*;
+  
+//********************************************************************************
+//////////////////Rule Starts From Here
+  
+ /* import sailpoint.api.Terminator;
+
+import sailpoint.object.Bundle;
+
+Terminator arnold = new Terminator(context);
+
+Bundle myBundle = context.getObjectByName(Bundle.class, "Org-SAP");
+
+if (myBundle != null) {
+
+  arnold.deleteObject(myBundle);
+
+}
+*/
+  
+  
+  import sailpoint.api.Terminator;
+
+import sailpoint.object.Bundle;
+
+Terminator arnold = new Terminator(context);
+
+List  myBundlew = context.getObjects(Bundle.class);
+  for(Bundle bun : myBundlew)
+{
+
+if (bun != null &amp;&amp; bun.getType()!=null &amp;&amp;  bun.getType().equalsIgnoreCase("Hybrid")) {
+
+  arnold.deleteObject(bun);
+
+}
+} 
+
+  
+  
+/*
+   Bundle bundle=context.getObjectByName(Bundle.class,"Org-SAP"); 
+
+   bundle.setPendingDelete(true);
+
+   context.saveObject(bundle);
+
+   context.commitTransaction(); 
+
+   context.decache(bundle);
+   */
+
+
+  </Source>
+</Rule>

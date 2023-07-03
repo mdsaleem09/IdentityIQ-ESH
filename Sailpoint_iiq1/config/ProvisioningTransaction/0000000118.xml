@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction accountDisplayName="ESHIAM\Angela Bell" applicationName="Active- Directory" identityDisplayName="Angela Bell" identityName="Angela Bell" integration="Active- Directory" name="0000000118" nativeIdentity="CN=Angela Bell,OU=People,OU=Demo,DC=Eshiam,DC=com" operation="Modify" source="IdentityRefresh" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="request">
+        <value>
+          <AccountRequest application="Active- Directory" nativeIdentity="CN=Angela Bell,OU=People,OU=Demo,DC=Eshiam,DC=com" op="Modify">
+            <Attributes>
+              <Map>
+                <entry key="provisioningTransactionId" value="c0a801038339167281834969e6c60cdb"/>
+              </Map>
+            </Attributes>
+            <AttributeRequest name="memberOf" op="Add" value="CN=DemoGroupcommon,OU=Groups,OU=Demo,DC=Eshiam,DC=com"/>
+            <ProvisioningResult status="failed">
+              <Errors>
+                <Message key="Error(s) reported back from the IQService - Error occurred while connecting to group CN=DemoGroupcommon,OU=Groups,OU=Demo,DC=Eshiam,DC=com. Failed to connect to the server for CN=DemoGroupcommon,OU=Groups,OU=Demo,DC=Eshiam,DC=com:There is no such object on the server. 0000208D: NameErr: DSID-03100238, problem 2001 (NO_OBJECT), data 0, best match of: &#x9;'OU=Groups,OU=Demo,DC=Eshiam,DC=com' . HRESULT:[0x80072030] Possible reasons for failure include a) The Domain Controller is currently not reachable b) The object has either been moved or renamed c) The object has been deleted &#xa; Please Ensure the data has been aggregated before performing the operation " type="Error"/>
+              </Errors>
+            </ProvisioningResult>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

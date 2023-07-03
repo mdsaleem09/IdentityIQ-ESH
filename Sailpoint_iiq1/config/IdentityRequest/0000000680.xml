@@ -1,0 +1,162 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE IdentityRequest PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<IdentityRequest completionStatus="Success" endDate="1676975751075" executionStatus="Completed" name="0000000680" priority="Normal" requesterDisplayName="The Administrator" requesterId="c0a8010d7bab1d02817bab2f825700e6" source="LCM" state="End" targetClass="Identity" targetDisplayName="Wanda Watkins" type="AccessRequest" verified="1676975751077">
+  <Attributes>
+    <Map>
+      <entry key="provisionedProject">
+        <value>
+          <ProvisioningProject identity="Wanda Watkins">
+            <Attributes>
+              <Map>
+                <entry key="disableRetryRequest">
+                  <value>
+                    <Boolean>true</Boolean>
+                  </value>
+                </entry>
+                <entry key="identityRequestId" value="0000000680"/>
+                <entry key="optimisticProvisioning" value="false"/>
+                <entry key="requester" value="spadmin"/>
+                <entry key="source" value="LCM"/>
+              </Map>
+            </Attributes>
+            <MasterPlan>
+              <ProvisioningPlan>
+                <AccountRequest application="IIQ" op="Modify">
+                  <Attributes>
+                    <Map>
+                      <entry key="attachmentConfigList"/>
+                      <entry key="attachments"/>
+                      <entry key="flow" value="AccessRequest"/>
+                      <entry key="id" value="c0a8010286611aee818672f150fa083a"/>
+                      <entry key="interface" value="LCM"/>
+                      <entry key="operation" value="RoleRemove"/>
+                    </Map>
+                  </Attributes>
+                  <AttributeRequest name="assignedRoles" op="Remove" value="OHSU-Role1">
+                    <Attributes>
+                      <Map>
+                        <entry key="deassignEntitlements">
+                          <value>
+                            <Boolean>true</Boolean>
+                          </value>
+                        </entry>
+                      </Map>
+                    </Attributes>
+                  </AttributeRequest>
+                </AccountRequest>
+                <Attributes>
+                  <Map>
+                    <entry key="identityRequestId" value="0000000680"/>
+                    <entry key="requester" value="spadmin"/>
+                    <entry key="source" value="LCM"/>
+                  </Map>
+                </Attributes>
+              </ProvisioningPlan>
+            </MasterPlan>
+            <ProvisioningPlan targetIntegration="IIQ" trackingId="0a89d14468d542a49697bc1a28355104">
+              <AccountRequest application="IIQ" op="Modify" targetIntegration="IIQ">
+                <Attributes>
+                  <Map>
+                    <entry key="attachmentConfigList"/>
+                    <entry key="attachments"/>
+                    <entry key="flow" value="AccessRequest"/>
+                    <entry key="id" value="c0a8010286611aee818672f150fa083a"/>
+                    <entry key="interface" value="LCM"/>
+                    <entry key="operation" value="RoleRemove"/>
+                  </Map>
+                </Attributes>
+                <AttributeRequest name="assignedRoles" op="Remove" value="OHSU-Role1">
+                  <Attributes>
+                    <Map>
+                      <entry key="deassignEntitlements">
+                        <value>
+                          <Boolean>true</Boolean>
+                        </value>
+                      </entry>
+                    </Map>
+                  </Attributes>
+                </AttributeRequest>
+              </AccountRequest>
+              <Attributes>
+                <Map>
+                  <entry key="identityRequestId" value="0000000680"/>
+                  <entry key="requester" value="spadmin"/>
+                  <entry key="source" value="LCM"/>
+                </Map>
+              </Attributes>
+            </ProvisioningPlan>
+            <ProvisioningTarget role="OHSU-Role1">
+              <AccountSelection applicationId="c0a891017bb91c9d817bba3e0bfc02ba" applicationName="Active- Directory" doCreate="true" selection="CN=Wanda Watkins,OU=People,OU=Demo,DC=Eshiam,DC=com"/>
+            </ProvisioningTarget>
+            <ProvisioningTarget retain="true" role="OHSU-Role">
+              <AccountSelection applicationId="c0a891017bb91c9d817bba3e0bfc02ba" applicationName="Active- Directory" doCreate="true" selection="CN=Wanda Watkins,OU=People,OU=Demo,DC=Eshiam,DC=com"/>
+            </ProvisioningTarget>
+          </ProvisioningProject>
+        </value>
+      </entry>
+      <entry key="taskResultId" value="c0a8010286611aee8186738b223709e5"/>
+    </Map>
+  </Attributes>
+  <RequestItems>
+    <IdentityRequestItem application="IIQ" name="assignedRoles" operation="Remove" provisioningEngine="IIQ" provisioningState="Finished" value="OHSU-Role1">
+      <Attributes>
+        <Map>
+          <entry key="assignmentId" value="970c6d28887c414b98f444fb301c35f1"/>
+          <entry key="attachmentConfigList"/>
+          <entry key="attachments"/>
+          <entry key="displayableValue" value="OHSU-Role1"/>
+          <entry key="flow" value="AccessRequest"/>
+          <entry key="id" value="c0a8010286611aee818672f150fa083a"/>
+          <entry key="identityEntitlementId" value="c0a8010286611aee818673547f300949"/>
+          <entry key="interface" value="LCM"/>
+          <entry key="operation" value="RoleRemove"/>
+          <entry key="provisioningPlan">
+            <value>
+              <ProvisioningPlan trackingId="b60417de003649c2aa72e7519c2274f6">
+                <AccountRequest application="IIQ" op="Modify">
+                  <Attributes>
+                    <Map>
+                      <entry key="attachmentConfigList"/>
+                      <entry key="attachments"/>
+                      <entry key="flow" value="AccessRequest"/>
+                      <entry key="id" value="c0a8010286611aee818672f150fa083a"/>
+                      <entry key="interface" value="LCM"/>
+                      <entry key="operation" value="RoleRemove"/>
+                    </Map>
+                  </Attributes>
+                  <AttributeRequest name="assignedRoles" op="Remove" trackingId="b60417de003649c2aa72e7519c2274f6" value="OHSU-Role1">
+                    <Attributes>
+                      <Map>
+                        <entry key="deassignEntitlements">
+                          <value>
+                            <Boolean>true</Boolean>
+                          </value>
+                        </entry>
+                      </Map>
+                    </Attributes>
+                  </AttributeRequest>
+                </AccountRequest>
+                <AccountRequest application="Active- Directory" nativeIdentity="CN=Wanda Watkins,OU=People,OU=Demo,DC=Eshiam,DC=com" op="Modify">
+                  <AttributeRequest name="memberOf" op="Remove" trackingId="b60417de003649c2aa72e7519c2274f6" value="CN=Cost-SavingsAnalysis,OU=Groups,OU=Demo,DC=Eshiam,DC=com">
+                    <Attributes>
+                      <Map>
+                        <entry key="allowSimplification" value="true"/>
+                        <entry key="assignment" value="true"/>
+                        <entry key="preferRemoveOverRetain" value="true"/>
+                      </Map>
+                    </Attributes>
+                  </AttributeRequest>
+                </AccountRequest>
+                <Attributes>
+                  <Map>
+                    <entry key="source" value="LCM"/>
+                  </Map>
+                </Attributes>
+              </ProvisioningPlan>
+            </value>
+          </entry>
+        </Map>
+      </Attributes>
+    </IdentityRequestItem>
+  </RequestItems>
+</IdentityRequest>

@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="remove workgroup capability  from rule" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+
+import sailpoint.object.*;
+  import sailpoint.api.*;
+  import java.util.*;
+  import java.util.List;
+  import sailpoint.object.ManagedAttribute;
+    import sailpoint.api.Workgroup;
+
+  
+   List identities=context.getObjects(Identity.class);
+    for(Identity id:identities)
+    {
+      if(id!=null &amp;&amp; id.getWorkgroups()!=null)
+      {
+    List workgroups=id.getWorkgroups();
+   
+        for(Identity idWorkgroup:workgroups)
+        {
+          if(idWorkgroup!=null )
+          {
+             
+            
+     
+                     idWorkgroup.remove(context.getObjectByName(Capability.class,"SystemAdministrator"));
+
+                      
+
+                              
+
+         
+          }
+           context.saveObject(idWorkgroup);
+            context.commitTransaction(); 
+      }
+        
+    }
+     
+
+    }
+    
+  
+ 
+  
+  
+ 
+  
+  </Source>
+</Rule>

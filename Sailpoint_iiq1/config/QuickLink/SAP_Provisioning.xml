@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE QuickLink PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<QuickLink action="workflow" category="Manage" messageKey="BRM SAP SEMI Provisioning" name="SAP Provisioning">
+  <Attributes>
+    <Map>
+      <entry key="forceAllowSelf" value="true"/>
+      <entry key="workflowName" value="SAP Provisioning Workflow"/>
+    </Map>
+  </Attributes>
+  <Description>Terminate or delete Identity from applicationc</Description>
+  <QuickLinkOptions allowOther="true">
+    <DynamicScopeRef>
+      <Reference class="sailpoint.object.DynamicScope" name="Manager"/>
+    </DynamicScopeRef>
+  </QuickLinkOptions>
+  <QuickLinkOptions allowSelf="true">
+    <DynamicScopeRef>
+      <Reference class="sailpoint.object.DynamicScope" name="Self Service"/>
+    </DynamicScopeRef>
+  </QuickLinkOptions>
+</QuickLink>

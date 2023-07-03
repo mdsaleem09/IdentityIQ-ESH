@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Form PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Form hidden="true" name="Role Members Report Form" type="Report">
+  <Section columns="2" label="rept_cert_role_members_section_opts" name="customProperties">
+    <Field displayName="rept_role_members_field_status" helpKey="rept_role_members_help_status" name="disabled" type="string" value="ref:disabled">
+      <AllowedValues>
+        <List>
+          <String>null</String>
+          <String>rept_role_members_filter_status_all</String>
+        </List>
+        <List>
+          <String>true</String>
+          <String>rept_role_members_filter_status_disabled</String>
+        </List>
+        <List>
+          <String>false</String>
+          <String>rept_role_members_filter_status_enabled</String>
+        </List>
+      </AllowedValues>
+    </Field>
+    <Field displayName="rept_role_members_field_apps" helpKey="rept_role_members_help_apps" multi="true" name="applications" postBack="true" type="Application" value="ref:applications"/>
+    <Field displayName="rept_role_members_field_owners" helpKey="rept_role_members_help_owners" multi="true" name="owners" type="Identity" value="ref:owners">
+      <Attributes>
+        <Map>
+          <entry key="identitySuggestFilter" value="Owner"/>
+        </Map>
+      </Attributes>
+    </Field>
+    <Field displayName="rept_role_members_field_type" helpKey="rept_role_members_help_type" multi="true" name="type" type="Bundle" value="ref:type">
+      <Attributes>
+        <Map>
+          <entry key="objectColumn" value="type"/>
+        </Map>
+      </Attributes>
+    </Field>
+    <Field displayName="rept_role_members_field_empty" helpKey="rept_role_members_help_empty" name="showEmpty" type="string" value="ref:showEmpty">
+      <AllowedValues>
+        <List>
+          <String>null</String>
+          <String>rept_role_members_opt_full_all</String>
+        </List>
+        <List>
+          <String>false</String>
+          <String>rept_role_members_opt_empty_roles</String>
+        </List>
+        <List>
+          <String>true</String>
+          <String>rept_role_members_opt_full_roles</String>
+        </List>
+      </AllowedValues>
+    </Field>
+    <Field displayName="rept_role_members_field_role_name" helpKey="rept_role_members_help_role_name" multi="true" name="roleName" type="Bundle" value="ref:roleName">
+      <Attributes>
+        <Map>
+          <entry key="objectColumn" value="name"/>
+        </Map>
+      </Attributes>
+    </Field>
+    <Field displayName="rept_role_members_field_entitlement_attribute" helpKey="rept_role_members_help_entitlement_attribute" multi="true" name="entitlementAttribute" type="string" value="ref:entitlementAttribute">
+      <AllowedValuesDefinition>
+        <Script>
+          <Source>
+              
+               import sailpoint.reporting.*;
+               import sailpoint.object.*;
+               List sanitizedValues = ReportingLibrary.sanitizeEntitlementAttributeValues(context, applications, entitlementAttribute);
+               form.getField("entitlementAttribute").setValue(sanitizedValues);
+               List bundleProfileRelationEntitlementAttributes = ReportingLibrary.getEntitlementAttributeAllowedValuesByApp(context, applications);
+               return bundleProfileRelationEntitlementAttributes;
+              
+            </Source>
+        </Script>
+      </AllowedValuesDefinition>
+    </Field>
+    <Field displayName="rept_role_members_field_entitlement_value" helpKey="rept_role_members_help_entitlement_value" multi="true" name="entitlementValue" type="string" value="ref:entitlementValue">
+      <AllowedValuesDefinition>
+        <Script>
+          <Source>
+              
+               import sailpoint.reporting.*;
+               import sailpoint.object.*;
+               List sanitizedValues = ReportingLibrary.sanitizeEntitlementValueValues(context, applications, entitlementValue);
+               form.getField("entitlementValue").setValue(sanitizedValues);
+               List bundleProfileRelationEntitlementValues = ReportingLibrary.getEntitlementValueAllowedValuesByApp(context, applications);
+               return bundleProfileRelationEntitlementValues;
+              
+            </Source>
+        </Script>
+      </AllowedValuesDefinition>
+    </Field>
+    <Field displayName="rept_role_members_field_permission_target" helpKey="rept_role_members_help_permission_target" multi="true" name="permissionTarget" type="string" value="ref:permissionTarget">
+      <AllowedValuesDefinition>
+        <Script>
+          <Source>
+              
+               import sailpoint.reporting.*;
+               import sailpoint.object.*;
+               List sanitizedValues = ReportingLibrary.sanitizePermissionTargetValues(context, applications, permissionTarget);
+               form.getField("permissionTarget").setValue(sanitizedValues);
+               List bundleProfileRelationPermissionTargets = ReportingLibrary.getPermissionTargetAllowedValuesByApp(context, applications);
+               return bundleProfileRelationPermissionTargets;
+              
+            </Source>
+        </Script>
+      </AllowedValuesDefinition>
+    </Field>
+    <Field displayName="rept_role_members_field_permission_right" helpKey="rept_role_members_help_permission_right" multi="true" name="permissionRight" type="string" value="ref:permissionRight">
+      <AllowedValuesDefinition>
+        <Script>
+          <Source>
+              
+               import sailpoint.reporting.*;
+               import sailpoint.object.*;
+               List sanitizedValues = ReportingLibrary.sanitizePermissionRightValues(context, applications, permissionRight);
+               form.getField("permissionRight").setValue(sanitizedValues);
+               List bundleProfileRelationPermissionRights = ReportingLibrary.getPermissionRightAllowedValuesByApp(context, applications);
+               return bundleProfileRelationPermissionRights;
+              
+            </Source>
+        </Script>
+      </AllowedValuesDefinition>
+    </Field>
+    <Field displayName="rept_role_members_field_relationships" helpKey="rept_role_members_help_relationships" name="relationships" type="string" value="ref:relationships">
+      <AllowedValues>
+        <List>
+          <String>null</String>
+          <String>rept_role_members_field_relationships_all</String>
+        </List>
+        <List>
+          <String>selfOnly</String>
+          <String>rept_role_members_field_relationships_direct</String>
+        </List>
+        <List>
+          <String>relatedOnly</String>
+          <String>rept_role_members_field_relationships_indirect</String>
+        </List>
+      </AllowedValues>
+    </Field>
+  </Section>
+</Form>

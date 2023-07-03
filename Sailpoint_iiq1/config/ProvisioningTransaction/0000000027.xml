@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction applicationName="DemoJdbcApp" identityDisplayName="Alan Bradley" identityName="Alan Bradley" integration="DemoJdbcApp" name="0000000027" operation="Create" source="IdentityRefresh" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="planResult">
+        <value>
+          <ProvisioningResult status="failed">
+            <Errors>
+              <Message key="BeanShell script error: bsh.EvalError: Sourced file: inline evaluation of: ``import java.sql.ResultSet; import java.sql.Statement; import java.sql.Connection . . . '' : Error in method invocation: Method setString(int, java.util.ArrayList) not found in class'org.apache.commons.dbcp2.DelegatingPreparedStatement' : at Line: 83 : in file: inline evaluation of: ``import java.sql.ResultSet; import java.sql.Statement; import java.sql.Connection . . . '' : st .setString ( 7 , attrReq .getValue ( ) ) &#xa; BSF info: JDBC-Create Provisioning Rule 2 at line: 0 column: columnNo" type="Error"/>
+            </Errors>
+          </ProvisioningResult>
+        </value>
+      </entry>
+      <entry key="request">
+        <value>
+          <AccountRequest application="DemoJdbcApp" assignmentIds="5edb2872183b4008ad36ecce5a8259f8,5249687656604038a6f3053a9b0197b1" op="Create">
+            <Attributes>
+              <Map>
+                <entry key="provisioningTransactionId" value="c0a8de017c251895817c357833161267"/>
+              </Map>
+            </Attributes>
+            <AttributeRequest name="GroupId" op="Add">
+              <Value>
+                <List>
+                  <String>4</String>
+                  <String>2</String>
+                </List>
+              </Value>
+            </AttributeRequest>
+            <AttributeRequest name="GroupValue" op="Add">
+              <Value>
+                <List>
+                  <String>Engineering</String>
+                  <String>Finance</String>
+                </List>
+              </Value>
+            </AttributeRequest>
+            <AttributeRequest name="FirstName" op="Set" value="Alan"/>
+            <AttributeRequest name="LastName" op="Set" value="Bradley"/>
+            <AttributeRequest name="EmailAddress" op="Set" value="Alan.Bradley@sailpointdemo.com"/>
+            <AttributeRequest name="NetworkID" op="Set" value="Alan.Bradley"/>
+            <AttributeRequest name="Name" op="Set" value="Alan Bradley"/>
+            <ProvisioningResult status="failed">
+              <Errors>
+                <Message key="BeanShell script error: bsh.EvalError: Sourced file: inline evaluation of: ``import java.sql.ResultSet; import java.sql.Statement; import java.sql.Connection . . . '' : Error in method invocation: Method setString(int, java.util.ArrayList) not found in class'org.apache.commons.dbcp2.DelegatingPreparedStatement' : at Line: 83 : in file: inline evaluation of: ``import java.sql.ResultSet; import java.sql.Statement; import java.sql.Connection . . . '' : st .setString ( 7 , attrReq .getValue ( ) ) &#xa; BSF info: JDBC-Create Provisioning Rule 2 at line: 0 column: columnNo" type="Error"/>
+              </Errors>
+            </ProvisioningResult>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

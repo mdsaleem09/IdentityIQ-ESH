@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE EmailTemplate PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<EmailTemplate name="RapidSetup-Email-GlobalFooter">
+  <Body>
+    &lt;p&gt;Global Footer&lt;/p&gt;		
+  </Body>
+  <Subject>Global Footer</Subject>
+</EmailTemplate>

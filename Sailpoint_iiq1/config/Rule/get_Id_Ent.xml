@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="get Id Ent" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+  import sailpoint.object.Identity;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+  import sailpoint.object.Filter;
+  import sailpoint.object.Profile;
+  
+  import java.util.*;
+ 
+//********************************************************************************
+//////////////////Rule Starts From Here
+
+    
+  
+  String m=null;
+  
+        Custom customObj = context.getObjectByName(Custom.class, "AD Applications Entitlements");
+	        if(customObj != null) {
+	 	       HashMap map=(HashMap) customObj.getAttributes().getMap();
+    for ( String key : map.keySet() ) {
+      if(key.equalsIgnoreCase("Active Directory"))
+          m=key;
+    System.out.println( "key "+m);
+          }
+         }
+         return m;
+  
+  /*
+  
+  import sailpoint.object.IdentityEntitlement;
+  
+  String identityName="Ad User1";
+  Filter filter = Filter.and(Filter.eq("identity.name",identityName),Filter.like("application.name","Active"));
+  QueryOptions opts =new QueryOptions();
+  opts.addFilter(filter);
+  int count =  context.countObjects(IdentityEntitlement.class, opts);
+  if(count &gt; 0){
+    return count;
+  }
+  
+  
+  
+  */
+                       
+
+
+  </Source>
+</Rule>

@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction accountDisplayName="Brenda Cooper" applicationName="DemoJdbcApp" identityDisplayName="Brenda Cooper" identityName="Brenda Cooper" integration="DemoJdbcApp" name="0000000033" nativeIdentity="1a2c3b4a" operation="Modify" source="RoleChangePropagation" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="filtered">
+        <value>
+          <AccountRequest application="DemoJdbcApp" nativeIdentity="1a2c3b4a" op="Modify">
+            <AttributeRequest name="GroupValue" op="Add">
+              <Attributes>
+                <Map>
+                  <entry key="reason">
+                    <value>
+                      <FilterReason>Exists</FilterReason>
+                    </value>
+                  </entry>
+                </Map>
+              </Attributes>
+              <Value>
+                <List>
+                  <String>Testing</String>
+                </List>
+              </Value>
+            </AttributeRequest>
+            <AttributeRequest name="GroupValue" op="Add">
+              <Attributes>
+                <Map>
+                  <entry key="reason">
+                    <value>
+                      <FilterReason>Exists</FilterReason>
+                    </value>
+                  </entry>
+                </Map>
+              </Attributes>
+              <Value>
+                <List>
+                  <String>Finance</String>
+                </List>
+              </Value>
+            </AttributeRequest>
+            <AttributeRequest name="GroupValue" op="Add" value="Engineering">
+              <Attributes>
+                <Map>
+                  <entry key="reason">
+                    <value>
+                      <FilterReason>Requested</FilterReason>
+                    </value>
+                  </entry>
+                </Map>
+              </Attributes>
+            </AttributeRequest>
+          </AccountRequest>
+        </value>
+      </entry>
+      <entry key="planResult">
+        <value>
+          <ProvisioningResult status="failed">
+            <Errors>
+              <Message key="BeanShell script error: bsh.EvalError: Sourced file: inline evaluation of: ``import java.sql.ResultSet;   import java.sql.Statement;   import java.sql.Connec . . . '' : Attempt to resolve method: getOperation() on undefined variable or class name: accRequest : at Line: 44 : in file: inline evaluation of: ``import java.sql.ResultSet;   import java.sql.Statement;   import java.sql.Connec . . . '' : accRequest .getOperation ( ) &#xa; BSF info: JDBC-Modify-Provisioning at line: 0 column: columnNo" type="Error"/>
+            </Errors>
+          </ProvisioningResult>
+        </value>
+      </entry>
+      <entry key="request">
+        <value>
+          <AccountRequest application="DemoJdbcApp" nativeIdentity="1a2c3b4a" op="Modify">
+            <Attributes>
+              <Map>
+                <entry key="provisioningTransactionId" value="c0a8de017c251895817c4a94a3582390"/>
+              </Map>
+            </Attributes>
+            <AttributeRequest name="GroupValue" op="Add" value="Informationtech"/>
+            <ProvisioningResult status="failed">
+              <Errors>
+                <Message key="BeanShell script error: bsh.EvalError: Sourced file: inline evaluation of: ``import java.sql.ResultSet;   import java.sql.Statement;   import java.sql.Connec . . . '' : Attempt to resolve method: getOperation() on undefined variable or class name: accRequest : at Line: 44 : in file: inline evaluation of: ``import java.sql.ResultSet;   import java.sql.Statement;   import java.sql.Connec . . . '' : accRequest .getOperation ( ) &#xa; BSF info: JDBC-Modify-Provisioning at line: 0 column: columnNo" type="Error"/>
+              </Errors>
+            </ProvisioningResult>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

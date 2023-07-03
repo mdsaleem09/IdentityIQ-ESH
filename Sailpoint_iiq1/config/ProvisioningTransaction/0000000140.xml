@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction accountDisplayName="CN=Arthur Bryant,OU=People,OU=Demo,DC=Eshiam,DC=com" applicationName="Active- Directory" identityDisplayName="Arthur Bryant" identityName="Arthur Bryant" integration="Active- Directory" name="0000000140" nativeIdentity="CN=Arthur Bryant,OU=People,OU=Demo,DC=Eshiam,DC=com" operation="Create" source="IdentityRefresh" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="request">
+        <value>
+          <AccountRequest application="Active- Directory" assignmentIds="997085e5a2314857b898431de53901af" nativeIdentity="CN=Arthur Bryant,OU=People,OU=Demo,DC=Eshiam,DC=com" op="Create">
+            <Attributes>
+              <Map>
+                <entry key="provisioningTransactionId" value="c0a8010384811d0f8184854ea8510517"/>
+              </Map>
+            </Attributes>
+            <AttributeRequest name="memberOf" op="Add" value="CN=automation Testing,OU=Groups,OU=Demo,DC=Eshiam,DC=com"/>
+            <AttributeRequest name="objectType" op="Set" value="User"/>
+            <AttributeRequest name="sAMAccountName" op="Set" value="Arthur Bryant"/>
+            <AttributeRequest name="password" op="Set">
+              <Attributes>
+                <Map>
+                  <entry key="secret" value="true"/>
+                </Map>
+              </Attributes>
+            </AttributeRequest>
+            <AttributeRequest name="IIQDisabled" op="Set">
+              <Value>
+                <Boolean/>
+              </Value>
+            </AttributeRequest>
+            <AttributeRequest name="givenName" op="Set" value="Arthur"/>
+            <AttributeRequest name="sn" op="Set" value="Bryant"/>
+            <AttributeRequest name="employeeId" op="Set" value="1b2a3a4c"/>
+            <AttributeRequest name="msNPAllowDialin" op="Set" value="Not Set"/>
+            <ProvisioningResult status="failed">
+              <Errors>
+                <Message key="Exception occurred while executing the RPCRequest: Errors returned from IQService. &quot;The object already exists. 00000524: UpdErr: DSID-031A1261, problem 6005 (ENTRY_EXISTS), data 0 . HRESULT:[0x80071392] For identity: CN=Arthur Bryant,OU=People,OU=Demo,DC=Eshiam,DC=com&quot;" type="Error"/>
+              </Errors>
+            </ProvisioningResult>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

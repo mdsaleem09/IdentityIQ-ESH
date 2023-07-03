@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="get custom values" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+   
+import sailpoint.object.Identity;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+  import sailpoint.object.Filter;
+  import sailpoint.object.Profile;
+  
+  import java.util.*;
+ import sailpoint.object.Identity;
+  import sailpoint.object.*;
+  import java.util.List;
+  import sailpoint.object.Custom;
+
+  
+  ArrayList list=new ArrayList();
+  Custom customObj=context.getObjectByName(Custom.class,"Hybrid Roles");
+if(customObj!=null)
+{
+List roles=customObj.get("Roles");
+for(String role:roles)
+{
+  
+  return role;
+}
+}
+ 
+
+ 
+  </Source>
+</Rule>

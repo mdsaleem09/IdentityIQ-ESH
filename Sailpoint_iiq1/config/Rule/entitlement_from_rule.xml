@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="entitlement from rule" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+
+import sailpoint.object.*;
+  import sailpoint.api.*;
+  
+  
+  for(int i=1; i&lt;=300; i++){
+    List l = new ArrayList();
+Identity wg = new Identity();
+  
+  ArrayList list=new ArrayList();
+  list.add(context.getObjectByName(Capability.class,"SystemAdministrator"));
+  
+  
+wg.setWorkgroup(true);
+wg.setName("test-workgroup"+i);
+  wg.setOwner(context.getObjectByName(Identity.class,"spadmin"));
+
+wg.setDescription("workgroup"+i);
+   wg.setCapabilities(list);
+
+    
+    String wgName=wg.getName();
+    String idName="Amanda Ross";
+    boolean s=addMembers(wgName,idName);
+    if(s)
+    {
+        context.saveObject(wg);
+
+   // context.commitTransaction();
+    }
+    
+  }
+    
+    public static boolean addMembers(String wgName,String idName)
+    {
+          boolean retVal = false;
+
+      ArrayList wgList=new ArrayList();
+      Identity idObj=context.getObjectByName(Identity.class,idName)
+     Identity workGroupObj = context.getObjectByName(Identity.class,wgName);
+      wgList.add(workGroupObj);
+    QueryOptions ops = new QueryOptions();
+    ops.addFilter(Filter.in("identity",wgList));
+    idObj.setWorkgroups(context.getObjects(Identity.class,ops));
+        context.saveObject(idObj);
+      retVal=true;
+      return retVal;
+
+      
+    
+      }
+  
+      context.commitTransaction();
+
+  
+   
+
+  </Source>
+</Rule>

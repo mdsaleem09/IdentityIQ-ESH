@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="OHSU-Leaver-Trigger" type="IdentityTrigger">
+  <Description>This rule can be used for Certification Events that use rule triggers. The previousIdentity and newIdentity hold snapshots of the identity before the update has occurred and the state of the identity after the update, respectively.</Description>
+  <Signature returnType="boolean">
+    <Inputs>
+      <Argument name="log" type="org.apache.commons.logging.Log">
+        <Description>
+          The log object associated with the SailPointContext.
+        </Description>
+      </Argument>
+      <Argument name="context" type="sailpoint.api.SailPointContext">
+        <Description>
+          A sailpoint.api.SailPointContext object that can be used to query the database if necessary.
+        </Description>
+      </Argument>
+      <Argument name="previousIdentity">
+        <Description>
+          The identity before the refresh/aggregation (this will be null when an
+          identity is created).
+        </Description>
+      </Argument>
+      <Argument name="newIdentity">
+        <Description>
+          The identity after the refresh/aggregation (this will be null when an
+          identity is deleted).
+        </Description>
+      </Argument>
+    </Inputs>
+    <Returns>
+      <Argument name="result">
+        <Description>
+          A boolean describing the result of the rule.
+        </Description>
+      </Argument>
+    </Returns>
+  </Signature>
+  <Source>return true;
+/*
+
+
+
+Trigger Logic: is ‘termination date +1’ (Last Working Day +1) in the HCM 
+
+*/
+
+  import sailpoint.object.Identity;
+  import sailpoint.tools.Util;
+  import java.text.SimpleDateFormat;
+
+  import org.apache.log4j.Level;
+  import org.apache.log4j.Logger;
+
+  
+  
+  
+  boolean leaverTriggerFlg = false;
+
+  Logger logger = Logger.getLogger("OHSU.Rule.IdentityTrigger.Leaver");
+  logger.setLevel(Level.DEBUG);
+
+
+    System.out.println("Inside Leaver Trigger Rule:-");
+
+  logger.debug("Start OHSU-Rule-IdentityTrigger-Leaver");
+
+
+  logger.debug("previousIdentity : "+previousIdentity);
+  logger.debug("newIdentity : "+newIdentity);
+
+  if(!(previousIdentity instanceof Identity) || !(newIdentity instanceof Identity))
+{
+       System.out.println("Inside leaverTriggerFlg1");
+ 
+return leaverTriggerFlg;
+}
+  if(newIdentity == null || newIdentity == void || !newIdentity.isCorrelated())
+     {
+      System.out.println("Inside leaverTriggerFlg2");
+	  return leaverTriggerFlg;
+	 }
+  
+      System.out.println("Inside leaverTriggerFlg3");
+
+			System.out.println("Inside leaverTriggerFlg4"+newIdentity.toXml());
+
+           //For Oracle Checking if person type should be equal to Ex-Employee and rehire shoould not be equal to one
+				 //   if(newIdentity.getAttribute("PType").equals("Ex-Employee") || !newIdentity.getAttribute("rehire").equals("1")){
+          /*if(newIdentity.getAttribute("pType").equals("Ex-Employee")){
+              System.out.println("Inside leaverTriggerFlg5");
+              System.out.println("inside oracle application if "+newIdentity.getAttribute("PType"));
+                     //System.out.println("inside oracle application if "+newIdentity.getAttribute("rehire"));
+               leaverTriggerFlg=true;
+					  }
+					
+              //For Banner Checking if Eligible Flag should not be equal to Y
+					  if(!newIdentity.getAttribute("Eligible Flag").equals("Y")){
+               System.out.println("inside oracle application if "+newIdentity.getAttribute("Eligible Flag"));
+					   leaverTriggerFlg=true;					
+					   }
+             */
+            
+          //termination Date should be in the past
+            if(newIdentity.getAttribute("pType")!=null &amp;&amp; newIdentity.getAttribute("pType").equals("Ex-Employee") &amp;&amp; newIdentity.getAttribute("terminationDate")!=null){
+            String strTermDate = (String) newIdentity.getAttribute("terminationDate");
+            System.out.println("inside oracle application if "+strTermDate);
+            logger.debug("strTermDate : "+strTermDate);
+            SimpleDateFormat sf = new SimpleDateFormat("dd/MM/yyyy");
+            Date termDate = sf.parse(strTermDate);
+            logger.debug(" termDate : "+termDate);
+            int diff = Util.getDaysDifference(new Date(), termDate);
+            logger.debug(" diff : "+diff);
+            if(diff &gt;= 1){
+            leaverTriggerFlg = true;
+            }
+            }     
+            
+            logger.debug(" leaverTriggerFlg : "+leaverTriggerFlg);
+            System.out.println(" leaverTriggerFlg : "+leaverTriggerFlg);
+            return leaverTriggerFlg;</Source>
+</Rule>

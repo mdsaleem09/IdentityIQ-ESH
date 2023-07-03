@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE IntegrationConfig PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<IntegrationConfig executor="com.roche.cidm.integration.SAPGRC.SAPGRCIntegrationExecutor" name="RocheSAPProvisionIntegrationModule" roleSyncStyle="none">
+  <Attributes>
+    <Map>
+      <entry key="operations" value="Create,Modify,Delete,Add,Remove,Enable,Disable"/>
+      <entry key="roleSyncHistory"/>
+      <entry key="ruleName" value="RocheRuleTest-BRM-SAPGRCProvisioning"/>
+      <entry key="sapPwd" value="%%SAPGRC_BRMASPIRE_WEBSERVICE_PASSWORD%%"/>
+      <entry key="sapURL" value="%%SAPGRC_BRMASPIRE_WEBSERVICE_URL%%"/>
+      <entry key="sapUserName" value="%%SAPGRC_BRM_ASPIRE_USERNAME%%"/>
+    </Map>
+  </Attributes>
+  <ManagedResources>
+    <ManagedResource>
+      <ApplicationRef>
+        <Reference class="sailpoint.object.Application" name="SAP-Direct"/>
+      </ApplicationRef>
+    </ManagedResource>
+  </ManagedResources>
+</IntegrationConfig>

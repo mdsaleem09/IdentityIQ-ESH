@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE IdentityTrigger PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<IdentityTrigger disabled="true" handler="sailpoint.api.AsynchronousWorkflowTriggerHandler" name="RapidSetup Leaver" type="RapidSetup">
+  <Description>Rapid Setup Leaver processed a lifecycle event.</Description>
+  <HandlerParameters>
+    <Attributes>
+      <Map>
+        <entry key="businessProcess" value="leaver"/>
+        <entry key="identityProcessingThreshold"/>
+        <entry key="identityProcessingThresholdType"/>
+        <entry key="workflow" value="RapidSetup - Leaver"/>
+      </Map>
+    </Attributes>
+  </HandlerParameters>
+</IdentityTrigger>

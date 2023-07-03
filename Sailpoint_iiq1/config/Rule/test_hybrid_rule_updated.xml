@@ -1,0 +1,102 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="test hybrid rule updated" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+  import sailpoint.object.Identity;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+  import sailpoint.object.Filter;
+  import sailpoint.object.Profile;
+  
+  import java.util.*;
+  
+
+  String roledisplayName=null;
+  String groupName=null;
+  
+String appName="Active Directory";
+  String owner="spadmin";
+  
+ Identity idObject=context.getObjectByName(Identity.class,"spadmin");
+Application appObj=context.getObjectByName(Application.class,appName);
+  
+   
+Filter filter=Filter.eq("application.name",appName);
+QueryOptions opts=new QueryOptions();
+opts.addFilter(filter);
+opts.setCloneResults(true);
+
+
+Iterator it=context.search(ManagedAttribute.class,opts);
+while(it.hasNext())
+{
+  
+ManagedAttribute ma=(ManagedAttribute)it.next();
+  System.out.println("Inside managed Attribute");
+//if(ma.getAttribute("Type")!=null &amp;&amp; ma.getAttribute("Type").equalsIgnoreCase("Composite"))
+  
+  Filter filter=Filter.and(Filter.eq("name",ma.getDisplayName()),Filter.eq("displayName",ma.getAttribute("Description")));
+Bundle bundObj=context.getUniqueObject(Bundle.class,filter);
+if(bundObj!=null)
+{
+ return bundObj;
+}
+  else if(bundObj==null)
+  {
+
+  
+            System.out.println("Inside else bundObj"+bundObj);
+
+  bundObj=new Bundle();
+  String groupName = (String) ma.getDisplayName();
+		            System.out.println("groupName"+groupName);
+		
+roledisplayName=ma.getAttribute("Description");
+
+return roledisplayName;
+
+bundObj.setDisplayName(roledisplayName);
+bundObj.setName(ma.getDisplayableName());
+bundObj.setType("Hybrid");
+    Bundle orgBund=context.getObjectByName(Bundle.class,"SAP");
+bundObj.addInheritance(orgBundle);
+//bundObj.setDescription(ma.getAttribute("Long Description"));
+bundObj.setOwner(appObj.getOwner());
+  
+  
+  
+  
+ArrayList  list=new ArrayList();
+
+
+Filter filter=Filter.like("application.name","Active Directory");
+QueryOptions opts=new QueryOptions();
+opts.addFilter(filter);
+Iterator it=context.search(ManagedAttribute.class,opts);
+while(it.hasNext())
+{
+ManagedAttribute ma=(ManagedAttribute)it.next();
+if(ma.getAttribute("Description")!=null  &amp;&amp; bundObj.getDisplayName()!=null &amp;&amp;  ma.getAttribute("Description").equalsIgnoreCase(bundObj.getDisplayName()))
+{
+list.add(ma);
+Profile profile=new Profile();
+profile.setApplication(ma.getApplication());
+List entValues = new ArrayList();
+entValues.add(ma.getValue());
+Filter fil = Filter.containsAll(ma.getAttribute(), entValues);
+     profile.addConstraint(fil);
+    bundObj.add(profile);
+    context.saveObject(bundObj);
+    context.commitTransaction();
+  
+}
+}
+   
+  
+    context.decache();
+    sailpoint.tools.Util.flushIterator(it); 
+}
+}
+  </Source>
+</Rule>

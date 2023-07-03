@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell"  name="SPCONF Field Value Rules Library">
+  <Source>
+    <![CDATA[
+    import sailpoint.api.SailPointContext;      
+    import sailpoint.object.Identity;
+    
+    /* TODO Change code - this code is provided as an example */
+
+    public String getCustomEmail(SailPointContext context, Identity identity, String op)
+    {
+      String firstname = identity.getFirstname();
+      logger.debug("Firstname value: " + firstname);
+      String lastname = identity.getLastname();
+      logger.debug("Lastname value: " + lastname);
+      String val = firstname + "." + lastname + "@example.com";
+      // Remove whitespace
+      val = val.replaceFirst("\\s++$", "");
+
+      logger.debug("Returning email value: " + val);
+      return val;
+    
+    }
+  
+    public String getCustomOffice(SailPointContext context, Identity identity, String op, String defaultValue)
+    {
+      
+       String office = identity.getStringAttribute("location");
+       if (null == office)
+          office = defaultValue;
+       return office;
+    
+    }
+    
+
+
+    ]]>
+    </Source>
+</Rule>

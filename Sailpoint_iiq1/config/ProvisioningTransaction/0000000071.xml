@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction accountDisplayName="CN=Daniel Lewis,OU=People,OU=Demo,DC=Eshiam,DC=com" applicationName="Active Directory" identityDisplayName="Daniel Lewis" identityName="Daniel Lewis" integration="Active Directory" name="0000000071" nativeIdentity="CN=Daniel Lewis,OU=People,OU=Demo,DC=Eshiam,DC=com" operation="Create" source="LCM" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="accessRequestId" value="0000000153"/>
+      <entry key="request">
+        <value>
+          <AccountRequest application="Active Directory" nativeIdentity="CN=Daniel Lewis,OU=People,OU=Demo,DC=Eshiam,DC=com" op="Create">
+            <Attributes>
+              <Map>
+                <entry key="provisioningTransactionId" value="c0a8de017d081095817d100fba4b0711"/>
+              </Map>
+            </Attributes>
+            <AttributeRequest name="assignedRoles" op="Set" value="Bus-role"/>
+            <AttributeRequest name="objectType" op="Set" value="User"/>
+            <AttributeRequest name="sAMAccountName" op="Set" value="Daniel Lewis"/>
+            <AttributeRequest name="password" op="Set">
+              <Attributes>
+                <Map>
+                  <entry key="secret" value="true"/>
+                </Map>
+              </Attributes>
+            </AttributeRequest>
+            <AttributeRequest name="IIQDisabled" op="Set">
+              <Value>
+                <Boolean/>
+              </Value>
+            </AttributeRequest>
+            <AttributeRequest name="givenName" op="Set" value="Daniel"/>
+            <AttributeRequest name="sn" op="Set" value="Lewis"/>
+            <AttributeRequest name="employeeID" op="Add" value="1a2a3b4b"/>
+            <AttributeRequest name="msNPAllowDialin" op="Set" value="Not Set"/>
+            <ProvisioningResult status="failed">
+              <Errors>
+                <Message key="Errors returned from IQService. &quot;Failed to update attributes for identity CN=Daniel Lewis,OU=People,OU=Demo,DC=Eshiam,DC=com. The specified directory service attribute or value does not exist.&#xa;&quot;" type="Error"/>
+              </Errors>
+            </ProvisioningResult>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

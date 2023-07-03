@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="get manager" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+  import sailpoint.object.Identity;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+  
+  
+  
+ // String appName="";
+  
+                      List l=new ArrayList();
+                     Identity idObj=context.getObjectByName(Identity.class,"Adam Kennedy");
+  if(idObj!=null)
+  {
+               l.add(idObj.getManager().getName());
+  }
+  return l;
+      
+  </Source>
+</Rule>

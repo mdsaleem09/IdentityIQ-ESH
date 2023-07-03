@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Capability PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Capability displayName="capability_rapidsetup_configuration_administrator" name="RapidSetupConfigurationAdministrator">
+  <Description>capability_desc_rapidsetup_configuration_administrator</Description>
+  <RightRefs>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessRapidSetupConfiguration"/>
+  </RightRefs>
+</Capability>

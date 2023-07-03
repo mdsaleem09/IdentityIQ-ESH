@@ -1,0 +1,245 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Hybrid Role Testing 19-01-22-updated" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+  import sailpoint.object.Identity;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+  import sailpoint.object.Filter;
+  import sailpoint.object.Profile;
+  import sailpoint.api.IdIterator;
+  import sailpoint.object.Filter.MatchMode;
+  import sailpoint.tools.Util;
+
+  import java.util.*;
+
+  System.out.println("17");
+  String roledisplayName = null;
+  String groupName = null;
+ 
+  
+ 
+
+ List bundObjs=context.getObjects(Bundle.class);
+       Set&lt;Bundle&gt; bundSet = new HashSet&lt;Bundle&gt;(bundObjs);
+
+  
+  //Set bundSet=new HashSet();
+  Identity idObject = context.getObjectByName(Identity.class,"spadmin");
+  Filter appfilter = Filter.and(Filter.like("name", "Active-", MatchMode.START), Filter.like("name", "Demo", MatchMode.ANYWHERE));
+  QueryOptions appOpts= new QueryOptions();
+  appOpts.addFilter(appfilter);
+  appOpts.setCloneResults(true);
+  Iterator appIt = context.search(Application.class,appOpts);
+  List appNames = new ArrayList();
+  while(appIt.hasNext()){
+    System.out.println("29");
+
+    appNames.add(appIt.next().getName());
+  }
+
+  Iterator listIt = appNames.iterator();
+  while(listIt.hasNext()){
+    System.out.println("36");
+
+    Application appObj = context.getObjectByName(Application.class,listIt.next());
+    String appName= appObj.getName();  
+    Identity idObject = context.getObjectByName(Identity.class,"spadmin");
+
+    Filter filter = Filter.and(Filter.eq("application.name",appName));
+    QueryOptions opts=new QueryOptions();
+    opts.addFilter(filter);
+    opts.setCloneResults(true);
+    Bundle bundSAPObj = context.getObjectByName(Bundle.class,"SAP-demo-3");
+
+    if(bundSAPObj == null){
+      System.out.println("49");
+
+      bundSAPObj= new Bundle();
+      bundSAPObj.setName("SAP-demo-3");
+      bundSAPObj.setDisplayName("SAP-demo-3");
+      bundSAPObj.setType("organizational");   
+      bundSAPObj.setOwner(idObject);
+      context.saveObject(bundSAPObj);
+    }
+
+    Iterator it = context.search(ManagedAttribute.class,opts);  
+    while(it.hasNext()){
+      System.out.println("61");
+
+      boolean isNewBundle = false;
+      ManagedAttribute ma= (ManagedAttribute)it.next();
+
+      if(ma!= null &amp;&amp; appObj.getOwner()!= null &amp;&amp;  ma.getDisplayName()!= null &amp;&amp; ma.getDisplayableName()!= null &amp;&amp;  ma.getAttribute("sysDescriptions")!= null){
+        System.out.println("67");
+
+        Map map= ma.getAttribute("sysDescriptions");
+        roledisplayName=map.get("en_US");
+        
+       // Filter filter=Filter.and(Filter.eq("displayName","SAP :"+roledisplayName),Filter.eq("name",ma.getDisplayName()));
+       // Filter filter= Filter.eq("name",ma.getDisplayName());
+        Filter filter= Filter.eq("displayName","SAP :"+roledisplayName);
+
+        Bundle bundObj= context.getUniqueObject(Bundle.class,filter);
+        //if(bundObj==null &amp;&amp; !bundSet.contains(bundObj)){
+        if(bundObj==null){
+          System.out.println("76");
+
+
+          bundObj= new Bundle();
+
+          isNewBundle = true;
+          //bundSet.add(bundObj);
+          
+        }
+
+        String groupName = (String) ma.getDisplayName();
+       // bundObj.setDisplayName(roledisplayName);
+         bundObj.setDisplayName("SAP :"+roledisplayName);
+        bundObj.setName(ma.getDisplayableName());
+        bundObj.setType("Hybrid");
+        bundObj.setAttribute("Requestable","0");
+        //Bundle orgBundle=context.getObjectByName(Bundle.class,"Org-SAP");
+        bundObj.addInheritance(bundSAPObj);
+        context.saveObject(bundSAPObj);
+        //bundObj.setDescription(ma.getAttribute("Long Description"));
+        bundObj.setOwner(appObj.getOwner());
+                            bundObj.setAttribute("approval","Role Owner");
+
+
+        //context.saveObject(bundObj);
+
+
+        //Iterate through all applications managed Attributes
+        // Filter appfilter = Filter.and(Filter.like("name", "Active-", MatchMode.START), Filter.like("name", "Demo", MatchMode.ANYWHERE));
+        Filter appfilter = Filter.like("name", "Active-");
+        QueryOptions Opts=new QueryOptions();
+        Opts.addFilter(appfilter);
+        Iterator appIt = context.search(Application.class,Opts);
+        List appNames = new ArrayList();
+        while(appIt.hasNext()){
+          System.out.println("107");
+
+          appNames.add(appIt.next().getName());
+        }
+
+        Iterator listit = appNames.iterator();
+        while(listit.hasNext()){
+          System.out.println("114");
+
+          Application appObj = context.getObjectByName(Application.class,listit.next());
+          String appName= appObj.getName();  
+          Identity idObject = context.getObjectByName(Identity.class,"spadmin");
+          Filter filter = Filter.and(Filter.eq("application.name",appName));
+          QueryOptions opt= new QueryOptions();
+          opt.addFilter(filter);
+          opt.setCloneResults(true);
+          String description=null;
+          IncrementalObjectIterator iT=new IncrementalObjectIterator(context,ManagedAttribute.class,opt);
+
+          while(iT.hasNext()){
+            System.out.println("127");
+
+            ManagedAttribute maObj=(ManagedAttribute)iT.next();
+            
+            Map mapOb= maObj.getAttribute("sysDescriptions");
+            description= "SAP :"+mapOb.get("en_US");
+
+            if(maObj!=null &amp;&amp; maObj.getDisplayName()!=null &amp;&amp;  maObj.getAttribute()!=null &amp;&amp; maObj.getDisplayableName()!=null &amp;&amp;  description!=null &amp;&amp;  bundObj !=null &amp;&amp; bundObj.getDisplayName()!=null  &amp;&amp;  description.equalsIgnoreCase(bundObj.getDisplayName())){
+              // System.out.println("appNames:"+appObj);
+              System.out.println("bundObj:"+bundObj.toXml());
+              ArrayList list=new ArrayList();
+              list.add(appObj);
+              
+              System.out.println("142");
+              if(isNewBundle==true){
+                                 System.out.println("isNew Bundle true");
+
+                System.out.println("145");
+
+              
+                  System.out.println("148");
+
+
+                  Application app= context.getObjectByName(Application.class,maObj.getApplication().getName());
+                  Profile profile=new Profile();
+                  profile.setApplication(app);
+                  List entValues = new ArrayList();
+                  entValues.add(maObj.getValue());
+                  Filter fil = Filter.containsAll(maObj.getAttribute(), entValues);
+                  profile.addConstraint(fil);
+                  bundObj.add(profile);
+                  
+                
+                  
+                   }
+              
+               else if(isNewBundle==false)
+                      {
+                 System.out.println("inside else if");
+                 HashSet set = new HashSet();
+                 
+                  List profilesExist= bundObj.getProfilesForApplications(list);
+               if (Util.nullSafeSize(profilesExist) &gt; 0){
+                 set.addAll(profilesExist);
+                                  System.out.println("isNew Bundle false"+profilesExist);
+
+                  for(Profile prof:profilesExist) {
+                    String profileAppName=prof.getApplication().getName();
+                  // if(prof!=null &amp;&amp; !prof.toXml().toString().contains(maObj.getValue())) {
+                       if(prof!=null &amp;&amp;  !set.contains(prof)) {
+                      
+                      System.out.println("bundleObject"+bundObj.getDisplayName());
+                                            System.out.println("profile object"+prof.getApplication().getName());
+
+                      Application app= context.getObjectByName(Application.class,maObj.getApplication().getName());
+                      Profile profile=new Profile();
+                      profile.setApplication(app);
+                      List entValues = new ArrayList();
+                      entValues.add(maObj.getValue());
+                      Filter fil = Filter.containsAll(maObj.getAttribute(), entValues);
+                      profile.addConstraint(fil);
+                      bundObj.add(profile);
+                         entValues.clear();
+                      
+                    }
+                    
+                  }
+                }
+                // profilesExist.clear();
+                      }
+              
+                
+              
+             
+                     
+              
+             
+              
+              
+
+            
+              }
+             context.saveObject(bundObj);
+                context.commitTransaction();
+            }
+
+
+          }
+        }
+         
+      }
+      context.decache();
+      sailpoint.tools.Util.flushIterator(it); 
+
+
+    }
+
+
+
+
+
+
+    </Source>
+</Rule>

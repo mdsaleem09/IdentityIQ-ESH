@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE MonitoringStatistic PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<MonitoringStatistic displayName="monitor_stat_label_cpu" name="cpu" type="Server" value="call:getCpuUsage" valueType="double">
+  <Attributes>
+    <Map>
+      <entry key="valueRenderer" value="percentage"/>
+    </Map>
+  </Attributes>
+</MonitoringStatistic>

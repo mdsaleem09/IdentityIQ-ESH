@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction accountDisplayName="ESHIAM\Watkins" applicationName="Active- Directory" identityDisplayName="Wanda Watkins" identityName="Wanda Watkins" integration="Active- Directory" name="0000000309" nativeIdentity="CN=Wanda Watkins,OU=People,OU=Demo,DC=Eshiam,DC=com" operation="Disable" source="LCM" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="accessRequestId" value="0000000685"/>
+      <entry key="request">
+        <value>
+          <AccountRequest application="Active- Directory" nativeIdentity="CN=Wanda Watkins,OU=People,OU=Demo,DC=Eshiam,DC=com" op="Disable" targetIntegration="Active- Directory">
+            <Attributes>
+              <Map>
+                <entry key="flow" value="AccountsRequest"/>
+                <entry key="interface" value="LCM"/>
+                <entry key="operation" value="Disable"/>
+                <entry key="provisioningTransactionId" value="c0a8010286611aee818674bd61100c01"/>
+              </Map>
+            </Attributes>
+            <AttributeRequest name="AC_PARENT" op="Add" value="OU=Disable,OU=Demo,DC=Eshiam,DC=com"/>
+            <ProvisioningResult status="committed"/>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

@@ -1,0 +1,179 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Form PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Form hidden="true" name="Roles by Entitlement Report Custom Fields" type="Report">
+  <Section columns="1" label="report_details_section_role_props" name="customProperties">
+    <Field displayName="rept_role_details_field_apps" helpKey="rept_role_details_help_apps" multi="true" name="applications" postBack="true" required="true" type="Application" value="ref:applications"/>
+    <Field displayName="rept_role_by_entitlement_field_profile_type" helpKey="rept_role_by_entitlement_help_profile_type" name="profileType" postBack="true" required="true" type="string" value="ref:profileType">
+      <AllowedValues>
+        <List>
+          <String>Entitlement</String>
+          <String>rept_role_by_entitlement_field_profile_type_entitlement</String>
+        </List>
+        <List>
+          <String>Permission</String>
+          <String>rept_role_by_entitlement_field_profile_type_permission</String>
+        </List>
+      </AllowedValues>
+      <Attributes>
+        <Map>
+          <entry key="xtype" value="spDropdown"/>
+        </Map>
+      </Attributes>
+    </Field>
+    <Field displayName="rept_role_by_entitlement_field_entitlement_attribute" helpKey="rept_role_by_entitlement_help_entitlement_attribute" multi="true" name="entitlementAttribute" type="string" value="ref:entitlementAttribute">
+      <AllowedValuesDefinition>
+        <Script>
+          <Source>
+              
+                 import sailpoint.reporting.*;
+                 import sailpoint.object.*;
+                 List sanitizedValues = ReportingLibrary.sanitizeEntitlementAttributeValues(context, applications, entitlementAttribute);
+                 form.getField("entitlementAttribute").setValue(sanitizedValues);
+                 List bundleProfileRelationEntitlementAttributes = ReportingLibrary.getEntitlementAttributeAllowedValuesByApp(context, applications);
+                 return bundleProfileRelationEntitlementAttributes;
+                
+            </Source>
+        </Script>
+      </AllowedValuesDefinition>
+      <Attributes>
+        <Map>
+          <entry key="hidden">
+            <value>
+              <Script>
+                <Source>
+                    
+                      return (profileType == null || profileType.equals("Permission"));
+                      
+                  </Source>
+              </Script>
+            </value>
+          </entry>
+        </Map>
+      </Attributes>
+    </Field>
+    <Field displayName="rept_role_by_entitlement_field_entitlement_value" helpKey="rept_role_by_entitlement_help_entitlement_value" multi="true" name="entitlementValue" type="string" value="ref:entitlementValue">
+      <AllowedValuesDefinition>
+        <Script>
+          <Source>
+              
+               import sailpoint.reporting.*;
+               import sailpoint.object.*;
+               List sanitizedValues = ReportingLibrary.sanitizeEntitlementValueValues(context, applications, entitlementValue);
+               form.getField("entitlementValue").setValue(sanitizedValues);
+               List bundleProfileRelationEntitlementValues = ReportingLibrary.getEntitlementValueAllowedValuesByApp(context, applications);
+               return bundleProfileRelationEntitlementValues;
+              
+            </Source>
+        </Script>
+      </AllowedValuesDefinition>
+      <Attributes>
+        <Map>
+          <entry key="hidden">
+            <value>
+              <Script>
+                <Source>
+                    
+                      return (profileType == null || profileType.equals("Permission"));
+                      
+                  </Source>
+              </Script>
+            </value>
+          </entry>
+        </Map>
+      </Attributes>
+    </Field>
+    <Field displayName="rept_role_by_entitlement_field_permission_target" helpKey="rept_role_by_entitlement_help_permission_target" multi="true" name="permissionTarget" type="string" value="ref:permissionTarget">
+      <AllowedValuesDefinition>
+        <Script>
+          <Source>
+              
+               import sailpoint.reporting.*;
+               import sailpoint.object.*;
+               List sanitizedValues = ReportingLibrary.sanitizePermissionTargetValues(context, applications, permissionTarget);
+               form.getField("permissionTarget").setValue(sanitizedValues);
+               List bundleProfileRelationPermissionTargets = ReportingLibrary.getPermissionTargetAllowedValuesByApp(context, applications);
+               return bundleProfileRelationPermissionTargets;
+              
+            </Source>
+        </Script>
+      </AllowedValuesDefinition>
+      <Attributes>
+        <Map>
+          <entry key="hidden">
+            <value>
+              <Script>
+                <Source>
+                    
+                      return (profileType == null || profileType.equals("Entitlement"));
+                      
+                  </Source>
+              </Script>
+            </value>
+          </entry>
+        </Map>
+      </Attributes>
+    </Field>
+    <Field displayName="rept_role_by_entitlement_field_permission_right" helpKey="rept_role_by_entitlement_help_permission_right" multi="true" name="permissionRight" type="string" value="ref:permissionRight">
+      <AllowedValuesDefinition>
+        <Script>
+          <Source>
+              
+               import sailpoint.reporting.*;
+               import sailpoint.object.*;
+               List sanitizedValues = ReportingLibrary.sanitizePermissionRightValues(context, applications, permissionRight);
+               form.getField("permissionRight").setValue(sanitizedValues);
+               List bundleProfileRelationPermissionRights = ReportingLibrary.getPermissionRightAllowedValuesByApp(context, applications);
+               return bundleProfileRelationPermissionRights;
+              
+            </Source>
+        </Script>
+      </AllowedValuesDefinition>
+      <Attributes>
+        <Map>
+          <entry key="hidden">
+            <value>
+              <Script>
+                <Source>
+                    
+                      return (profileType == null || profileType.equals("Entitlement"));
+                      
+                  </Source>
+              </Script>
+            </value>
+          </entry>
+        </Map>
+      </Attributes>
+    </Field>
+    <Field displayName="rept_role_by_entitlement_field_relationships" helpKey="rept_role_by_entitlement_help_relationships" name="relationships" postBack="true" type="string" value="ref:relationships">
+      <AllowedValues>
+        <List>
+          <String>null</String>
+          <String>rept_role_by_entitlement_field_relationships_all</String>
+        </List>
+        <List>
+          <String>selfOnly</String>
+          <String>rept_role_by_entitlement_field_relationships_direct</String>
+        </List>
+        <List>
+          <String>relatedOnly</String>
+          <String>rept_role_by_entitlement_field_relationships_indirect</String>
+        </List>
+      </AllowedValues>
+      <Attributes>
+        <Map>
+          <entry key="hidden">
+            <value>
+              <Script>
+                <Source>
+                    
+                      return (profileType == null);
+                      
+                  </Source>
+              </Script>
+            </value>
+          </entry>
+        </Map>
+      </Attributes>
+    </Field>
+  </Section>
+</Form>

@@ -1,0 +1,222 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Testing the Roles" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+  import sailpoint.object.Identity;
+  import sailpoint.object.Custom;
+  import sailpoint.object.Filter;
+  import sailpoint.object.QueryOptions;
+  import sailpoint.object.Link;
+  import sailpoint.api.IdentityService;
+  import java.util.List;
+  import sailpoint.object.Application;
+  import sailpoint.api.SailPointContext;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+
+  String childstr="";
+  String appName="";
+  String entName="";
+  String managedAttr="";
+  String  application="";
+
+
+
+
+  Bundle createITRole(String appname, String entName){
+
+    String itroleName = appname +"-"+entName;
+
+    boolean retVal = false;
+    Filter f = Filter.and(Filter.eq("type", "it"), Filter.eq("name", itroleName));
+
+    Bundle itRole  =  context.getUniqueObject(Bundle.class, f);
+    if( itRole == null){
+
+      itRole = new Bundle();
+
+
+    }
+    return itRole;
+  }
+
+
+  boolean checkEntitlmentOnApplication(String appname, String entName){
+
+    boolean retVal = false;
+    Filter f = Filter.and(Filter.eq("application.name", appname), Filter.eq("value", entName));
+
+    int count =  context.countObjects(ManagedAttribute.class, new QueryOptions().addFilter(f));
+    if( count &gt; 0){
+
+      retVal = true;
+
+    }
+    return retVal;
+  }
+
+
+
+  public ststic Bundle verifyAdnCreateBusinessRole(){
+    // if exist retun the role if not exist then creat role and retun  
+    //match criteria
+
+  }
+
+
+  // Filter f = Filter.eq(
+
+  List maObj=context.getObjects(ManagedAttribute.class, );// AD application 
+  for(ManagedAttribute ma:maObj)
+  {
+
+    if(ma!=null &amp;&amp; ma.get("ChildRoles")!=null)
+    {
+     
+      // create/update business rule
+
+
+      
+      Bundle parentBusRole = verifyAdnCreateBusinessRole(ma.getValue());
+      
+      
+      if(parentBusRole != null){
+    
+      
+      
+      
+      List rRequiredRoles = new ArrayList();
+
+      List childroles=ma.get("ChildRoles");
+      for(String childObj:childroles)
+      {
+
+
+        String[] childarr=childObj.split("-");// appname-childName
+
+        appName=childarr[0];
+        entName=childarr[1];
+        //
+        
+        
+        //check entitlement
+        
+        Bundle itRole = createITRole
+       
+
+          if(itRole != null){
+          
+          rRequiredRoles.add(itRole);
+        }
+
+
+
+      }
+        
+        
+        parentBusRole.setRequirements(rRequiredRoles);
+        
+        
+        
+        
+         context.saveObject(role);
+        context.commitTransaction();
+        
+        
+      }
+      
+      
+      
+
+      if(appName.contains(applicationName) &amp;&amp; appName!=null &amp;&amp; entName!=null)
+      {
+        Bundle role=new Bundle();
+        role.setDisplayName(entName+"_Business");
+        role.setName(entName+"_Business");
+        role.setType("business");
+        MatchTerm matchTermChild=new MatchTerm();
+        matchTermChild.setName("memberOf");
+        matchTermChild.setType(IdentitySelector.MatchTerm.Type.Entitlement);
+        matchTermChild.setValue(ma.getValue());
+        matchTermChild.setApplication(applicationName);
+        MatchExpression matchExpression=new MatchExpression();
+        matchExpression.addTerm(matchTermChild);
+        IdentitySelector identitySelector=new IdentitySelector();
+        identitySelector.setMatchExpression(matchExpression);
+        role.setSelector(identitySelector);
+
+
+
+
+        List itProfiles=new ArrayList();
+        List entListOne=new ArrayList();
+        List bundList=new ArrayList();
+        //entListOne.add("4");
+
+
+
+        //Filter filterone=Filter.containsAll("GroupId",entListOne);
+
+        List entListTwo=new ArrayList();             
+        entListTwo.add("CN=AccountingGeneral,OU=Groups,OU=Demo,DC=Eshiam,DC=com");
+        Filter filtertwo = Filter.containsAll("memberOf",entListTwo);
+
+
+
+
+        Bundle itRole=new Bundle();
+        role.setDisplayName(entName+"_IT");
+        role.setName(entName+"_IT");
+        role.setType("it");   
+
+
+
+        //Profile profileOne=new Profile();
+        // profileOne.setApplication(context.getObjectByName(Application.class,"JDBC-APPLICATIONTEST"));
+        // List opList=new ArrayList();
+        // opList(filterone);
+
+
+        // profileOne.setConstraints(opList);
+
+
+
+        Profile profileTwo=new Profile();
+        profileTwo.setApplication(context.getObjectByName(Application.class,"Active Directory"));
+        List adList=new ArrayList();
+        adList(filtertwo);
+
+
+        profileTwo.setConstraints(adList);
+
+
+
+        //itProfiles.add(profileOne);
+
+        itProfiles.add(profileTwo);
+        itRole.assignProfiles(itProfiles);
+
+        bundList.add(itRole);
+        role.setRequirements(bundList);
+        context.saveObject(role);
+        context.commitTransaction();
+
+      }
+
+    }
+
+
+
+
+  }
+
+
+
+
+
+
+
+
+  </Source>
+</Rule>

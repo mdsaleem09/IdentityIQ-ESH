@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE MonitoringStatistic PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<MonitoringStatistic displayName="monitor_stat_label_memory_usage_percentage" name="memoryUsagePercentage" type="JVM" value="call:getMemoryUsagePercentage" valueType="double">
+  <Attributes>
+    <Map>
+      <entry key="valueRenderer" value="percentage"/>
+    </Map>
+  </Attributes>
+  <Description>The percentage of the maximum allowed memory which is actively in use by the application server's Java virtual machine</Description>
+</MonitoringStatistic>

@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction accountDisplayName="ESHIAM\Andrew Gray" applicationName="Active Directory" identityDisplayName="Andrew Gray" identityName="Andrew Gray" integration="Active Directory" name="0000000013" nativeIdentity="CN=Andrew Gray,OU=People,OU=Demo,DC=Eshiam,DC=com" operation="Modify" source="IdentityRefresh" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="filtered">
+        <value>
+          <AccountRequest application="Active Directory" nativeIdentity="CN=Andrew Gray,OU=People,OU=Demo,DC=Eshiam,DC=com" op="Modify">
+            <AttributeRequest name="memberOf" op="Add" value="CN=Admins,OU=Groups,OU=Demo,DC=Eshiam,DC=com">
+              <Attributes>
+                <Map>
+                  <entry key="reason">
+                    <value>
+                      <FilterReason>Exists</FilterReason>
+                    </value>
+                  </entry>
+                </Map>
+              </Attributes>
+            </AttributeRequest>
+          </AccountRequest>
+        </value>
+      </entry>
+      <entry key="request">
+        <value>
+          <AccountRequest application="Active Directory" nativeIdentity="CN=Andrew Gray,OU=People,OU=Demo,DC=Eshiam,DC=com" op="Modify">
+            <Attributes>
+              <Map>
+                <entry key="provisioningTransactionId" value="c0a801067bee1cc9817c070b04840969"/>
+              </Map>
+            </Attributes>
+            <AttributeRequest name="groups" op="Add" value="CN=AccountsPayable,OU=Groups,OU=Demo,DC=Eshiam,DC=com"/>
+            <AttributeRequest name="memberOf" op="Add" value="CN=AccountsReceivable,OU=Groups,OU=Demo,DC=Eshiam,DC=com"/>
+            <ProvisioningResult status="failed">
+              <Errors>
+                <Message key="Errors returned from IQService. &quot;Failed to update attributes for identity CN=Andrew Gray,OU=People,OU=Demo,DC=Eshiam,DC=com. The specified directory service attribute or value does not exist.&#xa;&quot;" type="Error"/>
+              </Errors>
+            </ProvisioningResult>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

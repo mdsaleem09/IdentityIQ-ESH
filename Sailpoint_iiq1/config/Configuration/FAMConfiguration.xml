@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Configuration PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Configuration name="FAMConfiguration">
+  <Attributes>
+    <Map>
+      <entry key="authType" value="OAUTH"/>
+      <entry key="menuPath" value="/identityiqfam/v1/#"/>
+      <entry key="oauthPath" value="identityiqfamapi/token"/>
+      <entry key="password"/>
+      <entry key="scimCorrelationRule"/>
+      <entry key="userName"/>
+    </Map>
+  </Attributes>
+</Configuration>

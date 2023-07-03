@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction accountDisplayName="Ad User1" applicationName="SCIM Web Service" identityDisplayName="Ad User1" identityName="Ad User1" integration="SCIM Web Service" name="0000000099" nativeIdentity="adUser01" operation="Create" source="LCM" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="accessRequestId" value="0000000288"/>
+      <entry key="planResult">
+        <value>
+          <ProvisioningResult status="committed"/>
+        </value>
+      </entry>
+      <entry key="request">
+        <value>
+          <AccountRequest application="SCIM Web Service" nativeIdentity="adUser01" op="Create">
+            <Attributes>
+              <Map>
+                <entry key="flow" value="AccountsRequest"/>
+                <entry key="interface" value="LCM"/>
+                <entry key="nativeIdUpdated">
+                  <value>
+                    <Boolean>true</Boolean>
+                  </value>
+                </entry>
+                <entry key="operation" value="Create"/>
+                <entry key="provisioningTransactionId" value="c0a8de017e431803817e488a4ccd056b"/>
+              </Map>
+            </Attributes>
+            <AttributeRequest name="givenName" op="Set" value="Ad"/>
+            <AttributeRequest name="surName" op="Set" value="User1"/>
+            <AttributeRequest name="activeIdentity" op="Set" value="true"/>
+            <AttributeRequest name="password" op="Set"/>
+            <AttributeRequest name="name" op="Set" value="Ad User1"/>
+            <ProvisioningResult status="failed">
+              <Errors>
+                <Message key="Exception occurred while getting response for url: /scim/v2/Users and the exception is : com.google.gson.stream.MalformedJsonException: Expected ':' at line 4 column 8 path $.name" type="Error"/>
+              </Errors>
+            </ProvisioningResult>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

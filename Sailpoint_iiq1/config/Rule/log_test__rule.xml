@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="log test  rule" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+ 
+
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+  import org.apache.commons.logging.LogFactory;
+  import org.apache.commons.logging.Log;
+  
+  String idName="Sale";
+
+    Identity idObj=context.getObjectByName(Identity.class,idName);
+   Log log=LogFactory.getLog("test.rule.log");
+  
+  
+    log.info("sameer123"+idObj.getName());
+
+ 
+  </Source>
+</Rule>

@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction accountDisplayName="ESHIAM\Ad User9" applicationName="Active- Directory Demo" identityDisplayName="Ad User9" identityName="Ad User9" integration="Active- Directory Demo" name="0000000108" nativeIdentity="CN=Ad User9,OU=People,OU=Demo,DC=Eshiam,DC=com" operation="Delete" source="RapidSetup" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="accessRequestId" value="0000000326"/>
+      <entry key="request">
+        <value>
+          <AccountRequest application="Active- Directory Demo" nativeIdentity="CN=Ad User9,OU=People,OU=Demo,DC=Eshiam,DC=com" op="Delete">
+            <Attributes>
+              <Map>
+                <entry key="flow" value="Lifecycle"/>
+                <entry key="interface" value="LCM"/>
+                <entry key="operation" value="Delete"/>
+                <entry key="provisioningTransactionId" value="c0a8de017f651c23817f69eda5250876"/>
+              </Map>
+            </Attributes>
+            <ProvisioningResult status="failed">
+              <Errors>
+                <Message key="Unknown Host WIN-1IOG6N814LM" type="Error"/>
+              </Errors>
+            </ProvisioningResult>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

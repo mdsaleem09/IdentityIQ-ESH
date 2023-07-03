@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="test after Provision" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+   import sailpoint.object.Rule;
+  import sailpoint.object.Application;
+  
+  
+  
+  Map argMaps=new HashMap();
+  argMaps.put("application",context.getObjectByName(Application.class,"Active- DemoJdbcApp"));
+    argMaps.put("applicationName","Active- DemoJdbcApp");
+
+  
+  
+  
+  Rule afterRule=context.getObjectByName(Rule.class,"AfterProvisioningRule");
+  if(afterRule!=null)
+  
+  {
+    context.runRule(afterRule,argMaps);
+  }
+                       
+
+
+  </Source>
+</Rule>

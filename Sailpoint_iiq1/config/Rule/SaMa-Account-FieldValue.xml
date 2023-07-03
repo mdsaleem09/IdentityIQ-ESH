@@ -1,0 +1,346 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="SaMa-Account-FieldValue" type="FieldValue">
+  <Description>This rule can be used to generate a field value (eg - an account name) using data from the given Identity. If this rule is run in the context of a workflow step then the arguments passed into the step will also be available. Also, any field values that have been processed so far from the policy related to the Application/Role will be available.</Description>
+  <Signature returnType="String">
+    <Inputs>
+      <Argument name="log" type="org.apache.commons.logging.Log">
+        <Description>
+          The log object associated with the SailPointContext.
+        </Description>
+      </Argument>
+      <Argument name="context" type="sailpoint.api.SailPointContext">
+        <Description>
+          A sailpoint.api.SailPointContext object that can be used to query the database if necessary.
+        </Description>
+      </Argument>
+      <Argument name="identity" type="Identity">
+        <Description>
+          The Identity object that represents the user needing the field value.
+        </Description>
+      </Argument>
+      <Argument name="link" type="Link">
+        <Description>
+          The sailpoint.object.Link that is being acted upon. If the link is not applicable,
+          this value will be null.
+        </Description>
+      </Argument>
+      <Argument name="group" type="AccountGroupDTO">
+        <Description>
+          The sailpoint.web.group.AccountGroupDTO that is being acted upon. If the AccountGroupDTO
+          is not applicable, the value will be null.
+        </Description>
+      </Argument>
+      <Argument name="project" type="ProvisioningProject">
+        <Description>
+          The provisioning project being acted upon. If a provisioning project is not applicable,
+          the value will be null.
+        </Description>
+      </Argument>
+      <Argument name="accountRequest" type="ProvisioningPlan.AccountRequest">
+        <Description>
+          The account request. If an account request is not applicable, the value will be null.
+        </Description>
+      </Argument>
+      <Argument name="objectRequest" type="ProvisioningPlan.ObjectRequest">
+        <Description>
+          The object request. If an object request is not applicable, the value will be null.
+        </Description>
+      </Argument>
+      <Argument name="role" type="Bundle">
+        <Description>
+          The role with the template we are compiling. If the role is
+          not applicable, the value will be null.
+        </Description>
+      </Argument>
+      <Argument name="application" type="Application">
+        <Description>
+          The sailpont.object.Application with the template we are compiling. If the application
+          is not applicable, the value will be null.
+        </Description>
+      </Argument>
+      <Argument name="template" type="Template">
+        <Description>
+          The Template that contains this field.
+        </Description>
+      </Argument>
+      <Argument name="field" type="Field">
+        <Description>
+          The current field being computed.
+        </Description>
+      </Argument>
+      <Argument name="current" type="Object">
+        <Description>
+          The current value corresponding to the identity or account attribute that the field represents.
+          If no current value is set, this value will be null.
+        </Description>
+      </Argument>
+      <Argument name="operation" type="ProvisioningPlan.Operation">
+        <Description>
+          The operation being performed.
+        </Description>
+      </Argument>
+    </Inputs>
+    <Returns>
+      <Argument name="value">
+        <Description>
+          The string value created.
+        </Description>
+      </Argument>
+    </Returns>
+  </Signature>
+  <Source>
+  
+  import sailpoint.object.Filter;
+  import sailpoint.object.QueryOptions;
+	import sailpoint.object.Identity;
+  
+  String firstName=identity.getFirstname();
+  String lastName=identity.getLastname();
+  String userName="";
+  
+  boolean foundNoUser=true;
+  int j=1;
+  String userName="";
+  boolean foundNoUser=true;
+ 
+
+ 
+System.out.println("Entering into  SAMA-Account-NAme Generation");
+  public  boolean checkUsername(String name){
+    Filter f = Filter.and(Filter.eq("links.test",name),Filter.and(Filter.eq("links.application.name","Test Delimited")));
+    QueryOptions qo = new QueryOptions();
+    qo.add(f);
+    List ids = context.getObjects(Identity.class,qo);
+    if(ids.size()&gt;0) return true;
+    else return false;
+  }
+
+  //#########################  LAST+FIRST  #########################
+  while(foundNoUser){
+    if(firstName!=null){
+      if(lastName.length()&gt;=12){
+        for(int i=0;i&lt;12;i++){
+          if(i&lt;=firstName.length()) userName=lastName+firstName.substring(0,i);
+          if(userName.length()&gt;12) userName=lastName.substring(0,(12-i))+firstName.substring(0,i);   
+          if(i&gt;firstName.length()) userName=userName.substring(0,(12-i))+firstName;
+          if(!checkUsername(userName)) {
+            foundNoUser=false;
+            break;
+            break;
+          }
+          else j++;
+        }
+      }
+      else{
+        for(int i=0;i&lt;12;i++){
+          if(i&lt;=firstName.length()) userName=lastName+firstName.substring(0,i);
+          else if(firstName.length()!=lastName.length()) continue;
+            if(userName.length()&gt;12) userName=lastName.substring(0,(12-i))+firstName.substring(0,i);   
+            if(i&gt;firstName.length()) userName=userName.substring(0,(12-i))+firstName;
+
+            if(!checkUsername(userName)) {
+            foundNoUser=false;
+            break;
+            break;
+          }
+          else j++;
+
+        }
+      }
+    }
+  }
+
+  //#########################  FIRST+LAST  #########################
+  while(foundNoUser){
+    if(lastName!=null){
+      if(firstName.length()&gt;=12){
+        for(int i=0;i&lt;12;i++){
+          if(i&lt;=lastName.length()) userName=firstName+lastName.substring(0,i);
+          if(userName.length()&gt;12) userName=firstName.substring(0,(12-i))+lastName.substring(0,i); 
+          if(i&gt;lastName.length()) userName=userName.substring(0,(12-i))+lastName;
+          if(!checkUsername(userName)) {
+            foundNoUser=false;
+            break;
+            break;
+          }
+          else j++;
+        }
+      }
+
+      else{
+        if(lastName.length()&gt;firstName.length()){
+          for(int i=0;i&lt;12;i++){
+            if(i&lt;lastName.length()) userName=firstName+lastName.substring(0,i);
+            if(userName.length()&gt;12) userName=firstName.substring(0,(12-i))+lastName.substring(0,i);  //new
+            if(!checkUsername(userName)) {
+              foundNoUser=false;
+              break;
+              break;
+            }
+            else j++;
+          }
+        }
+
+
+        else if(lastName.length()==firstName.length()){
+          for(int i=0;i&lt;12;i++){
+            if(i&lt;=lastName.length()) userName=firstName+lastName.substring(0,i);
+            if(userName.length()&gt;12) userName=firstName.substring(0,(12-i))+lastName.substring(0,i); 
+            if(i&gt;lastName.length()) userName=userName.substring(0,(12-i))+lastName;
+            if(!checkUsername(userName)) {
+              foundNoUser=false;
+              break;
+              break;
+            }
+            else j++;
+          }
+        }
+
+
+        else{
+          for(int i=0;i&lt;12;i++){
+            if(i&lt;lastName.length()) userName=firstName.substring(0,(firstName.length()-i))+lastName.substring(0,i);
+            else {
+              if(i&lt;=firstName.length()) userName=firstName.substring(0,(firstName.length()-i+1))+lastName;
+              else continue;
+            }
+            if(userName.length()&gt;12) userName=firstName.substring(0,(12-i))+lastName.substring(0,i);
+
+            if(i&gt;lastName.length()) userName=userName.substring(0,(12-i))+lastName;
+            if(!checkUsername(userName)) {
+              foundNoUser=false;
+              break;
+              break;
+            }
+            else j++;
+          }
+        }
+      }
+
+    }
+  }
+
+
+  //#########################  NUMBERS  #########################
+
+  while(foundNoUser){
+    if(j&gt;9){
+      if(firstName!=null){
+        if(lastName.length()&gt;=12){
+          for(int i=0;i&lt;(12-(j.toString().length()));i++){
+            userName=lastName.substring(0,(11-i))+firstName.substring(0,i)+j.toString();
+            if(!checkUsername(userName)) {
+              foundNoUser=false;
+              break;
+              break;
+            }
+            else j++;
+          }
+        }
+        else{
+          for(int i=0;i&lt;(12-j.toString().length());i++){
+            if(i&lt;=firstName.length()) userName=lastName+firstName.substring(0,i)+j.toString();
+            if(userName.length()&gt;12) userName=lastName.substring(0,(12-(j.toString().length())-i))+firstName.substring(0,i)+j.toString();
+            if(i&gt;firstName.length()) userName=userName.substring(0,(12-j.toString().length()-i))+firstName+j.toString();
+            if(!checkUsername(userName)) {
+              foundNoUser=false;
+              break;
+              break;
+            }
+            else j++;
+          }
+        }
+      }
+
+
+      if(lastName!=null){
+        if(firstName.length()&gt;=12){
+          for(int i=0;i&lt;(12-(j.toString().length()));i++){
+            userName=firstName.substring(0,(11-i))+lastName.substring(0,i)+j.toString();
+            if(!checkUsername(userName)) {
+              foundNoUser=false;
+              break;
+              break;
+            }
+            else j++;
+          }
+        }
+        else{
+          for(int i=0;i&lt;(12-j.toString().length());i++){
+            if(i&lt;=lastName.length()) userName=firstName+lastName.substring(0,i)+j.toString();
+            if(userName.length()&gt;12) userName=firstName.substring(0,(12-(j.toString().length())-i))+lastName.substring(0,i)+j.toString();
+            if(i&gt;lastName.length()) userName=userName.substring(0,(12-j.toString().length()-i))+lastName+j.toString();
+            if(!checkUsername(userName)) {
+              foundNoUser=false;
+              break;
+              break;
+            }
+            else j++;
+          }
+        }
+      }
+    }
+
+
+    else{
+      if(firstName!=null){
+        if(lastName.length()&gt;=12){
+          for(int i=0;i&lt;11;i++){
+            userName=lastName.substring(0,(12-i))+firstName.substring(0,i)+j.toString();
+            if(!checkUsername(userName)) {
+              foundNoUser=false;
+              break;
+              break;
+            }
+            else j++;
+          }
+        }
+        else{
+          for(int i=0;i&lt;=10;i++){
+            if(i&lt;=firstName.length()) userName=lastName+firstName.substring(0,i)+j.toString();
+            if(userName.length()&gt;12) userName=lastName.substring(0,(11-i))+firstName.substring(0,i)+j.toString();
+            if(i&gt;firstName.length()) userName=userName.substring(0,(11-i))+firstName+j.toString();
+            if(!checkUsername(userName)) {
+              foundNoUser=false;
+              break;
+              break;
+            }
+            else j++;
+          }
+        }
+      }
+      if(lastName!=null){
+        if(firstName.length()&gt;=12){
+          for(int i=0;i&lt;11;i++){
+            userName=firstName.substring(0,(12-i))+lastName.substring(0,i)+j.toString();
+            if(!checkUsername(userName)) {
+              foundNoUser=false;
+              break;
+              break;
+            }
+            else j++;
+          }
+        }
+        else{
+          for(int i=0;i&lt;=10;i++){
+            if(i&lt;=lastName.length()) userName=firstName+lastName.substring(0,i)+j.toString();
+            if(userName.length()&gt;12) userName=firstName.substring(0,(11-i))+lastName.substring(0,i)+j.toString();
+            if(i&gt;lastName.length()) userName=userName.substring(0,(11-i))+lastName+j.toString();
+            if(!checkUsername(userName)) {
+              foundNoUser=false;
+              break;
+              break;
+            }
+            else j++;
+          }
+        }
+      }
+    }
+  }
+
+  return userName;
+
+
+  </Source>
+</Rule>

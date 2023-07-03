@@ -1,0 +1,127 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="date rule 2" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+  import sailpoint.object.Identity;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+    import sailpoint.tools.Util;
+  import java.text.SimpleDateFormat;
+  import java.util.Calendar;
+  import java.util.Date;
+  
+  
+  
+  
+  import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import sailpoint.tools.Util;
+  import sailpoint.object.*;
+
+  //IT Checks if start date is in future AD Account will be disabled
+String ste9 = "25/02/2023";
+  
+  Date ste2=new SimpleDateFormat("dd/MM/yyyy").parse(ste9);  
+//Identity identity = context.getObjectByName(Identity.class,"Wanda Watkins");
+SimpleDateFormat sf = new SimpleDateFormat("dd/MM/yyyy");
+//Date st  = identity.getAttribute("startDat");
+String currentDate = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
+
+Date current = sf.parse(currentDate);
+  if(st!=null){
+    return Util.getDaysDifference(new Date(),ste2);
+  if(Util.getDaysDifference(new Date(),st) &gt;=0 ){
+      return false;
+    }
+    return true;
+    }
+  
+  
+  
+  
+  /*
+  
+  System.out.println("Inside this rule");
+  String startDate = null;
+  Date startdt = new Date();
+//if(link.getAttribute("startDate")!= null){
+ // startDate =  link.getAttribute("startDate");
+  startDate="05/10/2021 0:0:0 AM PDT";
+  if(Util.isNotNullOrEmpty(startDate)){
+  SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+  startdt = dateFormat.parse(startDate);
+   return dateFormat.parse(startDate);
+    System.out.println("start Date"+startdt);
+  }
+  
+  
+  
+  
+  String terminationDate =  Util.dateToString(new Date());
+
+  //String terminationDate = "12/31/2050 0:0:0 AM PST";
+  SimpleDateFormat sf = new SimpleDateFormat("MM/dd/yy");
+  Date term = sf.parse(terminationDate);
+   terminationDate = sf.format(term);
+  return terminationDate; 
+  
+  
+  
+ // String appName="";
+  String mailExpiry="1682176167633";
+ 
+  
+  
+     String strTermDate="31-01-2023";
+      //String strTermDate = (String) newIdentity.getAttribute("termination Date");
+     // logger.debug("strTermDate : "+strTermDate);
+      SimpleDateFormat sf = new SimpleDateFormat("dd-MM-yyyy");
+      Date termDate = sf.parse(strTermDate);
+    //  logger.debug(" termDate : "+termDate);
+      int diff = Util.getDaysDifference(new Date(), termDate);
+      //logger.debug(" diff : "+diff);
+      if(diff &gt;= 1){
+      
+        return "trigger leaver";
+        
+        leaverTriggerFlg = true;
+      }
+  
+  return "no trigger";
+  
+  
+  
+  /*
+  Calendar cal = Calendar.getInstance();
+  Date todayDate=c.getTime();
+  cal.add(Calendar.DATE, mailExpiry); // look up actual value or pass into rule
+   int daysDiff = Util.getDaysDifference(cal.getTime(), new Date());
+  return daysDiff;
+    //numDays = Integer.toString(daysDiff);
+ 
+  
+  
+ Calendar c=Calendar.getInstance();
+  Date todayDate=c.getTime();
+  c.add(Calendar.DATE,10);
+  Date modifiedDate=c.getTime();
+  
+  
+  
+  Long adDate = Long.parseLong(str);
+
+   if(adDate.before(c.getTime())
+      {
+        System.out.println("Inside the rule");
+
+      }
+      
+      
+      */
+  
+  
+  
+  </Source>
+</Rule>

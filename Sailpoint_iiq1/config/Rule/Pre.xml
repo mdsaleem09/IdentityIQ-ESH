@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Pre" type="PreIterate">
+  <Description>This rule is called before the connector processes the data in a file.</Description>
+  <Signature returnType="void"/>
+  <Source>import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import org.apache.log4j.Logger;
+
+
+System.out.println("Inside PreIterateCSV rule");
+
+
+
+String fileName=(String)stats.get("fileName");
+System.out.println("Inside PreIterateCSV rule"+fileName);
+
+//String filePath=(String)stats.get("absolutePath");
+
+String filePath="D:\\Sailpoint-identityiq-Docs\\HR Data\\Test_HR.csv";
+System.out.println("Inside filePath "+filePath);
+
+
+String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+
+System.out.println("Filename : "+fileName);
+
+File file =new File(filePath);
+
+File newFile =new File("Location" + fileName.substring(0,fileName.indexOf('.')) +timeStamp+".csv");
+
+try { 
+Files.copy(file.toPath(), newFile.toPath());
+
+System.out.println("File "+fileName+"is copied to Archive folder");
+
+} catch (IOException e)
+
+{    
+   System.out.println("Exception in PreIterate Rule: "+e.getMessage());
+
+}</Source>
+</Rule>

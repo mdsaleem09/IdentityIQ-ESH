@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction accountDisplayName="ESHIAM\Andrea Hudson" applicationName="Active Directory" identityDisplayName="Andrea Hudson" identityName="Andrea Hudson" integration="Active Directory" name="0000000038" nativeIdentity="CN=Andrea Hudson,OU=People,OU=Demo,DC=Eshiam,DC=com" operation="Modify" source="LCM" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="accessRequestId" value="0000000114"/>
+      <entry key="request">
+        <value>
+          <AccountRequest application="Active Directory" nativeIdentity="CN=Andrea Hudson,OU=People,OU=Demo,DC=Eshiam,DC=com" op="Modify">
+            <Attributes>
+              <Map>
+                <entry key="attachmentConfigList"/>
+                <entry key="attachments"/>
+                <entry key="flow" value="AccessRequest"/>
+                <entry key="id" value="c0a801067bee1cc9817c071df51609e5"/>
+                <entry key="interface" value="LCM"/>
+                <entry key="operation" value="EntitlementRemove"/>
+                <entry key="provisioningTransactionId" value="c0a8de017c7e1116817c92468441014c"/>
+              </Map>
+            </Attributes>
+            <AttributeRequest name="memberOf" op="Remove" value="CN=manual Testing,OU=Groups,OU=Demo,DC=Eshiam,DC=com">
+              <Attributes>
+                <Map>
+                  <entry key="assignment" value="true"/>
+                </Map>
+              </Attributes>
+            </AttributeRequest>
+            <ProvisioningResult status="failed">
+              <Errors>
+                <Message key="Errors returned from IQService. &quot;Failed to update attributes for identity CN=Andrea Hudson,OU=People,OU=Demo,DC=Eshiam,DC=com. Failed to connect to the server for CN=Andrea Hudson,OU=People,OU=Demo,DC=Eshiam,DC=com&quot;" type="Error"/>
+              </Errors>
+            </ProvisioningResult>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

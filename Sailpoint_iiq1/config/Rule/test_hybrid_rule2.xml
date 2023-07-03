@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="test hybrid rule2" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+  import sailpoint.object.Identity;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+  import sailpoint.object.Filter;
+  import sailpoint.object.Profile;
+  
+  import java.util.*;
+  /*
+ public static Bundle verifyAndCreateHybridRole(ManagedAttribute ma)
+{
+  Application appObj=context.getObjectByName(Application.class,"Active Directory");
+
+//if exists return the role else create the role 
+Bundle bundObj=context.getObjectByName(Bundle.class,ma.getDisplayableName());
+if(bundObj==null)
+{
+bundObj=new Bundle();
+bundObj.setDisplayName("Hybrid"+ma.getDisplayableName());
+bundObj.setName(ma.getDisplayableName());
+bundObj.setType("Hybrid");
+Profile profile1=new Profile();
+profile1.setApplication(appObj);
+List entValues1 = new ArrayList();
+entValues1.add(ma.getValue());
+Filter f1 = Filter.containsAll(ma.getAttribute(), entValues1);
+          List fl1 = new ArrayList();
+          fl1.add(f1);
+     profile1.addConstraint(f1);
+    bundObj.add(profile1);
+    context.saveObject(bundObj);
+    context.commitTransaction();
+}
+  
+  
+          profile1.setConstraints(fl1);
+          profileList.add(profile1);
+          itRole.assignProfiles(profileList);
+		  List bundleITList = new ArrayList();
+          
+          bundleITList.add(itRole.getName());
+          
+          System.out.println("List Of Hybrid Roles:::"+bundleITList);
+          context.saveObject(itRole);
+         context.commitTransaction();
+         
+}
+*/
+//********************************************************************************
+//////////////////Rule Starts From Here
+
+    
+
+//if exists return the role else create the role 
+   if(context.getObjectByName(Bundle.class,accountGroup.getDisplayableName())!=null)
+   {
+     return accountGroup;
+   }
+  else{
+Bundle bundObj=new Bundle();
+bundObj.setDisplayName("Hybrid"+accountGroup.getDisplayableName());
+bundObj.setName(accountGroup.getDisplayableName());
+bundObj.setType("Hybrid");
+  bundObj.setOwner(appObj.getOwner());
+Profile profile1=new Profile();
+profile1.setApplication(groupApplication);
+List entValues1 = new ArrayList();
+entValues1.add(accountGroup.getValue());
+Filter f1 = Filter.containsAll(accountGroup.getAttribute(), entValues1);
+          List fl1 = new ArrayList();
+          fl1.add(f1);
+     profile1.addConstraint(f1);
+    bundObj.add(profile1);
+    context.saveObject(bundObj);
+    context.commitTransaction();
+}
+
+  </Source>
+</Rule>

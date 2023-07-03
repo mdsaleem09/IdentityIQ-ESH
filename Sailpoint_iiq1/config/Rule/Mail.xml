@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Mail" type="IdentityAttributeTarget">
+  <Description>Identity attribute target rules are used to transform identity attribute values that are being pushed to targets.</Description>
+  <Signature returnType="Object">
+    <Inputs>
+      <Argument name="log">
+        <Description>
+          The log object associated with the SailPointContext.
+        </Description>
+      </Argument>
+      <Argument name="context">
+        <Description>
+          A sailpoint.api.SailPointContext object that can be used to query the database if necessary.
+        </Description>
+      </Argument>
+      <Argument name="value" type="Object">
+        <Description>
+           The value of the identity attribute.  Note that this could be single value or a list of values.
+        </Description>
+      </Argument>
+      <Argument name="sourceIdentityAttribute">
+        <Description>
+           The sailpoint.object.ObjectAttribute for this target.
+        </Description>
+      </Argument>
+      <Argument name="sourceIdentityAttributeName">
+        <Description>
+           The name of the identity attribute for this target.
+        </Description>
+      </Argument>
+      <Argument name="sourceAttributeRequest">
+        <Description>
+           The sailpoint.object.ProvisioningPlan.AttributeRequest that is
+           setting the attribute on the identity.
+        </Description>
+      </Argument>
+      <Argument name="target">
+        <Description>
+           The sailpoint.object.AttributeTarget that is being processed.
+        </Description>
+      </Argument>
+      <Argument name="link">
+        <Description>
+           The sailpoint.object.Link that is being processed.
+        </Description>
+      </Argument>
+      <Argument name="identity">
+        <Description>
+           The sailpoint.object.Identity that is being processed.
+        </Description>
+      </Argument>
+      <Argument name="project">
+        <Description>
+           The sailpoint.object.ProvisioningProject that has the changes that
+           are being requested.
+        </Description>
+      </Argument>
+    </Inputs>
+    <Returns>
+      <Argument name="attributeValue">
+        <Description>
+          The transformed value that will be pushed to the target.
+        </Description>
+      </Argument>
+    </Returns>
+  </Signature>
+  <Source>import sailpoint.object.*;
+import sailpoint.api.*;
+String mail="";
+
+System.out.println("inside Transformation Rule");
+if(value==null){
+mail=identity.getAttribute("testCenter");
+System.out.println("setting mail Attr"+mail);
+
+}
+
+return mail;</Source>
+</Rule>

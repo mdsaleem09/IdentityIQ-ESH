@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE IdentityEntitlement PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<IdentityEntitlement name="detectedRoles" value="SAP Security::ESHIAM\AccountsReceivable">
+  <IdentityRef>
+    <Reference class="sailpoint.object.Identity" name="Amanda Ross"/>
+  </IdentityRef>
+</IdentityEntitlement>

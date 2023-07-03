@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="manager correlation rule" type="ManagerCorrelation">
+  <Description>A rule called to help IdentityIQ take a value from the mapped manager field and map it to an existing IdentityIQ identity.
+
+Just like identity correlation, the rule needs to return a map that contains some values that will guide the correlator on how to try to find the identity.  It can also do the lookup manually and just returned the identity.</Description>
+  <Signature returnType="Map">
+    <Inputs>
+      <Argument name="log" type="org.apache.commons.logging.Log">
+        <Description>
+          The log object associated with the SailPointContext.
+        </Description>
+      </Argument>
+      <Argument name="context" type="sailpoint.api.SailPointContext">
+        <Description>
+          A sailpoint.api.SailPointContext object that can be used to query the database if necessary.
+        </Description>
+      </Argument>
+      <Argument name="environment" type="Map">
+        <Description>
+          Arguments passed to the aggregation task.
+        </Description>
+      </Argument>
+      <Argument name="application">
+        <Description>
+          The application the aggregated account is from.
+        </Description>
+      </Argument>
+      <Argument name="instance">
+        <Description>
+          Optional instance identifier within the application.
+        </Description>
+      </Argument>
+      <Argument name="connector">
+        <Description>
+          A connector to the attribute source.
+        </Description>
+      </Argument>
+      <Argument name="link">
+        <Description>
+          Account link of the referencing identity.
+        </Description>
+      </Argument>
+      <Argument name="managerAttributeValue">
+        <Description>
+          Attribute value that is stored in the manager attribute.
+        </Description>
+      </Argument>
+    </Inputs>
+    <Returns>
+      <Argument name="identityName">
+        <Description>
+          The name of an Identity object.
+        </Description>
+      </Argument>
+      <Argument name="identity">
+        <Description>
+          A fully resolved Identity object if the rule wants
+          to do its own queries to locate the identity.
+        </Description>
+      </Argument>
+      <Argument name="identityAttributeName">
+        <Description>
+          The name of the extended attribute that can be used
+          to locate an existing identity.
+        </Description>
+      </Argument>
+      <Argument name="identityAttributeValue">
+        <Description>
+          The value of the named extended attribute that can be used
+          to locate an existing identity. This attribute is used
+          together with the identityAttributeName argument.
+        </Description>
+      </Argument>
+    </Returns>
+  </Signature>
+  <Source>import sailpoint.object.*;
+import java.util.Map;
+import java.util.HashMap;
+
+
+
+
+System.out.println("manager attribute Value:"+managerAttributeValue);
+
+Map map=new HashMap();
+
+Identity idObject=context.getObjectByName(Identity.class,"James Smith");
+
+
+String managerName=link.getAttribute("manager");
+
+
+map.put("identity",idObject);
+System.out.println("3333manager attribute Value:"+map);
+return map;</Source>
+</Rule>

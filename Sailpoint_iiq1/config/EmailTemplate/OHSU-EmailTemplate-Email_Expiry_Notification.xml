@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE EmailTemplate PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<EmailTemplate name="OHSU-EmailTemplate-Email Expiry Notification">
+  <Body>
+    &lt;html&gt;
+    &lt;body style="font-family:Calibri; font-size:100%"&gt;
+    &lt;p&gt;Your team member $!idName's   $!application Application's Account Email is about to expiry in a 7 days&lt;/p&gt;&lt;/br&gt;
+    &lt;p&gt;Please find below the details for the user.
+    &lt;ul&gt;
+    &lt;li&gt;&lt;b&gt;Username&lt;/b&gt; : $!idname&lt;/li&gt;
+    &lt;li&gt;&lt;b&gt;Application Name&lt;/b&gt; : $!application&lt;/li&gt;
+    &lt;/ul&gt;&lt;/p&gt;&lt;/br&gt;
+    &lt;p&gt;If you have any queries, please reach out at IAMsuppport@ohsu.com&lt;/p&gt;&lt;/br&gt;
+    &lt;p&gt;Best Regards&lt;/br&gt;
+    Your's OHSU Helpdesk
+    &lt;/body&gt;
+    &lt;/html&gt;
+  </Body>
+  <Description>
+    Email template used to notify user with his Active Directory Credentials
+  </Description>
+  <Signature>
+    <Inputs>
+      <Argument name="application" type="string">
+        <Description>application Name.</Description>
+      </Argument>
+      <Argument name="idname" type="string">
+        <Description>The ID Name that new account is created for.</Description>
+      </Argument>
+    </Inputs>
+  </Signature>
+  <Subject>Email Expiry Notification Account Credentials For : $!idName</Subject>
+</EmailTemplate>

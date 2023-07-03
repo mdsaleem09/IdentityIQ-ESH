@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Capability PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Capability displayName="SIEM Plugin Admin" name="SIEMPluginAdministrator">
+  <Description>The SIEM Plugin Administrator</Description>
+  <RightRefs>
+    <Reference class="sailpoint.object.SPRight" name="siemadministrator"/>
+  </RightRefs>
+</Capability>

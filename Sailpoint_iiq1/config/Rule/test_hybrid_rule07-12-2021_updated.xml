@@ -1,0 +1,215 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="test hybrid rule07-12-2021 updated" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+  import sailpoint.object.Identity;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+  import sailpoint.object.Filter;
+  import sailpoint.object.Profile;
+  import sailpoint.api.IdIterator;
+  import sailpoint.object.Filter.MatchMode;
+
+  import java.util.*;
+
+
+  String roledisplayName=null;
+  String groupName=null;
+
+
+
+  Identity idObject=context.getObjectByName(Identity.class,"spadmin");
+  Filter appfilter = Filter.and(Filter.like("name", "Active-", MatchMode.START), Filter.like("name", "Demo", MatchMode.ANYWHERE));
+  QueryOptions appOpts=new QueryOptions();
+  appOpts.addFilter(appfilter);
+  appOpts.setCloneResults(true);
+  Iterator appIt = context.search(Application.class,appOpts);
+  List appNames = new ArrayList();
+  while(appIt.hasNext()){
+
+    appNames.add(appIt.next().getName());
+
+  }
+  return appNames;
+  Iterator listIt = appNames.iterator();
+
+  while(listIt.hasNext()){
+
+    Application appObj = context.getObjectByName(Application.class,listIt.next());
+    String appName=appObj.getName();  
+    Identity idObject = context.getObjectByName(Identity.class,"spadmin");
+    
+  
+    Filter filter = Filter.and(Filter.eq("application.name",appName));
+    QueryOptions opts=new QueryOptions();
+    opts.addFilter(filter);
+    opts.setCloneResults(true);
+
+
+    Bundle bundSAPObj = context.getObjectByName(Bundle.class,"SAP");
+    if(bundSAPObj == null)
+    {
+      bundSAPObj=new Bundle();
+      bundSAPObj.setName("SAP");
+      bundSAPObj.setDisplayName("SAP");
+      bundSAPObj.setType("organizational");   
+      bundSAPObj.setOwner(idObject);
+      context.saveObject(bundSAPObj);
+
+    }
+
+
+    Bundle bundObj=null;
+    Iterator it=context.search(ManagedAttribute.class,opts);
+    while(it.hasNext())
+    
+
+      ManagedAttribute ma=(ManagedAttribute)it.next();
+      System.out.println("Inside managed Attribute");
+      //if(ma.getAttribute("Type")!=null &amp;&amp; ma.getAttribute("Type").equalsIgnoreCase("Composite"))
+
+
+      if(ma!=null &amp;&amp; appObj.getOwner()!=null &amp;&amp;  ma.getDisplayName()!=null &amp;&amp; ma.getDisplayableName()!=null &amp;&amp;  ma.getAttribute("sysDescriptions")!=null)
+      {
+
+        Map map= ma.getAttribute("sysDescriptions");
+        roledisplayName=map.get("en_US");
+
+
+        Filter filter=Filter.and(Filter.eq("name",ma.getDisplayName()),Filter.eq("displayName",roledisplayName));
+
+        bundObj=context.getUniqueObject(Bundle.class,filter);
+        if(bundObj==null)
+        {
+          bundObj=new Bundle();
+        }
+        //bundObj=new Bundle();
+        System.out.println("Inside else bundObj"+bundObj);
+
+
+        String groupName = (String) ma.getDisplayName();
+        System.out.println("groupName"+groupName);
+
+
+
+
+        System.out.println("roledisplayName"+roledisplayName);
+        System.out.println("MadisplayName"+ma.getDisplayableName());
+
+
+
+        Classification cl=context.getObjectByName(Classification.class,"Privileged");
+        ObjectClassification ob=new ObjectClassification();
+        ob.setClassification(cl);
+
+        bundObj.setDisplayName(roledisplayName);
+        bundObj.setName(ma.getDisplayableName());
+        bundObj.setType("Hybrid");
+
+
+
+        // bundObj.setAttribute("Requestable","1");
+
+        if(roledisplayName.contains("AuditMgmt"))
+        {
+          bundObj.addClassification(ob);
+        }
+
+        //Bundle orgBundle=context.getObjectByName(Bundle.class,"Org-SAP");
+
+        bundObj.addInheritance(bundSAPObj);
+        context.saveObject(bundSAPObj); 
+
+        //context.saveObject(orgBundle);
+        //bundObj.setDescription(ma.getAttribute("Long Description"));
+        bundObj.setOwner(appObj.getOwner());
+
+
+        //Iterate through all applications managed Attributes
+
+        
+        
+        
+        
+      }
+       
+    
+
+    Filter appfilter = Filter.and(Filter.like("name", "Active-", MatchMode.START), Filter.like("name", "Demo", MatchMode.ANYWHERE));
+    QueryOptions Opts=new QueryOptions();
+    Opts.addFilter(appfilter);
+    Opts.setCloneResults(true);
+    Iterator appIt = context.search(Application.class,Opts);
+    List appNames = new ArrayList();
+    while(appIt.hasNext()){
+
+      appNames.add(appIt.next().getName());
+
+    }
+    Iterator listIt = appNames.iterator();
+
+    while(listIt.hasNext()){
+
+      Application appObj = context.getObjectByName(Application.class,listIt.next());
+      String appName=appObj.getName();  
+      Identity idObject = context.getObjectByName(Identity.class,"spadmin");
+      Filter filter = Filter.and(Filter.eq("application.name",appName));
+      QueryOptions opt=new QueryOptions();
+      opt.addFilter(filter);
+      opt.setCloneResults(true);
+
+
+      String description=null;
+      Iterator iT=context.search(ManagedAttribute.class,opt);
+      //   IdIterator ents = new IdIterator(context, it);
+      while(iT.hasNext())
+      {
+        ManagedAttribute maObj=(ManagedAttribute)iT.next();
+
+        Map mapOb= maObj.getAttribute("sysDescriptions");
+        description=mapOb.get("en_US");
+        System.out.println("maObj description "+description);
+        if(maObj!=null &amp;&amp; maObj.getDisplayName()!=null &amp;&amp;  maObj.getAttribute()!=null &amp;&amp; maObj.getDisplayableName()!=null &amp;&amp;  description!=null &amp;&amp;  roledisplayName!=null &amp;&amp;  description.equalsIgnoreCase(roledisplayName))
+        {
+
+          Application app= context.getObjectByName(Application.class,maObj.getApplication().getName());
+          System.out.println("app"+app);
+          Profile profile=new Profile();
+          profile.setApplication(app);
+          List entValues = new ArrayList();
+          entValues.add(maObj.getValue());
+          Filter fil = Filter.containsAll(maObj.getAttribute(), entValues);
+          profile.addConstraint(fil);
+          bundObj.add(profile);
+          System.out.println("bundle in All ManagedAttributes:"+bundObj.getName());
+
+           context.saveObject(bundObj);
+          context.commitTransaction();
+           
+
+        }
+
+      }
+
+      
+     
+    }
+        
+
+      
+     
+    
+
+
+
+
+   
+  }
+   context.decache();
+    sailpoint.tools.Util.flushIterator(it); 
+  }
+
+
+  </Source>
+</Rule>

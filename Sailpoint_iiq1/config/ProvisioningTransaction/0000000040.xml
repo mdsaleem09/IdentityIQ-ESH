@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction accountDisplayName="ESHIAM\Bruce Henry" applicationName="Active Directory" identityDisplayName="Bruce Henry" identityName="Bruce Henry" integration="Active Directory" name="0000000040" nativeIdentity="CN=Bruce Henry,OU=People,OU=Demo,DC=Eshiam,DC=com" operation="Modify" source="RoleChangePropagation" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="request">
+        <value>
+          <AccountRequest application="Active Directory" nativeIdentity="CN=Bruce Henry,OU=People,OU=Demo,DC=Eshiam,DC=com" op="Modify" targetIntegration="Active Directory">
+            <Attributes>
+              <Map>
+                <entry key="provisioningTransactionId" value="c0a8de017c7e1116817c92efff3b0372"/>
+              </Map>
+            </Attributes>
+            <AttributeRequest name="memberOf" op="Add" value="CN=Benefits,OU=Groups,OU=Demo,DC=Eshiam,DC=com"/>
+            <ProvisioningResult status="retry"/>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

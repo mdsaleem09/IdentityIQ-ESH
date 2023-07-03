@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="SP Role Assigment Rule Library">
+  <Source><![CDATA[
+   
+   import sailpoint.object.*;
+   import sailpoint.object.Form.*;
+   import sailpoint.api.SailPointContext;
+   import java.util.*;
+   import java.text.*;
+   import sailpoint.tools.GeneralException;
+   import sailpoint.api.Provisioner;
+   import sailpoint.api.Matchmaker;
+   import sailpoint.object.ProvisioningPlan;
+   import sailpoint.object.ProvisioningPlan.AttributeRequest;
+   import sailpoint.object.ProvisioningPlan.AccountRequest;
+   import sailpoint.object.ProvisioningPlan.AccountRequest.Operation;
+   import sailpoint.tools.Util;
+   import sailpoint.tools.Message;
+   import org.apache.commons.logging.Log;
+   import org.apache.commons.logging.LogFactory;
+   import sailpoint.server.Auditor;
+   import sailpoint.api.*;
+    
+   import javax.naming.Context;
+   import javax.naming.directory.DirContext;
+   import javax.naming.directory.SearchControls;
+   import javax.naming.NamingEnumeration;
+   import javax.naming.directory.InitialDirContext;
+
+   private Log rolelogger = LogFactory.getLog("rule.SP.RoleAssignment.RulesLibrary");
+   
+   public AccountRequest getBirthrightRolesIIQAccountRequest(SailPointContext context, Identity identity){
+      if(rolelogger.isTraceEnabled()) rolelogger.trace("Enter getBirthrightRolesIIQAccountRequest: " + identity.getName());
+      
+      List roles = getBirthrightRolesToAssign(context, identity);
+      AccountRequest acctReq = null;
+      
+      if (roles != null){
+         AccountRequest.Operation op = AccountRequest.Operation.Modify;
+         String identityName = identity.getName();
+         acctReq = new AccountRequest(op, "IIQ", null, identityName);
+         
+         acctReq.add(new AttributeRequest("assignedRoles", ProvisioningPlan.Operation.Add, roles));
+      }
+      
+      if(rolelogger.isTraceEnabled()) rolelogger.trace("Exit getBirthrightRolesIIQAccountRequest: " + acctReq);
+      return acctReq;
+   }
+
+   public List getBirthrightRolesToAssign(SailPointContext context, Identity identity ) {
+      if(rolelogger.isTraceEnabled()) rolelogger.trace("Enter getBirthrightRolesToAssign: " + identity.getName());
+      String identityName = identity.getName();
+      String defaultRole = "Default Birthright Role";
+      
+      boolean useDefault = Boolean.parseBoolean("false");
+      
+      List assignedRoles = new ArrayList();
+      List adjustedAssignedRoles = new ArrayList();
+      Matchmaker matchMaker = new Matchmaker(context);
+      
+      List currentRoles = new ArrayList();
+      
+      //switching this a bit
+      if(rolelogger.isDebugEnabled()) rolelogger.debug("Get current role assignments");
+      List roleAssigns = identity.getAssignedRoles();
+      if(rolelogger.isDebugEnabled()) rolelogger.debug("Have roleAssigns: " + roleAssigns);
+      
+      if (roleAssigns != null){
+         if(rolelogger.isDebugEnabled()) rolelogger.debug("# currently assigned = " + roleAssigns.size());
+         
+         for (Bundle roleAssign : roleAssigns){
+            String rName = roleAssign.getName();
+            if(rolelogger.isDebugEnabled()) rolelogger.debug("Have role assign: " + rName);
+            currentRoles.add(rName);
+         }
+      }
+      
+      if(rolelogger.isDebugEnabled()) rolelogger.debug("Get the organization role");
+      Bundle orgRole = context.getObjectByName(Bundle.class, "%%SP_BIRTHRIGHT_ROLES_ORGANIZATION_ROLE%%");
+      
+      if(rolelogger.isDebugEnabled()) rolelogger.debug("Get the children.  NOTE: API changed in 6.0.");
+      List children = orgRole.getHierarchy(context);
+      
+      if (children != null){
+         if(rolelogger.isDebugEnabled()) rolelogger.debug("# of Children roles: " + children.size());
+         
+         for (Bundle bRole : children){
+            String roleName = bRole.getName();
+            if(rolelogger.isDebugEnabled()) rolelogger.debug("Have assignable role: " + roleName);
+            
+            boolean roleDisabled = bRole.isDisabled();
+            
+            if (roleDisabled){
+               if(rolelogger.isDebugEnabled()) rolelogger.debug("Role is disabled: " + roleName + ". Skip.");
+               continue;
+            }
+            
+            if (!"birthright".equals(bRole.getType())) {
+               if(rolelogger.isDebugEnabled()) rolelogger.debug("Not a birthright role: " + roleName + ". Skip.");
+               continue;
+            }
+            
+            if(rolelogger.isDebugEnabled()) rolelogger.debug("Check if already assigned");
+            if (!currentRoles.contains(roleName)){
+               if(rolelogger.isDebugEnabled()) rolelogger.debug(roleName + " not assigned.  Proceed with match logic.");
+            
+               if(rolelogger.isDebugEnabled()) rolelogger.debug("Get the selector");
+               IdentitySelector idSelector = bRole.getSelector();
+               
+               if (idSelector != null){
+                  if(rolelogger.isDebugEnabled()) rolelogger.debug("Check is match with id selector: " + idSelector.generateSummary());
+                  boolean isMatch = matchMaker.isMatch(idSelector,identity);
+                  
+                  if(rolelogger.isDebugEnabled()) rolelogger.debug("Does " + identity.getName() + " match role " + roleName + "? " + isMatch);
+                  
+                  if (isMatch){         
+                    // Avoid assigning a role when it has a child role that is already assigned
+               	  List thisRoleChildren = bRole.getHierarchy(context);
+               	  boolean childAlreadyAssigned = false;
+	                 if (!thisRoleChildren.isEmpty()) {
+	                   for (Bundle thisRoleChild : thisRoleChildren) {
+	                     if (currentRoles.contains(thisRoleChild.getName())) {
+	                     	childAlreadyAssigned = true;
+	                     }
+	                   }
+	                 }
+	                 if (!childAlreadyAssigned) {
+	                   if(rolelogger.isDebugEnabled()) rolelogger.debug("Role matches.  Assign: " + roleName);
+	                   assignedRoles.add(roleName);
+	                 }
+                  }
+               } else {
+                  if(rolelogger.isDebugEnabled()) rolelogger.debug("No selector for role, " + roleName + ".  Skip.");
+               }
+            }
+         }
+         // We don't want to assign roles that are inherited from other roles that will be assigned
+         
+         if (!assignedRoles.isEmpty()) {
+         	adjustedAssignedRoles.addAll(assignedRoles);
+         	for (String roleName : assignedRoles) {
+         		Bundle role = context.getObjectByName(Bundle.class, roleName);
+         		List inheritedList = role.getInheritance();
+         		if (null != inheritedList && !inheritedList.isEmpty()) {
+         			for (Bundle inherited : inheritedList) {
+         				if (adjustedAssignedRoles.contains(inherited.getName())) {
+         					adjustedAssignedRoles.remove(inherited.getName());
+         				}
+         				// context.decache(inherited);
+         			}
+         		}
+         		// context.decache(role);
+         	}
+         }
+         children = null;
+      }
+      
+      if (adjustedAssignedRoles == null || adjustedAssignedRoles.size() < 1){
+         if (useDefault){
+            if(rolelogger.isTraceEnabled()) rolelogger.trace("Add the default role: " + defaultRole);
+            
+            adjustedAssignedRoles.add(defaultRole);
+         } else {
+            adjustedAssignedRoles = null;
+         }
+         
+      }
+      
+      if(rolelogger.isTraceEnabled()) rolelogger.trace("Exit getBirthrightRolesToAssign: " + adjustedAssignedRoles);
+      return adjustedAssignedRoles;
+   }
+   
+   public AccountRequest getAddOrRemoveRolesAccountRequest(SailPointContext context, Identity identity){
+      if(rolelogger.isTraceEnabled()) rolelogger.trace("Enter getAddOrRemoveRolesAccountRequest: " + identity.getName());
+      
+      Map roleMap = getRolesToAddOrRemoveRule(context, identity);
+      AccountRequest acctReq = null;
+      
+      List addRoles = roleMap.get("addRoles");
+      List remRoles = roleMap.get("remRoles");
+      
+      if ((addRoles != null && addRoles.size() > 0) || (remRoles != null && remRoles.size() > 0)){
+         AccountRequest.Operation op = AccountRequest.Operation.Modify;
+         String identityName = identity.getName();
+         acctReq = new AccountRequest(op, "IIQ", null, identityName);
+         
+         if (addRoles != null && addRoles.size() > 0){
+            for (String role : addRoles){
+               acctReq.add(new AttributeRequest("assignedRoles", ProvisioningPlan.Operation.Add, role));
+            }
+         }
+         
+         if (remRoles != null && remRoles.size() > 0){
+            for (String role : remRoles){
+               acctReq.add(new AttributeRequest("assignedRoles", ProvisioningPlan.Operation.Remove, role));
+            }
+         }
+         
+      }
+      
+      if(rolelogger.isTraceEnabled()) rolelogger.trace("Exit getAddOrRemoveRolesAccountRequest: " + acctReq);
+      return acctReq;
+   }
+   
+   public Map getRolesToAddOrRemoveRule(SailPointContext context, Identity identity ) {
+      if(rolelogger.isTraceEnabled()) rolelogger.trace("Enter getRolesToAddOrRemoveRule: " + identity.getName());
+      String identityName = identity.getName();
+      String defaultRole = "Default Birthright Role";
+      boolean useDefault = Boolean.parseBoolean("false");
+      
+      Map roleMap = new HashMap();
+      List addRoles = new ArrayList();
+      List remRoles = new ArrayList();
+      List adjustedAddRoles = new ArrayList();
+      
+      Matchmaker matchMaker = new Matchmaker(context);
+      
+      List currentRoles = new ArrayList();
+      
+      if(rolelogger.isDebugEnabled()) rolelogger.debug("Get current role assignments");
+      List roleAssigns = identity.getAssignedRoles();
+      if(rolelogger.isDebugEnabled()) rolelogger.debug("Have current role assignments: " + roleAssigns);
+      
+      if (roleAssigns != null){
+         if(rolelogger.isDebugEnabled()) rolelogger.debug("# currently assigned = " + roleAssigns.size());
+         
+         for (Bundle roleAssign : roleAssigns){
+            String rName = roleAssign.getName();
+            if(rolelogger.isDebugEnabled()) rolelogger.debug("Have role assign: " + rName);
+            currentRoles.add(rName);
+         }
+      }
+      
+      if(rolelogger.isTraceEnabled()) rolelogger.trace("Get the organization role");
+      Bundle orgRole = context.getObjectByName(Bundle.class, "BirthRights");
+      
+      if(rolelogger.isTraceEnabled()) rolelogger.trace("Get the children.  NOTE: API changed in 6.0.");
+      List children = orgRole.getHierarchy(context);
+      
+      if (children != null){
+         if(rolelogger.isDebugEnabled()) rolelogger.debug("# of Children roles: " + children.size());
+         
+         for (Bundle bRole : children){
+            String roleName = bRole.getName();
+            if(rolelogger.isDebugEnabled()) rolelogger.debug("Have assignable role: " + roleName);
+            
+            boolean isMatch = false;
+            boolean hasRole = false; 
+            
+            IdentitySelector idSelector = bRole.getSelector();
+            
+            if (idSelector == null){
+               if(rolelogger.isDebugEnabled()) rolelogger.debug("No selector for role, " + roleName + ".  Skip.");
+               continue;
+            }
+            
+            boolean roleDisabled = bRole.isDisabled();
+            
+            if (roleDisabled){
+               if(rolelogger.isDebugEnabled()) rolelogger.debug("Role is disabled: " + roleName + ". Skip.");
+               continue;
+            }
+            
+            if (!"birthright".equals(bRole.getType())) {
+               if(rolelogger.isDebugEnabled()) rolelogger.debug("Not a birthright role: " + roleName + ". Skip.");
+               continue;
+            }
+            
+            if(idSelector.getRule() != null){
+                matchMaker.setArgument("roleName", roleName);
+            }
+               
+            if(rolelogger.isDebugEnabled()) rolelogger.debug("Check is match with id selector: " + idSelector.generateSummary());
+            isMatch = matchMaker.isMatch(idSelector,identity);
+            hasRole = currentRoles.contains(roleName);
+            
+            if(rolelogger.isDebugEnabled()) rolelogger.debug("Does " + identity.getName() + " match role " + roleName + "? " + isMatch);
+            if(rolelogger.isDebugEnabled()) rolelogger.debug("Does " + identity.getName() + " already have role " + roleName + "? " + hasRole);
+            
+            if (isMatch && !hasRole){
+               // Avoid assigning a role when it has a child role that is already assigned
+               List thisRoleChildren = bRole.getHierarchy(context);
+               boolean childAlreadyAssigned = false;
+               if (!thisRoleChildren.isEmpty()) {
+                  for (Bundle thisRoleChild : thisRoleChildren) {
+                     if (currentRoles.contains(thisRoleChild.getName())) {
+                     	childAlreadyAssigned = true;
+                     }
+                     // context.decache(thisRoleChild);
+                  }
+               }
+               if (!childAlreadyAssigned) {
+                  addRoles.add(roleName);
+               }
+            } else if (!isMatch && hasRole){
+               remRoles.add(roleName);
+            } else {
+               if(rolelogger.isDebugEnabled()) rolelogger.debug("No action required for role: " + roleName);
+            }
+            
+            
+         }
+         
+         // We don't want to assign roles that are inherited from other roles that will be assigned
+         
+         if (!addRoles.isEmpty()) {
+         	adjustedAddRoles.addAll(addRoles);
+         	for (String roleName : addRoles) {
+         		Bundle role = context.getObjectByName(Bundle.class, roleName);
+         		List inheritedList = role.getInheritance();
+         		if (null != inheritedList && !inheritedList.isEmpty()) {
+         			for (Bundle inherited : inheritedList) {
+         				if (adjustedAddRoles.contains(inherited.getName())) {
+         					adjustedAddRoles.remove(inherited.getName());
+         				}
+         				// context.decache(inherited);
+         			}
+         		}
+         		context.decache(role);
+         	}
+         }
+         
+         children = null;
+      }
+      
+      
+      if (adjustedAddRoles == null || adjustedAddRoles.size() < 1){
+         if (useDefault){
+            if(rolelogger.isTraceEnabled()) rolelogger.trace("Add the default role: " + defaultRole);
+           
+            adjustedAddRoles.add(defaultRole);
+         } 
+      }
+      
+      roleMap.put("addRoles", adjustedAddRoles);
+      roleMap.put("remRoles", remRoles);
+      
+      if(rolelogger.isTraceEnabled()) rolelogger.trace("Exit getRolesToAddOrRemoveRule: " + roleMap);
+      return roleMap;
+   }
+
+   
+   ]]></Source>
+</Rule>

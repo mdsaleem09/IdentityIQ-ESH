@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE EmailTemplate PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<EmailTemplate name="Leaver Completed Notification">
+  <Body>
+
+  #set($ctx = $spTools.class.forName("sailpoint.api.SailPointFactory").getMethod("getFactory", null).invoke(null,null).getCurrentContext())
+  #set($emailTools = $spTools.class.forName("sailpoint.rapidsetup.tools.EmailTools").getMethod("instance", null).invoke(null,null))
+  #set($reqType = $workflow.requestType)
+  #set($styleSheet = $emailTools.getEmailSection($ctx, "styleSheet"))
+  #set($headerTemplate = $emailTools.getEmailSection($ctx, "headerTemplate")) #set($footerTemplate = $emailTools.getEmailSection($ctx, "footerTemplate"))
+  &lt;html&gt;
+  &lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  #if( $styleSheet )
+    $styleSheet
+  #end
+  &lt;/head&gt;
+  &lt;body&gt;
+  #if( $headerTemplate )
+    $headerTemplate
+  #end
+  &lt;br/&gt;
+  Dear $recipientDisplayName,&lt;br/&gt;
+  &lt;p&gt;Termination of Identity '$refIdentityDisplayName' completed.&lt;/p&gt;
+  #if ( $plan &amp;&amp; $plan.accountRequests &amp;&amp; !$disableStaticManagerContent )
+    &lt;ul&gt;
+    #set($approvedAccountRequests = $emailTools.getApprovedAccountRequest($plan.accountRequests, $approvalSet, "leaver"))
+    #foreach ( $acctReq in $approvedAccountRequests )
+      &lt;li&gt;Application: $!acctReq.applicationName&lt;/li&gt;
+      &lt;ul&gt;
+      #if ( $!{acctReq.arguments["comments"]} )
+        #foreach ( $comment in $!{acctReq.arguments["comments"]} )
+          &lt;li&gt;Completion Comments: $comment&lt;/li&gt;
+        #end
+      #end
+      #if ( $!acctReq.nativeIdentity )
+        &lt;li&gt;Account ID : $!acctReq.nativeIdentity&lt;/li&gt;
+      #end
+      #if ( $!acctReq.op )
+        &lt;li&gt;Operation: $!acctReq.op&lt;/li&gt;
+      #end
+      &lt;ul&gt;
+      #foreach ( $attrReq in $acctReq.attributeRequests )
+        #if ( $!attrReq.name )
+          &lt;li&gt;Attribute Name : $!attrReq.name&lt;/li&gt;
+        #end
+        #if ( $!attrReq.displayValue )
+          &lt;li&gt;Display Value: $!attrReq.displayValue&lt;/li&gt;
+        #end
+        #if ( $!attrReq.op )
+          &lt;li&gt;Operation: $!attrReq.op&lt;/li&gt;
+        #end
+        #if ( $!attrReq.displayValue )
+          &lt;li&gt;Attribute Value: $!attrReq.displayValue&lt;/li&gt;
+        #elseif ( $!attrReq.value )
+          &lt;li&gt;Attribute Value: $!attrReq.value&lt;/li&gt;
+        #end
+      #end
+      #if ( $!{acctReq.arguments["requesterComments"]} )
+        &lt;li&gt;Requester Comments: $!{acctReq.arguments["requesterComments"]}&lt;/li&gt;
+      #end
+      &lt;/ul&gt;
+      &lt;/ul&gt;
+    #end
+    &lt;/ul&gt;
+  #end
+  #if ( $dynamicAppContent )
+    &lt;table&gt;
+    #if ( !$disableStaticManagerContent )
+      #foreach( $key in $dynamicAppContent.keySet() )
+        &lt;tr&gt;&lt;td&gt;$key&lt;/td&gt;&lt;td&gt;$dynamicAppContent.get($key)&lt;/td&gt;&lt;/tr&gt;
+      #end
+    #else
+      #foreach( $key in $dynamicAppContent.keySet() )
+        &lt;tr&gt;&lt;td&gt;$dynamicAppContent.get($key)&lt;/td&gt;&lt;/tr&gt;
+      #end
+    #end
+    &lt;/table&gt;
+  #end
+  #if ( $provisioningErrors )
+    The following errors occurred during provisioning:
+    &lt;ul&gt;
+    #foreach ( $error in $provisioningErrors )
+      &lt;li&gt;$!error&lt;/li&gt;
+    #end
+    &lt;/ul&gt;
+  #end
+  #if( $footerTemplate )
+    $footerTemplate
+  #end
+  &lt;/body&gt;
+  &lt;/html&gt;
+        
+    </Body>
+  <Description>
+      Email Template for notifying the manager when Leaver process has been completed
+    </Description>
+  <Signature>
+    <Inputs>
+      <Argument name="workflow" type="Workflow">
+        <Description>The Workflow object being executed.</Description>
+      </Argument>
+      <Argument name="approvalSet" type="ApprovalSet">
+        <Description>The ApprovalSet object contained in the workflow.</Description>
+      </Argument>
+      <Argument name="refIdentityDisplayName" type="string">
+        <Description>The name of the Identity that is registering.</Description>
+      </Argument>
+      <Argument name="recipientDisplayName" type="string">
+        <Description>The display name of the Identity that is registering.</Description>
+      </Argument>
+      <Argument name="provisioningErrors" type="List">
+        <Description>Any provisioning errors that may have occurred.</Description>
+      </Argument>
+      <Argument name="disableStaticManagerContent" type="boolean">
+        <Description>if false, then do not hide static content</Description>
+      </Argument>
+    </Inputs>
+  </Signature>
+  <Subject>#if($provisioningErrors) Error:#end User '$refIdentityDisplayName' has been terminated </Subject>
+</EmailTemplate>

@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="AD-After-Rule" type="ConnectorAfterCreate">
+  <Attributes>
+    <Map>
+      <entry key="ObjectOrientedScript" value="true"/>
+      <entry key="disabled" value="false"/>
+      <entry key="extension" value=".ps1"/>
+      <entry key="program" value="powershell.exe"/>
+      <entry key="timeout" value="10"/>
+    </Map>
+  </Attributes>
+  <Signature>
+    <Inputs>
+      <Argument name="log"/>
+      <Argument name="context"/>
+      <Argument name="request"/>
+      <Argument name="application"/>
+    </Inputs>
+  </Signature>
+  <Source>
+  log.error("testing the after rule ddddddidinjcnedcxked");
+  
+  $logFile = "C:\test.log";
+
+Add-type -path C:\SailPoint\IQService\Utils.dll;
+
+$sReader = New-Object System.IO.StringReader([System.String]$env:Request);
+
+$xmlReader = [System.xml.XmlTextReader]([Sailpoint.Utils.xml.XmlUtil]::getReader($sReader));
+
+$requestObject = New-Object sailpoint.utils.objects.AccountRequest($xmlReader);
+
+$resultObject = New-Object sailpoint.utils.objects.ServiceResult($xmlReader_Result);
+
+$requestObject.toxml() | Add-Content -path $logFile;
+
+log.error("testing the after rule gjjkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
+
+  Add-type -path "C:\SailPoint\IQService\Utils.dll"
+    New-Item -ItemType directory -Path "C:\User4"
+
+ 
+
+  </Source>
+</Rule>

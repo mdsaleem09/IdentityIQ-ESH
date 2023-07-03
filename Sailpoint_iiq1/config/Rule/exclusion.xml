@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="exclusion" type="CertificationExclusion">
+  <Description>This rule is an example Certification Exclusion rule that removes all of the certifiable items from a certification if the identity being certified is marked as inactive.</Description>
+  <Signature returnType="String"/>
+  <Source>import sailpoint.object.Certifiable; 
+import sailpoint.object.CertificationItem; 
+import sailpoint.object.EntitlementGroup;
+import java.util.*;
+import sailpoint.object.*;
+import sailpoint.object.QueryOptions;
+import sailpoint.object.Filter;
+import sailpoint.object.ManagedAttribute;
+ // System.out.println("certification :"+entity.toXml());
+  Iterator it = items.iterator();
+  while (it.hasNext()) {
+   Certifiable certifiable = (Certifiable) it.next();
+System.out.println("certification :"+certifiable.toXml());
+   if (certifiable instanceof Entitlements) {
+    EntitlementGroup ent = (EntitlementGroup) certifiable;
+    if (ent != null) {
+      Attributes attrs = ent.getAttributes();
+      if (attrs != null) {
+        List entlist = attrs.getKeys();
+        if (entlist != null) {
+          for (String entAttrName : entlist) {
+            System.out.println("entAttrName :"+entAttrName);
+            String entAttrVal = attrs.getString(entAttrName);
+            System.out.println("entAttrVal :"+entAttrVal);
+            if(entAttrVal.equalsIgnoreCase("CN=AccountingGeneral,OU=Groups,OU=Demo,DC=Eshiam,DC=com")){
+                  itemsToExclude.add(certifiable);
+                  System.out.println("excluding"+itemsToExclude);
+                  it.remove();
+                }
+              }
+            }
+          }
+        }
+      }
+    }</Source>
+</Rule>

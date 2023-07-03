@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE MonitoringStatistic PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<MonitoringStatistic displayName="monitor_stat_label_application_response_time" name="applicationResponseTime" template="true" type="Application" value="call:getApplicationResponseTime" valueType="long">
+  <Attributes>
+    <Map>
+      <entry key="referencedObject" value="ValidApplicationName"/>
+      <entry key="referencedObjectType" value="Application"/>
+    </Map>
+  </Attributes>
+</MonitoringStatistic>

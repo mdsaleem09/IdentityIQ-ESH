@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="remove Entitlements from plan" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+         import sailpoint.object.Identity;
+        import sailpoint.object.Link;
+        import sailpoint.object.Application;
+        import sailpoint.object.ProvisioningPlan;
+        import sailpoint.object.ProvisioningPlan.AccountRequest;
+        import sailpoint.object.ProvisioningPlan.AttributeRequest;
+        import sailpoint.api.Provisioner;
+        import sailpoint.object.EntitlementGroup;
+        import sailpoint.object.Attributes;
+        import sailpoint.tools.Util;
+
+        System.out.println("inside Remove Entitlements:");
+        String identityName="Robin Lawson";
+        Identity identity = context.getObjectByName(Identity.class,identityName);
+        Link link = identity.getLink(context.getObjectByName(Application.class,"Active- Directory"));
+        if(link.getAttribute("memberOf")!=null){ 
+        ProvisioningPlan plan = new ProvisioningPlan(); 
+        plan.setIdentity(identity);
+        plan.setNativeIdentity(identityName);
+        AccountRequest accountRequest = new AccountRequest(); 
+        accountRequest.setApplication("Active- Directory"); 
+        accountRequest.setOp(ProvisioningPlan.ObjectOperation.Modify); 
+        accountRequest.setNativeIdentity(link.getNativeIdentity());
+        List list = new ArrayList();
+            AttributeRequest attr = new AttributeRequest();
+             attr.setOperation(ProvisioningPlan.Operation.Remove);
+             attr.setName("memberOf");
+             attr.put("assignment", "true");
+        Object entValues=link.getAttribute("memberOf");
+
+        if(entValues instanceof List &amp;&amp; !entValues.isEmpty()){ 
+              attr.setValue(entValues);  
+        }
+       else if(entValues instanceof String &amp;&amp; entValues!=null){ 
+        attr.setValue(entValues);  
+        }
+        accountRequest.add(attr);      
+        plan.add(accountRequest);          
+        Provisioner provisioner = new Provisioner(context);
+        provisioner.compile(plan);  
+        provisioner.execute();
+        }
+        /*Identity identity = context.getObjectByName(Identity.class,identityName);
+        List exceptions = identity.getExceptions();
+        for(EntitlementGroup entGroup: exceptions){
+        Attributes entAttrs = entGroup.getAttributes();
+        for(String attributeName:entAttrs.keySet()){
+        List values = entAttrs.getList(attributeName);
+        if(!Util.isEmpty(values)){
+        for(String value:values){
+        ProvisioningPlan.AttributeRequest atrq= new ProvisioningPlan.AttributeRequest(attributeName, ProvisioningPlan.Operation.Remove,value); 
+        atrq.put("assignment", "true");
+        accountRequest.add(atrq);
+           }
+          }
+         }
+        }
+        */
+                           
+      
+        
+       System.out.println("Exiting Entitlement Remove Step:");
+      </Source>
+</Rule>

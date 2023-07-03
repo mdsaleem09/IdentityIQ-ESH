@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction accountDisplayName="CN=Arthur Bryant,OU=People,OU=Demo,DC=Eshiam,DC=com" applicationName="Active Directory" integration="Active Directory" name="0000000066" nativeIdentity="CN=Arthur Bryant,OU=People,OU=Demo,DC=Eshiam,DC=com" operation="Modify" source="IdentityRefresh" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="request">
+        <value>
+          <AccountRequest application="Active Directory" nativeIdentity="CN=Arthur Bryant,OU=People,OU=Demo,DC=Eshiam,DC=com" op="Modify" targetIntegration="Active Directory">
+            <Attributes>
+              <Map>
+                <entry key="provisioningTransactionId" value="c0a8de017ca61435817cb6901284033d"/>
+              </Map>
+            </Attributes>
+            <AttributeRequest name="memberOf" op="Add" value="CN=Admins,OU=Groups,OU=Demo,DC=Eshiam,DC=com"/>
+            <ProvisioningResult status="failed">
+              <Errors>
+                <Message key="Software caused connection abort: connect" type="Error"/>
+              </Errors>
+            </ProvisioningResult>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

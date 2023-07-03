@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction accountDisplayName="CN=elomus1,OU=People,OU=Demo,DC=Eshiam,DC=com" applicationName="Active- Directory" identityDisplayName="elomus1" identityName="elomus1" integration="Active- Directory" name="0000000149" nativeIdentity="CN=elomus1,OU=People,OU=Demo,DC=Eshiam,DC=com" operation="Create" source="LCM" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="accessRequestId" value="0000000470"/>
+      <entry key="request">
+        <value>
+          <AccountRequest application="Active- Directory" nativeIdentity="CN=elomus1,OU=People,OU=Demo,DC=Eshiam,DC=com" op="Create">
+            <Attributes>
+              <Map>
+                <entry key="attachmentConfigList"/>
+                <entry key="attachments"/>
+                <entry key="flow" value="AccessRequest"/>
+                <entry key="id" value="c0a80103848b129b81848e8050d602c3"/>
+                <entry key="interface" value="LCM"/>
+                <entry key="nativeIdUpdated">
+                  <value>
+                    <Boolean>true</Boolean>
+                  </value>
+                </entry>
+                <entry key="operation" value="EntitlementAdd"/>
+                <entry key="provisioningTransactionId" value="c0a80103858c19a881859b13de27072c"/>
+              </Map>
+            </Attributes>
+            <AttributeRequest displayValue="Automation_Test" name="memberOf" op="Add" value="CN=Automation_Test,OU=Groups,OU=Demo,DC=Eshiam,DC=com">
+              <Attributes>
+                <Map>
+                  <entry key="assignment" value="true"/>
+                </Map>
+              </Attributes>
+            </AttributeRequest>
+            <AttributeRequest name="objectType" op="Set" value="User"/>
+            <AttributeRequest name="sAMAccountName" op="Set" value="Musk"/>
+            <AttributeRequest name="password" op="Set">
+              <Attributes>
+                <Map>
+                  <entry key="secret" value="true"/>
+                </Map>
+              </Attributes>
+            </AttributeRequest>
+            <AttributeRequest name="givenName" op="Set" value="Elon"/>
+            <AttributeRequest name="sn" op="Set" value="Musk"/>
+            <AttributeRequest name="employeeId" op="Set" value="1a2p3k"/>
+            <AttributeRequest name="homeDirectory" op="Set" value="C:\U105"/>
+            <AttributeRequest name="homeDrive" op="Set" value="C:"/>
+            <AttributeRequest name="msNPAllowDialin" op="Set" value="Not Set"/>
+            <ProvisioningResult status="failed">
+              <Errors>
+                <Message key="Exception occurred while executing the RPCRequest: Errors returned from IQService. &quot;The object already exists. 00002071: UpdErr: DSID-03050371, problem 6005 (ENTRY_EXISTS), data 0 . HRESULT:[0x80071392] For identity: CN=elomus1,OU=People,OU=Demo,DC=Eshiam,DC=com&quot;" type="Error"/>
+              </Errors>
+            </ProvisioningResult>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

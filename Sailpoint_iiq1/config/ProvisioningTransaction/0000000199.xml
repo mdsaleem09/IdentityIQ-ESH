@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction accountDisplayName="CN=Lisa Rodriguez,OU=Disable,OU=Demo,DC=Eshiam,DC=com" applicationName="Active- Directory" integration="Active- Directory" name="0000000199" nativeIdentity="CN=Lisa Rodriguez,OU=Disable,OU=Demo,DC=Eshiam,DC=com" operation="Modify" source="RapidSetup" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="request">
+        <value>
+          <AccountRequest application="Active- Directory" nativeIdentity="CN=Lisa Rodriguez,OU=Disable,OU=Demo,DC=Eshiam,DC=com" op="Modify" targetIntegration="Active- Directory">
+            <Attributes>
+              <Map>
+                <entry key="oldNativeIdentity" value="CN=Lisa Rodriguez,OU=People,OU=Demo,DC=Eshiam,DC=com"/>
+                <entry key="provisioningTransactionId" value="c0a8010285b010dc8185dc19497824a0"/>
+                <entry key="uuid" value="{dbf359bf-4c5b-43e9-a5b0-028750222c54}"/>
+              </Map>
+            </Attributes>
+            <AttributeRequest name="memberOf" op="Remove" value="CN=All_Users,OU=Groups,OU=Demo,DC=Eshiam,DC=com">
+              <Attributes>
+                <Map>
+                  <entry key="allowSimplification" value="true"/>
+                  <entry key="assignment" value="true"/>
+                  <entry key="preferRemoveOverRetain" value="true"/>
+                </Map>
+              </Attributes>
+            </AttributeRequest>
+            <ProvisioningResult status="failed">
+              <Errors>
+                <Message key="Unknown Host WIN-42SFB7PG899" type="Error"/>
+              </Errors>
+            </ProvisioningResult>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

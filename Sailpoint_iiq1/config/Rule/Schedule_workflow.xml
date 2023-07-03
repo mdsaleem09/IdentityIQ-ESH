@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Schedule workflow" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+ 
+        import sailpoint.object.Workflow;
+        import sailpoint.object.Identity;
+        import sailpoint.object.Attributes;
+        import sailpoint.workflow.StandardWorkflowHandler;
+        import sailpoint.request.WorkflowRequestExecutor;
+        import sailpoint.object.Request;
+        import sailpoint.object.RequestDefinition;
+        import sailpoint.api.RequestManager;
+        import java.util.Calendar;
+
+  
+        String identityName="Kelly Boyd";
+        if (identityName != null)
+        {
+          String workflowName = "Scramble -Password"; // Change your workflow name
+          String requestName = "Run '" + workflowName + "' for: " + identityName; // Change your request name
+          String requesterId = "spadmin";
+
+          Workflow eventWorkflow = context.getObject(Workflow.class, workflowName);
+          Identity id = context.getObjectByName(Identity.class, requesterId);
+         
+          Attributes reqArgs = new Attributes();
+          reqArgs.put(StandardWorkflowHandler.ARG_REQUEST_DEFINITION, WorkflowRequestExecutor.DEFINITION_NAME);
+          reqArgs.put(StandardWorkflowHandler.ARG_WORKFLOW, workflowName);
+          reqArgs.put(StandardWorkflowHandler.ARG_REQUEST_NAME, requestName);
+         
+          Attributes wfArgs = new Attributes();
+          wfArgs.put("identityName", identityName);
+          wfArgs.put("workflow", eventWorkflow.getName());
+         // wfArgs.put("workflow", eventWorkflow.getId());
+          reqArgs.putAll(wfArgs);
+
+          Calendar calendar = Calendar.getInstance();
+          calendar.add(Calendar.DAY_OF_MONTH, 5);
+
+          Request req = new Request();
+          RequestDefinition reqdef = context.getObject(RequestDefinition.class, "Workflow Request");
+          req.setDefinition(reqdef);
+          req.setOwner(id);
+          req.setName(requestName);
+          req.setEventDate(calendar.getTime());
+          req.setAttributes( reqdef, reqArgs );
+          RequestManager.addRequest(context, req);
+        } else
+        {
+          log.warn ("No Identity value present");
+        }
+   
+
+	
+
+  
+  
+  </Source>
+</Rule>

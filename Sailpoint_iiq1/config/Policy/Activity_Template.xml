@@ -1,0 +1,3 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Policy PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Policy certificationActions="Acknowledged,Mitigated,Delegated" configPage="activitypolicy.xhtml" executor="sailpoint.policy.ActivityPolicyExecutor" name="Activity Template" state="Inactive" template="true" type="Activity" typeKey="policy_type_activity" violationOwnerType="Manager"/>

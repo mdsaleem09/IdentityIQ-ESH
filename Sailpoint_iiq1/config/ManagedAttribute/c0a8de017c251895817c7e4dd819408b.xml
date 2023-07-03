@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ManagedAttribute PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ManagedAttribute aggregated="true" attribute="Roles" displayName="Test-Role" hash="2c43d9ca54600d5ab092a418162e0e96f471af57" requestable="true" type="role" value="Test-Role">
+  <ApplicationRef>
+    <Reference class="sailpoint.object.Application" name="SAP-Direct"/>
+  </ApplicationRef>
+  <Attributes>
+    <Map>
+      <entry key="sysDescriptions">
+        <value>
+          <Map>
+            <entry key="en_US" value="AccountsPayable"/>
+          </Map>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ManagedAttribute>

@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE IdentityEntitlement PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<IdentityEntitlement aggregationState="Connected" name="GroupValue" nativeIdentity="100" source="Aggregation" type="Entitlement" value="DevAccess">
+  <ApplicationRef>
+    <Reference class="sailpoint.object.Application" name="JDBC"/>
+  </ApplicationRef>
+  <IdentityRef>
+    <Reference class="sailpoint.object.Identity" name="James Smith"/>
+  </IdentityRef>
+</IdentityEntitlement>

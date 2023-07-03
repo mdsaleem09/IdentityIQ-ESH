@@ -1,0 +1,137 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Entitlement Owner Rule" type="CertificationPreDelegation">
+  <Description>A pre-delegation rule that is run on every CertificationEntity when the certification is generated in order to cause some entities to be pre-delegated.  As an example, a manager certification could pre-delegate the certification responsibility to each employee that reports to the manager.  This would allow each subordinate to first determine what they need access to, then allow the manager to review their decision.</Description>
+  <Signature returnType="Map"/>
+  <Source>
+  import sailpoint.object.*;
+      import sailpoint.api.*;
+
+  import sailpoint.object.Identity;
+
+
+  Map results = new HashMap();
+  
+  
+  Identity requester = certification.getCreator(context);
+  Identity certIdentity = null;
+  Identity managers = null;
+  Identity maOwner=null;
+  List items = entity.getItems();
+  ManagedAttribute ma = entity.getAccountGroup(context);
+  if(ma!=null)
+  {
+    
+          System.out.println("ma" + ma.toXml());
+
+   maOwner = ma.getOwner();
+    
+  }
+  //Iterate through each item in the entitlement
+  for (CertificationItem item : items) {
+    if (item != null) {
+      certIdentity = item.getIdentity(context);
+       //System.out.println("Line Item " +item );
+
+      if (certIdentity != null) {
+	    
+        //Get manager for normal identity
+        //System.out.println("Idenity: " + certIdentity);
+          managers = certIdentity.getManager();
+        //System.out.println("Manager " + manager);
+        
+
+        if (maOwner == null) {
+          //Reassigns to manager
+          
+ //reassignItems.clear();
+    //  reassignItems.add(item);
+
+  results.put("recipientName", managers.getName());
+    results.put("description", "saleem test");
+      results.put("comments",  "ending the rule");
+        }
+      }
+            return results;
+
+    }
+    
+  }
+  
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+//System.out.println("entity"+entity.toXml());
+//System.out.println("entity getId"+entity.getIdentity());
+  /*
+  System.out.println("certification.getCertifiers"+certification.getCertifiers());
+
+   
+  List list=certification.getCertifiers();
+  System.out.println("certification"+certification.toXml());
+  
+  System.out.println("entity certification app name"+entity.getApplication());
+  
+  Application appObj=context.getObjectByName(Application.class,entity.getApplication());
+  String owner=appObj.getOwner().getName();
+    System.out.println("owner"+owner);
+
+  String manager=null;
+  String currentUser = entity.getIdentity();
+      System.out.println("currentUser"+currentUser);
+
+  Identity identityObj = context.getObjectByName(Identity.class,currentUser); 
+               if(identityObj!=null)
+               {
+                 System.out.println("idName"+identityObj.getName());
+               }
+  if(identityObj!=null &amp;&amp; identityObj.getManager()!=null )
+  {
+     manager=identityObj.getManager().getName();
+    
+    
+  } 
+      System.out.println("manager"+manager);
+
+ for(String cert:list)
+ {
+         System.out.println("cert"+cert);
+
+   
+    if(cert!=null &amp;&amp; cert.equalsIgnoreCase(owner))
+    {
+      
+      
+      
+results.put("recipientName", manager);
+    results.put("description", "rule test");
+      results.put("comments",  "ending the rule");
+      
+    }
+     System.out.println("results"+results);
+
+      return results;
+
+ }
+
+
+/*
+  String currentUser = entity.getIdentity();
+                     ManagedAttribute ma=context.getObjectByName(ManagedAttribute.class,currentUser );
+
+  Identity identityObj = context.getObjectByName(Identity.class,currentUser); 
+ if(identityObj !=null &amp;amp;&amp;amp; identityObj.getOwner()==null)
+  */</Source>
+</Rule>

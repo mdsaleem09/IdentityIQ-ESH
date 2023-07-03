@@ -1,0 +1,3 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE MonitoringStatistic PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<MonitoringStatistic displayName="monitor_stat_label_request_proc_threads" name="requestProcessorThreads" type="Server" value="call:getRequestProcessorThreads" valueType="int"/>

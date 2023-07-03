@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ManagedAttribute PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ManagedAttribute aggregated="true" attribute="memberOf" displayName="ESHIAM\Development" hash="c10bdf7cfa5a35e6a9f326d1dae004789629cf28" lastRefresh="1674550835897" requestable="true" type="group" uuid="{e01fc2bf-9a22-43e9-ac5d-b27e7ceccb4a}" value="CN=Development,OU=Groups,OU=Demo,DC=Eshiam,DC=com">
+  <ApplicationRef>
+    <Reference class="sailpoint.object.Application" name="Active- Directory"/>
+  </ApplicationRef>
+  <Attributes>
+    <Map>
+      <entry key="GroupScope" value="Global"/>
+      <entry key="GroupType" value="Security"/>
+      <entry key="cn" value="Development"/>
+      <entry key="msDS-PrincipalName" value="ESHIAM\Development"/>
+      <entry key="objectSid" value="S-1-5-21-2379072024-2618563348-3591105667-1364"/>
+      <entry key="objectguid" value="{e01fc2bf-9a22-43e9-ac5d-b27e7ceccb4a}"/>
+      <entry key="sAMAccountName" value="Development"/>
+      <entry key="sysDescriptions"/>
+    </Map>
+  </Attributes>
+</ManagedAttribute>

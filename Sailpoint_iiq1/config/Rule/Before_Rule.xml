@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Before Rule" type="WebServiceBeforeOperationRule">
+  <Description>This rule is used by the  Web Services connector before performing any operation like testconnection, aggregation etc. Here user can update the existing Endpoint object using a key 'updatedEndPoint' and along with it save 
+required attribute in the application using key 'connectorStateMap'. If user just want to return Endpoint (requestEndPoint) no need to create map and update the key values. But if a user wants to return both Endpoint (requestEndPoint) and connectorStateMap who's values will be eventually saved in the application. Create a Map and add both using respective key's.</Description>
+  <Signature returnType="Object">
+    <Inputs>
+      <Argument name="log">
+        <Description>
+          The log object associated with the SailPointContext.
+        </Description>
+      </Argument>
+      <Argument name="context">
+        <Description>
+          A sailpoint.api.SailPointContext object that can be used to query the database if necessary.
+        </Description>
+      </Argument>
+      <Argument name="application">
+        <Description>The application whose data file is being processed.</Description>
+      </Argument>
+      <Argument name="requestEndPoint">
+        <Description>The current request information contain header, body, context url, method type, response attribute map, 
+                successful response code
+                </Description>
+      </Argument>
+      <Argument name="oldResponseMap">
+        <Description>earlier response object </Description>
+      </Argument>
+      <Argument name="restClient">
+        <Description>REST Client Object</Description>
+      </Argument>
+      <Argument name="provisioningPlan">
+        <Description>provisioningPlan can be used to update the payload of the http request. Provisioning Plan has an account request which defines the operation to be performed on the account.
+                 An account request can contain multiple attributes requests and each attribute request represents an operation on a single account attribute.
+                </Description>
+      </Argument>
+    </Inputs>
+    <Returns>
+      <Argument name="Endpoint or Updated Map which contains requestEndPoint and connectorStateMap">
+        <Description>Updated Endpoint or information Map which contains endpoint and connectorStateMap</Description>
+      </Argument>
+    </Returns>
+  </Signature>
+  <Source>System.out.println("requestEndPoint"+requestEndPoint);
+
+Map updatedMap = new HashMap();
+for(Map iterateMap :processedResponseObject){
+
+   System.out.println(iterateMap.get("employeeID"));
+
+
+ List empIds = iterateMap.get("employeeID");
+
+for(String emp:empIds ){
+
+System.out.println("emp"+emp);
+
+System.out.println("emp"+emp.substring(1));
+
+emp = emp.substring(1);
+
+iterateMap .put("employeeID",emp);
+}
+
+}
+  updatedMap.put("data",processedResponseObject);
+
+return updatedMap;
+
+
+
+</Source>
+</Rule>

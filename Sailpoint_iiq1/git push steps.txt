@@ -1,0 +1,16 @@
+git clone url
+git checkout --orphan branchname
+git rm -rf .
+git add .
+git commit -m ""
+git push -u origin dev
+
+//for large files
+git lfs install
+f you have already tried to commit large files and got the error then you must first undo the commit, use git reset — soft HEAD~1 otherwise ignore this step.
+git lfs track "*.zip"
+git status
+git add .
+git commit -m ""
+git push -u origin dev
+

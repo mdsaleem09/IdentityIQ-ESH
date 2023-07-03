@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE IdentityRequest PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<IdentityRequest completionStatus="Success" endDate="1676569905752" executionStatus="Completed" name="0000000660" priority="Normal" requesterDisplayName="Scheduler" source="LCM" state="End" targetClass="sailpoint.object.Identity" targetDisplayName="Wanda Watkins" type="Leaver" verified="1676589819536">
+  <Attributes>
+    <Map>
+      <entry key="messages">
+        <value>
+          <List>
+            <Message key="err_exception" type="Error">
+              <Parameters>
+                <Message key="In Step 'Provision' : invalid step name in transition: SendRehireEmail" type="Error"/>
+              </Parameters>
+            </Message>
+          </List>
+        </value>
+      </entry>
+      <entry key="provisionedProject">
+        <value>
+          <ProvisioningProject identity="Wanda Watkins">
+            <Attributes>
+              <Map>
+                <entry key="disableRetryRequest">
+                  <value>
+                    <Boolean>true</Boolean>
+                  </value>
+                </entry>
+                <entry key="identityRequestId" value="0000000660"/>
+                <entry key="optimisticProvisioning" value="false"/>
+                <entry key="requester" value="Scheduler"/>
+                <entry key="source" value="LCM"/>
+              </Map>
+            </Attributes>
+            <MasterPlan>
+              <ProvisioningPlan>
+                <AccountRequest application="IIQ" nativeIdentity="Wanda Watkins" op="Modify">
+                  <AttributeRequest name="assignedRoles" op="Set">
+                    <Value>
+                      <List>
+                        <String>Organization</String>
+                      </List>
+                    </Value>
+                  </AttributeRequest>
+                </AccountRequest>
+                <Attributes>
+                  <Map>
+                    <entry key="comments" value="Adding Joiner Access"/>
+                    <entry key="identityRequestId" value="0000000660"/>
+                    <entry key="requester" value="Scheduler"/>
+                    <entry key="source" value="LCM"/>
+                  </Map>
+                </Attributes>
+              </ProvisioningPlan>
+            </MasterPlan>
+          </ProvisioningProject>
+        </value>
+      </entry>
+      <entry key="taskResultId" value="c0a81de68649119081865b5a7d8e12ce"/>
+    </Map>
+  </Attributes>
+  <RequestItems>
+    <IdentityRequestItem application="IIQ" approvalState="Pending" compilationStatus="Filtered" name="assignedRoles" nativeIdentity="Wanda Watkins" operation="Set" provisioningEngine="IIQ" provisioningState="Finished" value="Organization">
+      <Attributes>
+        <Map>
+          <entry key="requesterComments" value="Adding Joiner Access"/>
+        </Map>
+      </Attributes>
+    </IdentityRequestItem>
+  </RequestItems>
+</IdentityRequest>

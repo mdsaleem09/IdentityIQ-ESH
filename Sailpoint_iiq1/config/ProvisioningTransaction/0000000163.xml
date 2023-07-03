@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction accountDisplayName="ESHIAM\Musk" applicationName="Active- Directory" identityDisplayName="Musk" identityName="elomus1" integration="Active- Directory" name="0000000163" nativeIdentity="CN=elomus1,OU=DisabledUsers,OU=People,OU=Demo,DC=Eshiam,DC=com" operation="Disable" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="request">
+        <value>
+          <AccountRequest application="Active- Directory" nativeIdentity="CN=elomus1,OU=DisabledUsers,OU=People,OU=Demo,DC=Eshiam,DC=com" op="Disable">
+            <Attributes>
+              <Map>
+                <entry key="provisioningTransactionId" value="c0a8010285b010dc8185cf7797d5135e"/>
+              </Map>
+            </Attributes>
+            <ProvisioningResult status="failed">
+              <Errors>
+                <Message key="Error(s) reported back from the IQService - Error occurred while disabling the account CN=elomus1,OU=DisabledUsers,OU=People,OU=Demo,DC=Eshiam,DC=comFailed to connect to the server for CN=elomus1,OU=DisabledUsers,OU=People,OU=Demo,DC=Eshiam,DC=com:There is no such object on the server. 0000208D: NameErr: DSID-03100238, problem 2001 (NO_OBJECT), data 0, best match of: &#x9;'OU=DisabledUsers,OU=People,OU=Demo,DC=Eshiam,DC=com' . HRESULT:[0x80072030] Possible reasons for failure include a) The Domain Controller is currently not reachable b) The object has either been moved or renamed c) The object has been deleted &#xa; Please Ensure the data has been aggregated before performing the operation " type="Error"/>
+              </Errors>
+            </ProvisioningResult>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

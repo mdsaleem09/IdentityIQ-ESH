@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE QuickLink PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<QuickLink action="requestAccess" category="Access" cssClass="quicklink-request-access" messageKey="quicklink_request_access" name="Request Access">
+  <Attributes>
+    <Map>
+      <entry key="labelScript">
+        <value>
+          <Script>
+            <Source>
+                
+                  return (quickLinkWrapper.isAllowSelf() &amp;&amp; !quickLinkWrapper.isAllowOthers()) ? "quicklink_request_access_label_my_access" : "quicklink_request_access_label_user_access";
+                
+              </Source>
+          </Script>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+  <Description>quicklink_request_access_desc</Description>
+  <QuickLinkOptions allowSelf="true">
+    <DynamicScopeRef>
+      <Reference class="sailpoint.object.DynamicScope" name="Self Service"/>
+    </DynamicScopeRef>
+    <Attributes>
+      <Map>
+        <entry key="allowRequestEntitlements" value="true"/>
+        <entry key="allowRequestEntitlementsAdditionalAccountRequests" value="false"/>
+        <entry key="allowRequestEntitlementsRemove" value="true"/>
+        <entry key="allowRequestEntitlementsShowPopulation" value="true"/>
+        <entry key="allowRequestRoles" value="true"/>
+        <entry key="allowRequestRolesAdditionalAccountRequests" value="false"/>
+        <entry key="allowRequestRolesRemove" value="true"/>
+        <entry key="allowRequestRolesShowPopulation" value="true"/>
+      </Map>
+    </Attributes>
+  </QuickLinkOptions>
+  <QuickLinkOptions allowBulk="true">
+    <DynamicScopeRef>
+      <Reference class="sailpoint.object.DynamicScope" name="Manager"/>
+    </DynamicScopeRef>
+    <Attributes>
+      <Map>
+        <entry key="allowRequestEntitlements" value="true"/>
+        <entry key="allowRequestEntitlementsAdditionalAccountRequests" value="false"/>
+        <entry key="allowRequestEntitlementsRemove" value="true"/>
+        <entry key="allowRequestEntitlementsShowPopulation" value="true"/>
+        <entry key="allowRequestRoles" value="true"/>
+        <entry key="allowRequestRolesAdditionalAccountRequests" value="false"/>
+        <entry key="allowRequestRolesRemove" value="true"/>
+        <entry key="allowRequestRolesShowPopulation" value="true"/>
+      </Map>
+    </Attributes>
+  </QuickLinkOptions>
+  <QuickLinkOptions allowBulk="true">
+    <DynamicScopeRef>
+      <Reference class="sailpoint.object.DynamicScope" name="Help Desk"/>
+    </DynamicScopeRef>
+    <Attributes>
+      <Map>
+        <entry key="allowRequestEntitlements" value="true"/>
+        <entry key="allowRequestEntitlementsAdditionalAccountRequests" value="false"/>
+        <entry key="allowRequestEntitlementsRemove" value="true"/>
+        <entry key="allowRequestEntitlementsShowPopulation" value="true"/>
+        <entry key="allowRequestRoles" value="true"/>
+        <entry key="allowRequestRolesAdditionalAccountRequests" value="false"/>
+        <entry key="allowRequestRolesRemove" value="true"/>
+        <entry key="allowRequestRolesShowPopulation" value="true"/>
+      </Map>
+    </Attributes>
+  </QuickLinkOptions>
+</QuickLink>

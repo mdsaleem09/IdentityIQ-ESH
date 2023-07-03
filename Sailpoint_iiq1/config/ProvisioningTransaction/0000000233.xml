@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction accountDisplayName="CN=Cindy Little,OU=People,OU=Demo,DC=Eshiam,DC=com" applicationName="Active- Directory" identityDisplayName="Cindy Little" identityName="Cindy Little" integration="Active- Directory" name="0000000233" nativeIdentity="CN=Cindy Little,OU=People,OU=Demo,DC=Eshiam,DC=com" operation="Create" source="IdentityRefresh" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="request">
+        <value>
+          <AccountRequest application="Active- Directory" assignmentIds="a3ce950052c543b2a9d8b68dc795e537" nativeIdentity="CN=Cindy Little,OU=People,OU=Demo,DC=Eshiam,DC=com" op="Create" targetIntegration="Active- Directory">
+            <Attributes>
+              <Map>
+                <entry key="provisioningTransactionId" value="c0a8010386101c68818610b519705706"/>
+              </Map>
+            </Attributes>
+            <AttributeRequest name="memberOf" op="Add" value="CN=All_Users,OU=Groups,OU=Demo,DC=Eshiam,DC=com"/>
+            <AttributeRequest name="sAMAccountName" op="Set" value="Little"/>
+            <AttributeRequest name="password" op="Set">
+              <Attributes>
+                <Map>
+                  <entry key="secret" value="true"/>
+                </Map>
+              </Attributes>
+            </AttributeRequest>
+            <AttributeRequest name="givenName" op="Set" value="Cindy"/>
+            <AttributeRequest name="sn" op="Set" value="Little"/>
+            <AttributeRequest name="employeeId" op="Set" value="1c2c3d4c"/>
+            <AttributeRequest name="homeDirectory" op="Set" value="\\ohsu.edu\edu\UsersU202Little"/>
+            <AttributeRequest name="homeDrive" op="Set" value="C:"/>
+            <AttributeRequest name="msNPAllowDialin" op="Set" value="Not Set"/>
+            <ProvisioningResult status="failed">
+              <Errors>
+                <Message key="Exception occurred while executing the RPCRequest: Errors returned from IQService. &quot;The object already exists. 00000524: UpdErr: DSID-031A1261, problem 6005 (ENTRY_EXISTS), data 0 . HRESULT:[0x80071392] For identity: CN=Cindy Little,OU=People,OU=Demo,DC=Eshiam,DC=com&quot;" type="Error"/>
+              </Errors>
+            </ProvisioningResult>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

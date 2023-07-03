@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="LCM Validate Identity Name" type="Validation">
+  <Source>
+    
+      import sailpoint.api.*;
+      import sailpoint.object.*;
+      import sailpoint.tools.*;
+      import sailpoint.api.*;
+      import sailpoint.web.messages.MessageKeys;
+
+      List messages = new ArrayList();
+      QueryOptions qo = new QueryOptions();
+      String trimValue = (value != null) ? ((String)value).trim() : null;
+      if (trimValue == null || "".equals(trimValue)) {
+          Message msg = new Message();
+          msg.setKey(MessageKeys.LCM_CREATE_IDENTITY_NO_NAME_ERROR);
+          messages.add(msg);
+      } else {
+          Filter filter  = Filter.or(Filter.eq("id", trimValue), Filter.ignoreCase(Filter.eq("name", trimValue)));
+          qo.add(new Filter[]{filter});
+          qo.addFilter(ObjectUtil.buildWorkgroupInclusiveIdentityFilter());
+          int count = SailPointFactory.getCurrentContext().countObjects(Identity.class,qo);
+          if (count&gt;0) {
+              Message msg = new Message();
+              msg.setKey(MessageKeys.LCM_CREATE_IDENTITY_NAME_ERROR);
+              messages.add(msg);
+          }
+      }
+      return messages;
+    
+  </Source>
+</Rule>

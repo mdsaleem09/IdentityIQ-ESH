@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE IdentityTrigger PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<IdentityTrigger attributeName="inactive" disabled="true" handler="sailpoint.api.WorkflowTriggerHandler" name="CustomDisable" newValueFilter="true" oldValueFilter="false" type="AttributeChange">
+  <Owner>
+    <Reference class="sailpoint.object.Identity" name="spadmin"/>
+  </Owner>
+  <HandlerParameters>
+    <Attributes>
+      <Map>
+        <entry key="workflow" value="Disable-AD"/>
+      </Map>
+    </Attributes>
+  </HandlerParameters>
+</IdentityTrigger>

@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE QuickLink PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<QuickLink action="listViolations" category="Tasks" cssClass="quicklink-policy-violations" messageKey="quicklink_policy_violations" name="Policy Violations">
+  <Attributes>
+    <Map>
+      <entry key="displayText" value="true"/>
+      <entry key="ownerId">
+        <value>
+          <Script>
+            <Source>
+                              return currentUser.getId();
+                          </Source>
+          </Script>
+        </value>
+      </entry>
+      <entry key="textScript">
+        <value>
+          <Script>
+            <Source>
+                              
+                              import sailpoint.object.PolicyViolation;
+                              import sailpoint.object.QueryOptions;
+                              import sailpoint.object.Filter;
+                              import sailpoint.object.Identity;
+                              import java.util.List;
+                              import java.util.ArrayList;
+                              import java.util.Iterator;
+                              import sailpoint.object.WorkItem;
+
+                              QueryOptions qo = new QueryOptions();
+                              List filters = new ArrayList();
+
+                              filters.add(Filter.eq("owner", currentUser));
+
+                              if (currentUser.getWorkgroups() != null &amp;&amp; !currentUser.getWorkgroups().isEmpty())
+                              {
+                                filters.add(Filter.in("owner", currentUser.getWorkgroups()));
+                              }
+
+                              List&lt;String&gt; delegatedViolationIds = new ArrayList();
+                              qo.add(Filter.eq("type", WorkItem.Type.Delegation));
+                              qo.add(Filter.or(filters));
+                              Iterator iter = context.search(WorkItem.class, qo, "targetId");
+                              while (iter.hasNext()) {
+                                  delegatedViolationIds.add((String) iter.next()[0]);
+                              }
+
+                              if (!delegatedViolationIds.isEmpty())
+                              {
+                                  filters.add(Filter.in("id", delegatedViolationIds));
+                              }
+                              qo = new QueryOptions();
+                              qo.addFilter(Filter.or(filters));
+                              qo.addFilter(Filter.or(Filter.eq("status", PolicyViolation.Status.Open), Filter.eq("status", PolicyViolation.Status.Delegated)));
+                              qo.addFilter(Filter.eq("active", Boolean.TRUE));
+                              int count =
+                              context.countObjects(PolicyViolation.class, qo);
+                              return count;
+                              
+                          </Source>
+          </Script>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+  <Description>quicklink_policy_violations_desc</Description>
+  <QuickLinkOptions allowSelf="true">
+    <DynamicScopeRef>
+      <Reference class="sailpoint.object.DynamicScope" name="Everyone"/>
+    </DynamicScopeRef>
+  </QuickLinkOptions>
+</QuickLink>

@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="delete entitlements from applications" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+
+  import sailpoint.object.*;
+
+import java.util.*;
+
+import sailpoint.api.Terminator;
+
+//Identity iden;
+       List list=new ArrayList();
+
+
+Terminator t = new Terminator(context);
+
+Filter myFilter = Filter.eq("application.name", "Active- Directory Demo");
+
+QueryOptions qo = new QueryOptions();
+
+qo.addFilter(myFilter);
+
+//List identitys = context.getObjects(Identity.class);
+//for(Identity ids:identitys)
+
+//if(ids!=null){
+
+//iden =(Identity)ids.getDisplayName();
+
+//t.deleteObject(ids);
+  t.deleteObjects(ManagedAttribute.class,qo);
+  
+  // context.saveObject(ids);
+     // context.commitTransaction();
+ //list.add(ids.getDisplayName());
+
+
+
+
+
+</Source>
+</Rule>

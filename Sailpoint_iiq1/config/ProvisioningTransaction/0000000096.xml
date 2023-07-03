@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction accountDisplayName="CN=Ad User2,OU=People,OU=Demo,DC=Eshiam,DC=com" applicationName="Active- Directory Demo" identityDisplayName="Ad User2" identityName="Ad User2" integration="Active- Directory Demo" name="0000000096" nativeIdentity="CN=Ad User2,OU=People,OU=Demo,DC=Eshiam,DC=com" operation="Create" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="request">
+        <value>
+          <AccountRequest application="Active- Directory Demo" nativeIdentity="CN=Ad User2,OU=People,OU=Demo,DC=Eshiam,DC=com" op="Create">
+            <Attributes>
+              <Map>
+                <entry key="provisioningTransactionId" value="c0a8de017e2310ed817e2efe28010eba"/>
+              </Map>
+            </Attributes>
+            <AttributeRequest name="objectType" op="Set" value="User"/>
+            <AttributeRequest name="sAMAccountName" op="Set" value="Ad User2"/>
+            <AttributeRequest name="IIQDisabled" op="Set">
+              <Value>
+                <Boolean/>
+              </Value>
+            </AttributeRequest>
+            <AttributeRequest name="givenName" op="Set" value="Ad"/>
+            <AttributeRequest name="employeeID" op="Add" value="adUser02"/>
+            <AttributeRequest name="msNPAllowDialin" op="Set" value="Not Set"/>
+            <ProvisioningResult status="failed">
+              <Errors>
+                <Message key="Errors returned from IQService. &quot;Error occurred while enabling the account CN=Ad User2,OU=People,OU=Demo,DC=Eshiam,DC=comThe server is unwilling to process the request.&#xa;&quot;" type="Error"/>
+              </Errors>
+            </ProvisioningResult>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

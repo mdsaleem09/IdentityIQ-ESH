@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE IdentityEntitlement PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<IdentityEntitlement aggregationState="Connected" name="description" nativeIdentity="CN=Christine Long,OU=People,OU=Demo,DC=Eshiam,DC=com" source="Aggregation" type="Entitlement" value="testing">
+  <ApplicationRef>
+    <Reference class="sailpoint.object.Application" name="Active- Directory"/>
+  </ApplicationRef>
+  <IdentityRef>
+    <Reference class="sailpoint.object.Identity" name="Christine Long"/>
+  </IdentityRef>
+</IdentityEntitlement>

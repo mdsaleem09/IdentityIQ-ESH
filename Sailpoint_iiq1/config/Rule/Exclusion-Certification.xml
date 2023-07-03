@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Exclusion-Certification" type="CertificationExclusion">
+  <Description>This rule is an example Certification Exclusion rule that removes all of the certifiable items from a certification if the identity being certified is marked as inactive.</Description>
+  <Signature returnType="String"/>
+  <Source>import sailpoint.api.IdentityService;
+import sailpoint.object.*;
+  
+
+
+System.out.println("certContext"+certContext);
+
+System.out.println("items"+items);
+System.out.println("itemsToExclude"+itemsToExclude);
+
+
+System.out.println("state"+state);
+
+
+
+if(entity instanceof Identity){
+   
+Identity identity = (Identity) entity;
+
+if(identity!=null){
+
+
+    Application application = context.getObjectByName(Application.class,"Active- Directory");
+   
+    IdentityService idService =  new IdentityService(context);
+
+    List links =  idService.getLinks(identity,application);
+		if(null != links &amp;&amp; links.size()&gt;0){
+
+    for(Link link: links){
+    if(link.isDisabled()){
+    
+    for(Iterator it= items.iterator(); it.hasNext();){
+   Certifiable certifiable = (Certifiable) it.next();
+if(certifiable instanceof Entitlements){
+
+ EntitlementGroup ent=(EntitlementGroup)certifiable;
+if(ent!=null){
+      itemsToExclude(certifiable);
+      it.remove();
+}
+}
+}
+}
+}
+}
+}
+}
+  
+  
+System.out.println("itemsToExclude"+itemsToExclude);
+return "Accounts Disabled";</Source>
+</Rule>

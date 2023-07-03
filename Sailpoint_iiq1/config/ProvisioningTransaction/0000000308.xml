@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction accountDisplayName="CN=Wanda Watkins,OU=People,OU=Demo,DC=Eshiam,DC=com" applicationName="Active- Directory" identityDisplayName="Wanda Watkins" identityName="Wanda Watkins" integration="Active- Directory" name="0000000308" nativeIdentity="CN=Wanda Watkins,OU=People,OU=Demo,DC=Eshiam,DC=com" operation="Create" source="LCM" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="accessRequestId" value="0000000674"/>
+      <entry key="request">
+        <value>
+          <AccountRequest application="Active- Directory" assignmentIds="TEMP:4b3ee689630e4e408c63266f9ee57d26" nativeIdentity="CN=Wanda Watkins,OU=People,OU=Demo,DC=Eshiam,DC=com" op="Create">
+            <Attributes>
+              <Map>
+                <entry key="provisioningTransactionId" value="c0a8010286611aee818672f53fa4085c"/>
+              </Map>
+            </Attributes>
+            <AttributeRequest name="memberOf" op="Add" value="CN=Admins,OU=Groups,OU=Demo,DC=Eshiam,DC=com"/>
+            <AttributeRequest name="objectType" op="Set" value="User"/>
+            <AttributeRequest name="sAMAccountName" op="Set" value="Watkins"/>
+            <AttributeRequest name="password" op="Set">
+              <Attributes>
+                <Map>
+                  <entry key="secret" value="true"/>
+                </Map>
+              </Attributes>
+            </AttributeRequest>
+            <AttributeRequest name="IIQDisabled" op="Set">
+              <Value>
+                <Boolean/>
+              </Value>
+            </AttributeRequest>
+            <AttributeRequest name="userAccountControl" op="Add" value="514"/>
+            <AttributeRequest name="givenName" op="Set" value="Wanda"/>
+            <AttributeRequest name="sn" op="Set" value="Watkins"/>
+            <AttributeRequest name="employeeId" op="Set" value="1c2a3b4a"/>
+            <AttributeRequest name="homeDirectory" op="Set" value="\\ohsu.edu\edu\UsersU101Watkins"/>
+            <AttributeRequest name="homeDrive" op="Set" value="C:"/>
+            <AttributeRequest name="msNPAllowDialin" op="Set" value="Not Set"/>
+            <ProvisioningResult status="failed">
+              <Errors>
+                <Message key="Exception occurred while executing the RPCRequest: Errors returned from IQService. &quot;Failed to connect to the server for OU=People,OU=Demo,DC=Eshiam,DC=com:The user name or password is incorrect. 80090308: LdapErr: DSID-0C0903C5, comment: AcceptSecurityContext error, data 52e, v2580. HRESULT:[0x8007052E]&quot; Possible reasons for failure include a) The Domain Controller is currently not reachable b) The object has either been moved or renamed c) The object has been deleted &#xa; Please Ensure the data has been aggregated before performing the operation " type="Error"/>
+              </Errors>
+            </ProvisioningResult>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE IdentityArchive PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<IdentityArchive name="1b2c" sourceId="c0a8010686771a5e8186b6aa98fb2809">
+  <Archive>&lt;?xml version='1.0' encoding='UTF-8'?&gt;
+&lt;!DOCTYPE Identity PUBLIC "sailpoint.dtd" "sailpoint.dtd"&gt;
+&lt;Identity correlated="true" created="1678101879035" id="c0a8010686771a5e8186b6aa98fb2809" lastRefresh="1678101879046" lock="a535044e366348aca4c08ddf61de3170|1678376849476|1678377149476|TestHR-oracle-Account Aggregation" modified="1678101879046" name="1b2c" needsRefresh="true"&gt;
+  &lt;Attributes&gt;
+    &lt;Map&gt;
+      &lt;entry key="Dob" value="24/01/1996"/&gt;
+      &lt;entry key="EmployeeID" value="1b2c"/&gt;
+      &lt;entry key="Last4SSN" value="2796"/&gt;
+      &lt;entry key="displayName" value="1b2c"/&gt;
+      &lt;entry key="firstname" value="Amanda1"/&gt;
+      &lt;entry key="globalID" value="af13f22c-dc81-4bd2-8879-176f32187c29"/&gt;
+      &lt;entry key="lastname" value="Ross1"/&gt;
+      &lt;entry key="pType" value="Ex-Employee"/&gt;
+      &lt;entry key="terminationDate" value="08/24/2017"/&gt;
+      &lt;entry key="triggerSnapshots"&gt;
+        &lt;value&gt;
+          &lt;Map&gt;
+            &lt;entry key="Rule" value="1b2c"/&gt;
+          &lt;/Map&gt;
+        &lt;/value&gt;
+      &lt;/entry&gt;
+    &lt;/Map&gt;
+  &lt;/Attributes&gt;
+  &lt;AttributeMetaDatas&gt;
+    &lt;AttributeMetaData attribute="Dob" source="Oracle:DOB"/&gt;
+    &lt;AttributeMetaData attribute="terminationDate" source="Oracle:Termination Date"/&gt;
+    &lt;AttributeMetaData attribute="EmployeeID" source="Oracle:EmployeeID"/&gt;
+    &lt;AttributeMetaData attribute="pType" source="Oracle:PType"/&gt;
+    &lt;AttributeMetaData attribute="Last4SSN" source="Oracle:IIQ_Last4SSN"/&gt;
+    &lt;AttributeMetaData attribute="lastname" source="Oracle:LastName"/&gt;
+    &lt;AttributeMetaData attribute="firstname" source="Oracle:FirstName"/&gt;
+  &lt;/AttributeMetaDatas&gt;
+  &lt;Links&gt;
+    &lt;Link created="1678101879035" displayName="1b2c" id="c0a8010686771a5e8186b6aa98fb280a" lastRefresh="1678101879035" modified="1678101879038" identity="1b2c"&gt;
+      &lt;ApplicationRef&gt;
+        &lt;Reference class="sailpoint.object.Application" id="c0a8de017db91807817de767f9f827c5" name="Oracle"/&gt;
+      &lt;/ApplicationRef&gt;
+      &lt;Attributes&gt;
+        &lt;Map&gt;
+          &lt;entry key="DOB" value="24/01/1996"/&gt;
+          &lt;entry key="Department" value="Regional Operations"/&gt;
+          &lt;entry key="Email" value="abc@ohsu.com"/&gt;
+          &lt;entry key="EmployeeID" value="1b2c"/&gt;
+          &lt;entry key="FirstName" value="Amanda1"/&gt;
+          &lt;entry key="IIQ_Last4SSN" value="2796"/&gt;
+          &lt;entry key="LastName" value="Ross1"/&gt;
+          &lt;entry key="Manager" value="1a2p3st"/&gt;
+          &lt;entry key="Name" value="Amanda Ross"/&gt;
+          &lt;entry key="PType" value="Ex-Employee"/&gt;
+          &lt;entry key="Student Type" value="Graduate"/&gt;
+          &lt;entry key="Termination Date" value="08/24/2017"/&gt;
+        &lt;/Map&gt;
+      &lt;/Attributes&gt;
+    &lt;/Link&gt;
+  &lt;/Links&gt;
+&lt;/Identity&gt;
+</Archive>
+</IdentityArchive>

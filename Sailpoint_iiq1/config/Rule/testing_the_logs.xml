@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="testing the logs" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+  
+       import org.apache.log4j.Logger;
+       import org.apache.log4j.Level;
+       
+       
+       //[org name.project name.item name]
+       Logger log=Logger.getLogger("eshiam.rules Testing.bshdemo");
+  // TODO: Remove this forced log level set before checking in this Rule.
+     log.setLevel(Level.DEBUG);
+       log.info("Printing the logs in info level");
+       log.debug("printing the logs in debug level");
+       log.warn("printing the logs in warn level");
+       log.error("printing the logs in error level");
+        
+
+  </Source>
+</Rule>

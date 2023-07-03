@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction accountDisplayName="CN=Ad User7,OU=People,OU=Demo,DC=Eshiam,DC=com" applicationName="Active- Directory" identityDisplayName="Ad User7" identityName="Ad User7" integration="Active- Directory" name="0000000111" nativeIdentity="CN=Ad User7,OU=People,OU=Demo,DC=Eshiam,DC=com" operation="Create" source="LCM" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="accessRequestId" value="0000000348"/>
+      <entry key="request">
+        <value>
+          <AccountRequest application="Active- Directory" nativeIdentity="CN=Ad User7,OU=People,OU=Demo,DC=Eshiam,DC=com" op="Create" targetIntegration="Active- Directory">
+            <Attributes>
+              <Map>
+                <entry key="provisioningTransactionId" value="c0a82be682fb12c18183012cf5a903e4"/>
+              </Map>
+            </Attributes>
+            <AttributeRequest name="dn" op="Add" value="cn=Ad User7,OU=People,OU=Demo,DC=Eshiam,DC=com"/>
+            <AttributeRequest name="objectType" op="Set" value="User"/>
+            <AttributeRequest name="sAMAccountName" op="Set" value="Ad User7"/>
+            <AttributeRequest name="password" op="Set">
+              <Attributes>
+                <Map>
+                  <entry key="secret" value="true"/>
+                </Map>
+              </Attributes>
+            </AttributeRequest>
+            <AttributeRequest name="IIQDisabled" op="Set">
+              <Value>
+                <Boolean/>
+              </Value>
+            </AttributeRequest>
+            <AttributeRequest name="givenName" op="Set" value="Ad"/>
+            <AttributeRequest name="sn" op="Set" value="User7"/>
+            <AttributeRequest name="employeeId" op="Set" value="sa007"/>
+            <AttributeRequest name="msNPAllowDialin" op="Set" value="Not Set"/>
+            <ProvisioningResult status="committed"/>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

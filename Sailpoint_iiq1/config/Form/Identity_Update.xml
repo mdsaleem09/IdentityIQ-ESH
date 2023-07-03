@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Form PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Form name="Identity Update" type="Workflow">
+  <Attributes>
+    <Map>
+      <entry key="pageTitle" value="provision_identity_update_title"/>
+      <entry key="pageTitleParam" value="$(identityName)"/>
+    </Map>
+  </Attributes>
+  <Section type="text">
+    <Field displayName="provision_identity_update_description"/>
+  </Section>
+  <Section label="provision_request_information" type="datatable">
+    <Attributes>
+      <Map>
+        <entry key="hideNulls" value="true"/>
+      </Map>
+    </Attributes>
+    <Field displayName="provision_requester">
+      <Script>
+        <Source>
+          import sailpoint.object.Identity;
+
+          Identity launchIdentity = context.getObject(Identity.class, launcher);
+
+          return launchIdentity == null ? launcher : launchIdentity.getDisplayableName();
+        </Source>
+      </Script>
+    </Field>
+    <Field displayName="provision_requested_roles" value="ref:newRoles"/>
+  </Section>
+  <Section columns="3" label="provision_target_identity" type="datatable">
+    <Attributes>
+      <Map>
+        <entry key="hideNulls" value="true"/>
+      </Map>
+    </Attributes>
+    <Field columnSpan="1" displayName="provision_first_name" value="script:(identity != null) ? identity.getFirstname() : null"/>
+    <Field columnSpan="1" displayName="provision_last_name" value="script:(identity != null) ? identity.getLastname() : null"/>
+    <Field columnSpan="1" displayName="provision_account_id" value="script:(identity != null) ? identity.getDisplayableName() : null"/>
+    <Field columnSpan="3" displayName="provision_assigned_roles">
+      <Script>
+        <Source>
+          import java.util.ArrayList;
+          import java.util.List;
+          import sailpoint.object.Bundle;
+          import sailpoint.tools.Util;
+
+          String names = null;
+
+          if (identity != null) {
+              List&lt;String&gt; roleNames = new ArrayList&lt;String&gt;();
+
+              for (Bundle bundle : Util.iterate(identity.getAssignedRoles())) {
+                  roleNames.add(bundle.getDisplayableName());
+              }
+
+              names = Util.listToCsv(roleNames);
+          }
+
+          return names;
+      </Source>
+      </Script>
+    </Field>
+  </Section>
+  <Button action="next" label="button_ok"/>
+  <Button action="cancel" label="button_cancel"/>
+  <Button action="cancel" label="button_return" readOnly="true"/>
+</Form>

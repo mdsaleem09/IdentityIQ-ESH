@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Roles Restrictable" type="RequestObjectSelector">
+  <Description>Request Object Selector Rules are used by the Life Cycle Manager to determine the Objects that can be requested by a given user on a given population.  For bulk request this rule is run twice.  The first time the result determines which applications are shown to the requestor.  The second time the result determines whether or not the specified requestee has access to the object.  On the first execution the requestee is always null, so the rule needs to expect and handle that case in order to be usable for bulk requests.</Description>
+  <Signature returnType="sailpoint.object.QueryInfo"/>
+  <Source>import sailpoint.api.ScopeService;
+      import sailpoint.object.Identity;
+      import sailpoint.object.Scope;
+      import sailpoint.object.QueryOptions;
+      import sailpoint.object.QueryInfo;
+
+      ScopeService scopeService = new ScopeService(context);
+      QueryInfo scopeQueryInfo;
+      if (requestee == null) {
+          scopeQueryInfo = new QueryInfo(new QueryOptions().addFilter(Filter.eq("name","IT-Role")));
+      } else {
+          scopeQueryInfo = scopeService.getAssignedScopeQueryInfo(requestee);
+      }
+      
+      return scopeQueryInfo;</Source>
+</Rule>

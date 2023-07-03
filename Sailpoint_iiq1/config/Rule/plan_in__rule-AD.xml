@@ -1,0 +1,96 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="plan in  rule-AD" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+ 
+
+  
+ import sailpoint.object.*;
+import sailpoint.api.*;
+import sailpoint.object.ProvisioningPlan.AccountRequest;
+   import sailpoint.object.ProvisioningPlan.AttributeRequest;
+   import sailpoint.object.ProvisioningPlan.Operation;
+  import sailpoint.object.ProvisioningPlan;
+/*
+        String identityName="Daniel Lewis";
+        System.out.println("Inside this rule:");
+  Identity idObj=context.getObjectByName(Identity.class,identityName);
+       
+
+  ProvisioningPlan plan=new ProvisioningPlan();
+ 
+  plan.setIdentity(idObj);
+  AccountRequest acctReq=new AccountRequest();
+  acctReq.setApplication("Active Directory");
+  acctReq.setOp(ProvisioningPlan.ObjectOperation.Create);
+  plan.add(acctReq);
+                System.out.println("Plan in Create Workflow2:"+plan.toXml());
+
+  Provisioner provisioner = new Provisioner(context);
+	provisioner.execute(plan);
+	context.saveObject(idObj);
+	context.commitTransaction();*/
+   import sailpoint.object.Identity;
+import sailpoint.object.Workflow;
+import sailpoint.object.WorkflowLaunch;
+import sailpoint.api.Workflower;
+import sailpoint.object.Filter;
+
+import java.util.Calendar;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Date;
+
+
+
+       String identityName="Adam Kennedy";
+        System.out.println("Inside this rule:");
+  Identity idObj=context.getObjectByName(Identity.class,identityName);
+       
+
+  ProvisioningPlan plan=new ProvisioningPlan();
+ 
+  plan.setIdentity(idObj);
+  AccountRequest acctReq=new AccountRequest();
+  acctReq.setApplication("IIQ");
+  acctReq.setOp(ProvisioningPlan.ObjectOperation.Modify);
+  //acctReq.setNativeIdentity("CN=Albert Woods,OU=People,OU=Demo,DC=Eshiam,DC=com");
+  acctReq.add(new AttributeRequest("assignedRoles",ProvisioningPlan.Operation.Set,"Bus-role"));
+  plan.add(acctReq);
+  
+  
+  
+Identity id = context.getUniqueObject(Identity.class,Filter.eq("name",identityName));
+Identity launcher = context.getObjectByName(Identity.class,"spadmin"); //give name of the launcher to get their Identity object,Here we are using spadmin
+if( id != null){
+
+
+
+Map args = new HashMap();
+args.put("identityName",id.getName());
+args.put("name",id.getName());
+args.put("launcher",launcher.getName());
+  args.put("plan",plan);
+  args.put("approvalScheme","none");
+
+
+
+//launching workflow
+Workflow wf = (Workflow)context.getObjectByName(Workflow.class,"LCM Provisioning");
+WorkflowLaunch wflaunch = new WorkflowLaunch();
+wflaunch.setWorkflowName(wf.getName());
+wflaunch.setWorkflowRef(wf.getName());
+wflaunch.setCaseName("Test WF " + id.getName());
+wflaunch.setVariables(args);
+Workflower workflower = new Workflower(context);
+WorkflowLaunch launch = workflower.launch(wflaunch);
+
+}
+ 
+
+ 
+  </Source>
+</Rule>

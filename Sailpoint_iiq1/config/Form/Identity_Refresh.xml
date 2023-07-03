@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Form PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Form name="Identity Refresh" type="Workflow">
+  <Attributes>
+    <Map>
+      <entry key="pageTitle" value="provision_identity_refresh_title"/>
+      <entry key="pageTitleParam" value="$(identityName)"/>
+    </Map>
+  </Attributes>
+  <Section type="text">
+    <Field displayName="provision_identity_refresh_description"/>
+  </Section>
+  <Section label="provision_target_identity" type="datatable">
+    <Attributes>
+      <Map>
+        <entry key="hideNulls" value="true"/>
+      </Map>
+    </Attributes>
+    <Field displayName="provision_account_id" value="script:identity.getName()"/>
+    <Field displayName="provision_first_name" value="script:identity.getFirstname()"/>
+    <Field displayName="provision_last_name" value="script:identity.getLastname()"/>
+    <Field displayName="provision_assigned_roles">
+      <Script>
+        <Source>
+          import sailpoint.api.ObjectUtil;
+          import sailpoint.tools.Util;
+          List names = ObjectUtil.getObjectNames(identity.getAssignedRoles());
+          return Util.listToCsv(names);
+      </Source>
+      </Script>
+    </Field>
+  </Section>
+  <Button action="next" label="button_ok"/>
+  <Button action="cancel" label="button_cancel"/>
+  <Button action="cancel" label="button_return" readOnly="true"/>
+</Form>

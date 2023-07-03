@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE MitigationExpiration PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<MitigationExpiration action="NOTHING" comments="qxs" expiration="1642412176167" lastActionDate="1642481859049">
+  <CertifiableDescriptor>
+    <PolicyViolation active="true" constraintId="c0a8de017db91807817dc7b89e9217c4" constraintName="Testing AD Policy" policyName="Testing AD Policy" status="Open">
+      <Attributes>
+        <Map>
+          <entry key="RelevantApplications">
+            <value>
+              <List>
+                <String>Active- Directory Demo</String>
+              </List>
+            </value>
+          </entry>
+        </Map>
+      </Attributes>
+      <IdentityRef>
+        <Reference class="sailpoint.object.Identity" name="Edward Baker"/>
+      </IdentityRef>
+      <Owner>
+        <Reference class="sailpoint.object.Identity" name="William Moore"/>
+      </Owner>
+    </PolicyViolation>
+  </CertifiableDescriptor>
+  <IdentityRef>
+    <Reference class="sailpoint.object.Identity" name="Edward Baker"/>
+  </IdentityRef>
+  <Mitigator>
+    <Reference class="sailpoint.object.Identity" name="spadmin"/>
+  </Mitigator>
+</MitigationExpiration>

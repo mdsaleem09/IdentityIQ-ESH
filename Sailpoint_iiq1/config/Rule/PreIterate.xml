@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="PreIterate" type="PreIterate">
+  <Description>This rule is called before the connector processes the data in a file.</Description>
+  <Signature returnType="void"/>
+  <Source>import sailpoint.api.SailPointFactory;
+      import sailpoint.api.SailPointContext;
+      import sailpoint.tools.GeneralException;
+      import sailpoint.tools.xml.XMLObjectFactory;
+      import sailpoint.object.Configuration;
+
+      SailPointContext ctx = SailPointFactory.getCurrentContext();
+      if ( ctx == null ) {
+          throw new GeneralException("Unable to get sailpoint context.");
+      }
+
+System.out.println("Pre-Iterate Rule");
+
+
+      String name = application.getName() + "_aggregationStats";
+     System.out.println("name"+name);
+
+      Configuration config = ctx.getObject(Configuration.class,name);
+      // The existance of a config object means the post rule
+      // has created an object and the stats should be checked
+      if ( config != null ) {
+  System.out.println("config:"+config.toXml());
+          if ( log.isDebugEnabled() ) {
+              log.debug("CurrentStats: \n" + XMLObjectFactory.getInstance().toXml(stats));
+              log.debug("Config : \n" + config.toXml());
+          }
+          String key = schema.getObjectType();
+          Map lastStats = (Map)config.get(key);
+          if ( lastStats != null ) {
+              Long lastMod = (Long)lastStats.get("lastModified");
+              Long currentMod = (Long)stats.get("lastModified");
+              if ( currentMod &lt; lastMod ) {
+                  throw new GeneralException("Last modification date is older then it was during the last aggregation!");
+              }
+
+              // This probably isn't real world (the size could decrease without a problem)
+              // I'm including it here for illustration
+              Long currentLength = (Long)stats.get("length");
+              Long lastLength = (Long)lastStats.get("length");
+              if ( currentLength &gt; lastLength ) {
+                  throw new GeneralException("The data file's length is less then it was during the last aggregation!");
+              }
+          } else {
+              if ( log.isDebugEnabled() ) {
+                  log.debug("Configuration for ["+key+"] was not found...Nothing checked.");
+              }
+          }
+      } else {
+          if ( log.isDebugEnabled() ) {
+              log.debug("Configuration ["+name+"] was not found...Nothing checked.");
+          }
+      }</Source>
+</Rule>

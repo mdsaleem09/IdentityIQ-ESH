@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="SAP Entitlements" type="GroupAggregationRefresh">
+  <Description>This rule is used to set the owner or modify the account group before it is persisted to the database.</Description>
+  <Signature returnType="Object">
+    <Inputs>
+      <Argument name="log" type="org.apache.commons.logging.Log">
+        <Description>
+          The log object associated with the SailPointContext.
+        </Description>
+      </Argument>
+      <Argument name="context" type="sailpoint.api.SailPointContext">
+        <Description>
+          A sailpoint.api.SailPointContext object that can be used to query the database if necessary.
+        </Description>
+      </Argument>
+      <Argument name="environment" type="Map">
+        <Description>
+          Arguments passed to the aggregation task.
+        </Description>
+      </Argument>
+      <Argument name="obj" type="ResourceObject">
+        <Description>
+          A sailpoint.object.ResourceObject generated from the application
+          and the ProvisioningPlan's ObjectRequest.
+        </Description>
+      </Argument>
+      <Argument name="accountGroup" type="ManagedAttribute">
+        <Description>
+          The account group being refreshed.
+        </Description>
+      </Argument>
+      <Argument name="groupApplication" type="Application">
+        <Description>
+          Application being aggregated.
+        </Description>
+      </Argument>
+    </Inputs>
+    <Returns>
+      <Argument name="accountGroup" type="ManagedAttribute">
+        <Description>
+          The refreshed account group object.
+        </Description>
+      </Argument>
+    </Returns>
+  </Signature>
+  <Source>
+  return null;
+  String group = accountGroup.getDisplayName();
+       System.out.println("groupNames"+accountGroup.getDisplayName());
+
+	  if(!group.equals("ESHIAM\\AccountingGeneral"))
+	    {
+       System.out.println("groupNamesif"+accountGroup.getDisplayName());
+				 accountGroup = null;
+				 obj=null;
+
+		}
+
+</Source>
+</Rule>

@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE IdentityRequest PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<IdentityRequest completionStatus="Incomplete" endDate="1676963653841" executionStatus="Completed" name="0000000671" priority="Normal" requesterDisplayName="The Administrator" requesterId="c0a8010d7bab1d02817bab2f825700e6" source="LCM" state="End" targetClass="sailpoint.object.Identity" targetDisplayName="Wanda Watkins" type="Leaver" verified="1677635006810">
+  <Attributes>
+    <Map>
+      <entry key="messages">
+        <value>
+          <List>
+            <Message key="task_msg_identity_request_verification_timeout" type="Error"/>
+          </List>
+        </value>
+      </entry>
+      <entry key="provisionedProject">
+        <value>
+          <ProvisioningProject identity="Wanda Watkins">
+            <Attributes>
+              <Map>
+                <entry key="disableRetryRequest">
+                  <value>
+                    <Boolean>true</Boolean>
+                  </value>
+                </entry>
+                <entry key="identityRequestId" value="0000000671"/>
+                <entry key="optimisticProvisioning" value="false"/>
+                <entry key="requester" value="spadmin"/>
+                <entry key="source" value="LCM"/>
+              </Map>
+            </Attributes>
+            <MasterPlan>
+              <ProvisioningPlan>
+                <AccountRequest application="IIQ" nativeIdentity="Wanda Watkins" op="Modify">
+                  <AttributeRequest name="assignedRoles" op="Set">
+                    <Value>
+                      <List>
+                        <String>OHSU-Role</String>
+                      </List>
+                    </Value>
+                  </AttributeRequest>
+                </AccountRequest>
+                <Attributes>
+                  <Map>
+                    <entry key="comments" value="Adding Joiner Access"/>
+                    <entry key="identityRequestId" value="0000000671"/>
+                    <entry key="requester" value="spadmin"/>
+                    <entry key="source" value="LCM"/>
+                  </Map>
+                </Attributes>
+              </ProvisioningPlan>
+            </MasterPlan>
+            <ProvisioningPlan targetIntegration="IIQ" trackingId="881d39706c354bf194149952f8887511">
+              <AccountRequest application="IIQ" nativeIdentity="Wanda Watkins" op="Modify" targetIntegration="IIQ">
+                <AttributeRequest name="assignedRoles" op="Set" value="OHSU-Role"/>
+              </AccountRequest>
+              <Attributes>
+                <Map>
+                  <entry key="comments" value="Adding Joiner Access"/>
+                  <entry key="identityRequestId" value="0000000671"/>
+                  <entry key="requester" value="spadmin"/>
+                  <entry key="source" value="LCM"/>
+                </Map>
+              </Attributes>
+            </ProvisioningPlan>
+            <ProvisioningPlan nativeIdentity="Wanda Watkins" targetIntegration="Active- Directory" trackingId="502d7100062e43369c03d8fa406f6720">
+              <AccountRequest application="Active- Directory" nativeIdentity="CN=Wanda Watkins,OU=People,OU=Demo,DC=Eshiam,DC=com" op="Modify" targetIntegration="Active- Directory">
+                <AttributeRequest name="memberOf" op="Add" value="CN=Admins,OU=Groups,OU=Demo,DC=Eshiam,DC=com"/>
+                <ProvisioningResult status="committed"/>
+              </AccountRequest>
+              <Attributes>
+                <Map>
+                  <entry key="comments" value="Adding Joiner Access"/>
+                  <entry key="identityRequestId" value="0000000671"/>
+                  <entry key="requester" value="spadmin"/>
+                  <entry key="source" value="LCM"/>
+                </Map>
+              </Attributes>
+            </ProvisioningPlan>
+            <ProvisioningTarget role="OHSU-Role">
+              <AccountSelection applicationId="c0a891017bb91c9d817bba3e0bfc02ba" applicationName="Active- Directory" selection="CN=Wanda Watkins,OU=People,OU=Demo,DC=Eshiam,DC=com">
+                <AccountInfo displayName="CN=Wanda Watkins,OU=People,OU=Demo,DC=Eshiam,DC=com" nativeIdentity="CN=Wanda Watkins,OU=People,OU=Demo,DC=Eshiam,DC=com"/>
+              </AccountSelection>
+            </ProvisioningTarget>
+          </ProvisioningProject>
+        </value>
+      </entry>
+      <entry key="taskResultId" value="c0a8010286611aee818672d297bc07d8"/>
+    </Map>
+  </Attributes>
+  <RequestItems>
+    <IdentityRequestItem application="IIQ" approvalState="Pending" name="assignedRoles" nativeIdentity="Wanda Watkins" operation="Set" provisioningEngine="IIQ" provisioningState="Finished" value="OHSU-Role">
+      <Attributes>
+        <Map>
+          <entry key="assignmentId" value="daef353c293e4c558b960731eac5079c"/>
+          <entry key="displayableValue" value="OHSU-Role"/>
+          <entry key="provisioningPlan">
+            <value>
+              <ProvisioningPlan trackingId="4e973bc50f34461b81dc1e8f62c17c90">
+                <AccountRequest application="IIQ" nativeIdentity="Wanda Watkins" op="Modify">
+                  <AttributeRequest name="assignedRoles" op="Set" trackingId="4e973bc50f34461b81dc1e8f62c17c90" value="OHSU-Role"/>
+                </AccountRequest>
+                <AccountRequest application="Active- Directory" nativeIdentity="CN=Wanda Watkins,OU=People,OU=Demo,DC=Eshiam,DC=com" op="Modify">
+                  <AttributeRequest name="memberOf" op="Add" trackingId="4e973bc50f34461b81dc1e8f62c17c90" value="CN=Admins,OU=Groups,OU=Demo,DC=Eshiam,DC=com"/>
+                </AccountRequest>
+                <Attributes>
+                  <Map>
+                    <entry key="source" value="LCM"/>
+                  </Map>
+                </Attributes>
+              </ProvisioningPlan>
+            </value>
+          </entry>
+          <entry key="requesterComments" value="Adding Joiner Access"/>
+        </Map>
+      </Attributes>
+    </IdentityRequestItem>
+    <IdentityRequestItem application="Active- Directory" approvalState="Finished" compilationStatus="Expansion" expansionCause="Role" name="memberOf" nativeIdentity="CN=Wanda Watkins,OU=People,OU=Demo,DC=Eshiam,DC=com" operation="Add" provisioningEngine="Active- Directory" provisioningState="Commited" value="CN=Admins,OU=Groups,OU=Demo,DC=Eshiam,DC=com">
+      <Attributes>
+        <Map>
+          <entry key="expansionInfo" value="OHSU-Role"/>
+          <entry key="identityEntitlementId" value="c0a8010286611aee818672d2a37507dd"/>
+          <entry key="managedAttributeType" value="Entitlement"/>
+          <entry key="provisioningPlan">
+            <value>
+              <ProvisioningPlan trackingId="05c78237e0d94fc696d036b6dc4e0aa9">
+                <AccountRequest application="Active- Directory" nativeIdentity="CN=Wanda Watkins,OU=People,OU=Demo,DC=Eshiam,DC=com" op="Modify" targetIntegration="Active- Directory">
+                  <AttributeRequest name="memberOf" op="Add" trackingId="05c78237e0d94fc696d036b6dc4e0aa9" value="CN=Admins,OU=Groups,OU=Demo,DC=Eshiam,DC=com"/>
+                </AccountRequest>
+                <Attributes>
+                  <Map>
+                    <entry key="source" value="LCM"/>
+                  </Map>
+                </Attributes>
+              </ProvisioningPlan>
+            </value>
+          </entry>
+          <entry key="requesterComments" value="Adding Joiner Access"/>
+        </Map>
+      </Attributes>
+    </IdentityRequestItem>
+  </RequestItems>
+</IdentityRequest>

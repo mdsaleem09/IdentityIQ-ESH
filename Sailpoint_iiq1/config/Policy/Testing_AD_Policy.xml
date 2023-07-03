@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Policy PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Policy certificationActions="Mitigated,Delegated" configPage="advancedPolicy.xhtml" executor="sailpoint.policy.GenericPolicyExecutor" name="Testing AD Policy" state="Inactive" type="Advanced" typeKey="policy_type_advanced" violationOwnerType="Manager">
+  <PolicyAlert disabled="true" escalationStyle="none"/>
+  <Attributes>
+    <Map>
+      <entry key="checkEffective">
+        <value>
+          <Boolean/>
+        </value>
+      </entry>
+      <entry key="sysDescriptions">
+        <value>
+          <Map>
+            <entry key="en_US"/>
+          </Map>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+  <Owner>
+    <Reference class="sailpoint.object.Identity" name="spadmin"/>
+  </Owner>
+  <GenericConstraints>
+    <GenericConstraint name="Testing AD Policy" violationOwnerType="None">
+      <IdentitySelector>
+        <MatchExpression>
+          <MatchTerm name="cn" type="Entitlement" value="Edward Baker">
+            <ApplicationRef>
+              <Reference class="sailpoint.object.Application" name="Active- Directory"/>
+            </ApplicationRef>
+          </MatchTerm>
+        </MatchExpression>
+      </IdentitySelector>
+    </GenericConstraint>
+  </GenericConstraints>
+</Policy>

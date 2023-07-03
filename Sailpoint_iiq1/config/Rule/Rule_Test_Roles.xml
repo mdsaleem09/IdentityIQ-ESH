@@ -1,0 +1,109 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Rule Test Roles" type="GroupAggregationRefresh">
+  <Description>This rule is used to set the owner or modify the account group before it is persisted to the database.</Description>
+  <Signature returnType="Object">
+    <Inputs>
+      <Argument name="log">
+        <Description>
+          The log object associated with the SailPointContext.
+        </Description>
+      </Argument>
+      <Argument name="context">
+        <Description>
+          A sailpoint.api.SailPointContext object that can be used to query the database if necessary.
+        </Description>
+      </Argument>
+      <Argument name="environment" type="Map">
+        <Description>
+          Arguments passed to the aggregation task.
+        </Description>
+      </Argument>
+      <Argument name="obj" type="ResourceObject">
+        <Description>
+          A sailpoint.object.ResourceObject generated from the application
+          and the ProvisioningPlan's ObjectRequest.
+        </Description>
+      </Argument>
+      <Argument name="accountGroup" type="ManagedAttribute">
+        <Description>
+          The account group being refreshed.
+        </Description>
+      </Argument>
+      <Argument name="groupApplication" type="Application">
+        <Description>
+          Application being aggregated.
+        </Description>
+      </Argument>
+    </Inputs>
+    <Returns>
+      <Argument name="accountGroup" type="ManagedAttribute">
+        <Description>
+          The refreshed account group object.
+        </Description>
+      </Argument>
+    </Returns>
+  </Signature>
+  <Source>import sailpoint.object.*;
+import sailpoint.api.*;
+import sailpoint.object.IdentitySelector;
+import sailpoint.object.IdentitySelector.MatchExpression;
+import sailpoint.object.IdentitySelector.MatchTerm;
+import sailpoint.object.ManagedAttribute;
+import sailpoint.object.Bundle;
+import sailpoint.object.Application;
+import sailpoint.object.Profile;
+ 
+if(context.getObjectByName(Bundle.class,accountGroup.getDisplayName()+"_Business") != null){
+return accountGroup;
+}else{
+Bundle role = new Bundle();
+role.setDisplayName(accountGroup.getDisplayName()+"_Business");
+role.setName(accountGroup.getDisplayName()+"_Business");
+role.setType("business");
+
+    MatchTerm matchTermChild=new MatchTerm();
+    matchTermChild.setName("memberOf");
+    matchTermChild.setType(IdentitySelector.MatchTerm.Type.Entitlement);
+    matchTermChild.setValue(accountGroup.getValue());
+matchTermChild.setApplication(groupApplication);
+MatchExpression  matchExpression=new MatchExpression();
+matchExpression.addTerm(matchTermChild);
+IdentitySelector identitySelector=new IdentitySelector();
+identitySelector.setMatchExpression(matchExpression);
+role.setSelector(identitySelector);
+
+List bundleITList = new ArrayList();
+List profileList = new ArrayList();
+List entValues1 = new ArrayList();
+entValues1.add("CN=AccountsPayable,OU=Groups,OU=Demo,DC=Eshiam,DC=com");
+Filter f1 = Filter.containsAll("groups",entValues1);
+List entValues2 = new ArrayList();
+entValues2.add("CN=AccountsReceivable,OU=Groups,OU=Demo,DC=Eshiam,DC=com");
+Filter f2 = Filter.containsAll("memberOf",entValues2);
+Bundle ITrole = new Bundle();
+ITrole.setDisplayName(accountGroup.getDisplayName()+"_IT");
+ITrole.setName(accountGroup.getDisplayName()+"_IT");
+ITrole.setType("it");
+
+    Profile profile1 = new Profile();
+    profile1.setApplication(context.getObjectByName(Application.class,"Active Directory"));
+    List fl1 = new ArrayList();
+    fl1.add(f1);
+    profile1.setConstraints(fl1);
+Profile profile2 = new Profile();
+    profile2.setApplication(groupApplication);
+    List fl2 = new ArrayList();
+    fl2.add(f2);
+    profile2.setConstraints(fl2);
+profileList.add(profile1);
+profileList.add(profile2);
+
+ITrole.assignProfiles(profileList);
+
+    bundleITList.add(ITrole);
+role.setRequirements(bundleITList);
+   context.saveObject(role);
+   context.commitTransaction();
+}</Source>
+</Rule>

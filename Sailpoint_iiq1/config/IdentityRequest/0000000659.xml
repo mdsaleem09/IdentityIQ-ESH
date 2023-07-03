@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE IdentityRequest PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<IdentityRequest completionStatus="Success" endDate="1675759749209" executionStatus="Completed" name="0000000659" priority="Normal" requesterDisplayName="The Administrator" requesterId="c0a8010d7bab1d02817bab2f825700e6" source="RapidSetup" state="End" targetClass="Identity" targetDisplayName="Kelly Boyd" type="Lifecycle" verified="1675759749219">
+  <Attributes>
+    <Map>
+      <entry key="provisionedProject">
+        <value>
+          <ProvisioningProject identity="Kelly Boyd">
+            <Attributes>
+              <Map>
+                <entry key="disableRetryRequest">
+                  <value>
+                    <Boolean>true</Boolean>
+                  </value>
+                </entry>
+                <entry key="identityRequestId" value="0000000659"/>
+                <entry key="noLocking">
+                  <value>
+                    <Boolean>true</Boolean>
+                  </value>
+                </entry>
+                <entry key="optimisticProvisioning" value="false"/>
+                <entry key="requester" value="spadmin"/>
+                <entry key="source" value="RapidSetup"/>
+              </Map>
+            </Attributes>
+            <MasterPlan>
+              <ProvisioningPlan>
+                <AccountRequest application="IIQ" nativeIdentity="Kelly Boyd" op="Modify">
+                  <Attributes>
+                    <Map>
+                      <entry key="flow" value="Lifecycle"/>
+                      <entry key="id" value="c0a81de686111c4b818615d8428826fb"/>
+                      <entry key="interface" value="LCM"/>
+                      <entry key="operation" value="RoleAdd"/>
+                    </Map>
+                  </Attributes>
+                  <AttributeRequest name="assignedRoles" op="Add" value="OHSU-Role">
+                    <Attributes>
+                      <Map>
+                        <entry key="assignment" value="true"/>
+                      </Map>
+                    </Attributes>
+                  </AttributeRequest>
+                </AccountRequest>
+                <Attributes>
+                  <Map>
+                    <entry key="identityRequestId" value="0000000659"/>
+                    <entry key="requester" value="spadmin"/>
+                    <entry key="source" value="RapidSetup"/>
+                  </Map>
+                </Attributes>
+              </ProvisioningPlan>
+            </MasterPlan>
+            <ProvisioningTarget retain="true" role="OHSU-Role">
+              <AccountSelection applicationId="c0a891017bb91c9d817bba3e0bfc02ba" applicationName="Active- Directory" selection="CN=Kelly Boyd,OU=People,OU=Demo,DC=Eshiam,DC=com">
+                <AccountInfo displayName="CN=Kelly Boyd,OU=People,OU=Demo,DC=Eshiam,DC=com" nativeIdentity="CN=Kelly Boyd,OU=People,OU=Demo,DC=Eshiam,DC=com"/>
+              </AccountSelection>
+            </ProvisioningTarget>
+          </ProvisioningProject>
+        </value>
+      </entry>
+      <entry key="taskResultId" value="c0a8010386211c4b81862b10741b071f"/>
+    </Map>
+  </Attributes>
+  <RequestItems>
+    <IdentityRequestItem application="IIQ" compilationStatus="Filtered" name="assignedRoles" nativeIdentity="Kelly Boyd" operation="Add" provisioningEngine="IIQ" provisioningState="Finished" value="OHSU-Role">
+      <Attributes>
+        <Map>
+          <entry key="assignmentId" value="440d3ebe51f94f99a25f6707d970e978"/>
+          <entry key="displayableValue" value="OHSU-Role"/>
+          <entry key="flow" value="Lifecycle"/>
+          <entry key="id" value="c0a81de686111c4b818615d8428826fb"/>
+          <entry key="identityEntitlementId" value="c0a8010386211c4b81862b10829b0723"/>
+          <entry key="interface" value="LCM"/>
+          <entry key="operation" value="RoleAdd"/>
+        </Map>
+      </Attributes>
+    </IdentityRequestItem>
+  </RequestItems>
+</IdentityRequest>

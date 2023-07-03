@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Joiner_OHSU" type="IdentityTrigger">
+  <Description>This rule can be used for Certification Events that use rule triggers. The previousIdentity and newIdentity hold snapshots of the identity before the update has occurred and the state of the identity after the update, respectively.</Description>
+  <Signature returnType="boolean">
+    <Inputs>
+      <Argument name="log" type="org.apache.commons.logging.Log">
+        <Description>
+          The log object associated with the SailPointContext.
+        </Description>
+      </Argument>
+      <Argument name="context" type="sailpoint.api.SailPointContext">
+        <Description>
+          A sailpoint.api.SailPointContext object that can be used to query the database if necessary.
+        </Description>
+      </Argument>
+      <Argument name="previousIdentity">
+        <Description>
+          The identity before the refresh/aggregation (this will be null when an
+          identity is created).
+        </Description>
+      </Argument>
+      <Argument name="newIdentity">
+        <Description>
+          The identity after the refresh/aggregation (this will be null when an
+          identity is deleted).
+        </Description>
+      </Argument>
+    </Inputs>
+    <Returns>
+      <Argument name="result">
+        <Description>
+          A boolean describing the result of the rule.
+        </Description>
+      </Argument>
+    </Returns>
+  </Signature>
+  <Source>
+import sailpoint.object.Identity;
+import sailpoint.object.Link;
+import sailpoint.tools.Util;
+
+import org.apache.log4j.Logger;
+import org.apache.log4j.Level;
+
+   Logger log = Logger.getLogger("ohsu.rule.trigger");
+   String idName = newIdentity.getName();
+   log.debug("Evaluating Workflow Trigger for Identity:"+idName);
+
+System.out.println("joiner trigger rule");
+
+
+if(!(previousIdentity instanceof Identity) || !(newIdentity instanceof Identity))
+{
+return false;
+}
+  if(newIdentity == null || newIdentity == void || !newIdentity.isCorrelated())
+  {
+      System.out.println("inside if Next Identity"+newIdentity);
+	  return false;
+	 }
+	 
+	              String firstName = newIdentity.getStringAttribute("firstname");
+				  String lastName = newIdentity.getStringAttribute("lastname");
+				  String birthDate = newIdentity.getStringAttribute("Dob");
+				 // String manager = newIdentity.getStringAttribute("manager");
+	  
+	              //Checking if firstName &amp; lastName &amp; birthDate &amp; birthMonth &amp; Manager should be present in all accounts
+				  if(Util.isNotNullOrEmpty(firstName) &amp;&amp; Util.isNotNullOrEmpty(lastName)
+				  &amp;&amp; Util.isNotNullOrEmpty(birthDate)){
+				  
+				  //Getting All the Links from the identity
+	              List links = newIdentity.getLinks();
+				  if(Util.nullSafeSize(links) &gt; 0){  
+				  for(Link link:links){
+				  String appName = link.getApplicationName();
+				  
+				  //For Oracle Checking if person type should not be equal to Ex-Employee
+				  if(appName.equals("Oracle") &amp;&amp; link.getAttribute("Last4SSN")!=null &amp;&amp; !link.getAttribute("PType").equals("Ex-Employee")){
+            System.out.println("inside oracle application if ");
+					return true;
+					}}
+					
+					//For Banner Checking if Eligible Flag should  be equal to Y
+					if(appName.equals("Banner") &amp;&amp; link.getAttribute("Eligible Flag").equals("Y")){
+					return true;
+					}}
+					
+					//For HMC Checking if Eligible Flag should  be equal to Y &amp; Last 4SSN should be present
+					if(appName.equals("HMC") &amp;&amp; link.getAttribute("Last4SSN")!=null &amp;&amp; link.getAttribute("Eligible Flag").equals("Y")){
+					return true;
+					}
+					
+					  return false;
+
+					}</Source>
+</Rule>

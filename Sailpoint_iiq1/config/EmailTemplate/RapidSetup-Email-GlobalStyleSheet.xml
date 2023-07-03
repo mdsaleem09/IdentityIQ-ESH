@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE EmailTemplate PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<EmailTemplate name="RapidSetup-Email-GlobalStyleSheet">
+  <Body>
+  &lt;style type="text/css"&gt;
+  table {
+		  border: none;
+		  padding: 20px 40px 20px 40px;
+		  margin: 0 auto;
+		  color: #333333;
+		  width: 100%;
+		  border-collapse: separate !important;
+		}
+	&lt;/style&gt;	   
+  </Body>
+  <Subject>Global Style Sheet</Subject>
+</EmailTemplate>

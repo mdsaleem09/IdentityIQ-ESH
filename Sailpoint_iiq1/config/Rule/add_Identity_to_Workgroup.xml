@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="add Identity to Workgroup" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+ 
+
+  
+ import sailpoint.object.*;
+import sailpoint.api.*;
+import sailpoint.object.ProvisioningPlan.AccountRequest;
+   import sailpoint.object.ProvisioningPlan.AttributeRequest;
+   import sailpoint.object.ProvisioningPlan.Operation;
+  import sailpoint.object.ProvisioningPlan;
+
+        String identityName="Benjamin Hicks";
+        System.out.println("Inside this rule:");
+  Identity idObj=context.getObjectByName(Identity.class,identityName);
+    Identity idWorkgroup=context.getObjectByName(Identity.class,"Group -0");
+  if(idObj!=null &amp;&amp; idWorkgroup!=null)
+  {
+  idObj.add(idWorkgroup);
+    
+  context.saveObject(idObj);
+    //context.saveObject(idWorkgroup);
+
+  context.commitTransaction();
+
+  }
+  
+  
+  
+        
+	
+
+ 
+  </Source>
+</Rule>

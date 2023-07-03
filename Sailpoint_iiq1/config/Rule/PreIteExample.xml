@@ -1,0 +1,155 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="PreIteExample" type="PreIterate">
+  <Description>This rule is called before the connector processes the data in a file.</Description>
+  <Signature returnType="void">
+    <Inputs>
+      <Argument name="log">
+        <Description>
+          The log object associated with the SailPointContext.
+        </Description>
+      </Argument>
+      <Argument name="context">
+        <Description>
+          A sailpoint.api.SailPointContext object that can be used to query the database if necessary.
+        </Description>
+      </Argument>
+      <Argument name="application">
+        <Description>
+          Application being iterated.
+        </Description>
+      </Argument>
+      <Argument name="schema">
+        <Description>
+          Schema representing the data being iterated.
+        </Description>
+      </Argument>
+      <Argument name="stats">
+        <Description>
+          A map passed by the connector of the stats for the file about to be iterated.
+          Contains keys:
+            fileName : (String) filename of the file about to be processed
+            absolutePath : (String) absolute filename
+            length : (Long) length in bytes
+            lastModified : (Long) last time the file was updated Java GMT
+        </Description>
+      </Argument>
+    </Inputs>
+  </Signature>
+  <Source>import java.io.*;
+import java.util.*;
+import java.text.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
+import sailpoint.api.*;
+import sailpoint.connector.*;
+import sailpoint.object.*;
+import sailpoint.task.*;
+import sailpoint.tools.*;
+import java.util.stream.*;
+    import sailpoint.object.TaskResult;
+  import sailpoint.tools.Message;
+
+
+
+System.out.println("Context...."+context);
+System.out.println("Application...."+application);
+System.out.println("schema..."+schema);
+System.out.println("Stats...."+stats);
+
+//Check All mand attrbuts there r not
+List record=new ArrayList();
+int HEADER_COUNT=3;
+String filepath=(String)application.getAttributeValue("file");
+
+File file=new File(filepath);
+
+System.out.println("filepath...."+filepath);
+
+
+
+TaskManager managerTask=new TaskManager(context);
+if(file.exists())
+{
+FileInputStream fs=new FileInputStream(file);
+BufferedReader br=new BufferedReader(new InputStreamReader(fs));
+//reading the lines
+System.out.println("salim");
+ Stream lines=br.lines();
+System.out.println("hello");
+Iterator iterator=lines.iterator();
+//getting the first line
+String columnStr=(String)iterator.next();
+String []columns=columnStr.split(",");
+
+System.out.println("line0"+columns[0]);
+
+List columnList=Arrays.asList(columns);
+
+System.out.println("columnList"+columnList);
+
+int column_size=columnList.size();
+
+
+System.out.println("column_size"+column_size);
+
+
+if(HEADER_COUNT!=column_size)
+{
+
+System.out.println("inside if");
+System.out.println("inside if HEADER_COUNT "+HEADER_COUNT);
+System.out.println("inside if column_size"+column_size);
+
+TaskResult result=context.getObject(TaskResult.class,"TestHR Account Aggregation");
+managerTask.terminate(result);
+return;
+}
+
+             else
+                {
+//iterating records one by one,checking mandatory attributes and predefined values are there or not
+//if there is any record without mandatoy attributes and predefined values .adding record to alist
+
+while(iterator.hasNext())
+{
+String record=(String)iterator.next();
+
+if(record!=null &amp;&amp; record.trim().length()&gt;0)
+{
+String []records=record.split(",");
+
+System.out.println("record"+records[0]);
+
+List recordList=Arrays.asList(records);
+
+System.out.println("recordList"+recordList);
+
+//build map from cols and records 
+HashMap map =(HashMap)DelimitedFileConnector.defaultBuildMap(columnList, recordList);
+System.out.println("Map....."+map.toString());
+
+//Check whether EmployeeID is empty or not  if it is empty then terminate the task
+if(map.get("Department")!=null &amp;&amp; map.get("Department").length()&gt;0)
+{
+System.out.println("continue iteration");
+}
+else{
+System.out.println("Exit  task");
+TaskResult taskResult=context.getObjectByName(TaskResult.class,"TestHR Account Aggregation");
+
+  managerTask.terminate(taskResult);
+   Message msg = new Message(Message.Type.Warn," Department does not exist",new Object[] {});
+  System.out.println("msg"+msg);
+      taskResult.addMessage(msg);
+      context.saveObject(taskResult);
+      context.commitTransaction();
+//return;
+}
+}
+}
+             }
+}
+  </Source>
+</Rule>

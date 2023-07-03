@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE QuickLink PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<QuickLink action="manageWorkItems" category="Tasks" cssClass="quicklink-violation-reviews" messageKey="quicklink_violation_reviews" name="Mobile Violation Reviews">
+  <Attributes>
+    <Map>
+      <entry key="displayText" value="true"/>
+      <entry key="textAriaLabel" value="quicklink_policy_violations_text_aria_label"/>
+      <entry key="textScript">
+        <value>
+          <Script>
+            <Source>
+                
+                    import sailpoint.object.QueryOptions;
+                    import sailpoint.object.Filter;
+                    import sailpoint.object.Identity;
+                    import sailpoint.object.WorkItem;
+                    import java.util.List;
+                    import java.util.ArrayList;
+
+                    QueryOptions qo = new QueryOptions();
+                    List filters = new ArrayList();
+
+                    filters.add(Filter.eq("owner", currentUser));
+
+                    if (currentUser.getWorkgroups() != null &amp;&amp; !currentUser.getWorkgroups().isEmpty())
+                    {
+                      filters.add(Filter.in("owner", currentUser.getWorkgroups()));
+                    }
+
+                    qo.addFilter(Filter.or(filters));
+                    qo.addFilter(Filter.eq("type", "ViolationReview"));
+                    int count = context.countObjects(WorkItem.class, qo);
+                    return count;
+                    
+              </Source>
+          </Script>
+        </value>
+      </entry>
+      <entry key="workItemType" value="ViolationReview"/>
+    </Map>
+  </Attributes>
+  <Description>quicklink_policy_violations_desc</Description>
+  <QuickLinkOptions allowSelf="true">
+    <DynamicScopeRef>
+      <Reference class="sailpoint.object.DynamicScope" name="Everyone"/>
+    </DynamicScopeRef>
+  </QuickLinkOptions>
+</QuickLink>

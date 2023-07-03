@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="log test  rule2" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+ import org.apache.log4j.Logger;
+  import org.apache.log4j.Level;
+    Logger log = Logger.getLogger("test.rule.log");
+  log.setLevel(Level.ALL);
+
+  
+  
+    log.debug("salim");
+  
+  
+  
+   
+  </Source>
+</Rule>

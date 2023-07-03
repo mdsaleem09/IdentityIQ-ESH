@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE PolicyViolation PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<PolicyViolation active="true" constraintId="c0a8de017ef61b1f817f1b1951be0b08" constraintName="new rule" policyName="Adv-PolicyViolation Testing" status="Open">
+  <Description>hasAccountGeneral entitlement cannot be combined with other AD entitlements</Description>
+  <IdentityRef>
+    <Reference class="sailpoint.object.Identity" name="Keith Mcdonald"/>
+  </IdentityRef>
+</PolicyViolation>

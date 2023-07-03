@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Capability PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Capability displayName="capability_application_administrator" name="ApplicationAdministrator">
+  <Description>capability_desc_application_administrator</Description>
+  <RightRefs>
+    <Reference class="sailpoint.object.SPRight" name="ViewApplication"/>
+    <Reference class="sailpoint.object.SPRight" name="ManageApplication"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessReport"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessAccountGroupMembershipReport"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessApplicationOwnerCertificationReport"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessApplicationCentricCertificationReport"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessCertificationDecisionReport"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessApplicationActivityReport"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessMitigationReport"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessWorkItemReport"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessApplicationReport"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessUncorrelatedIdentitiesReport"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessApplicationUserReport"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessApplicationRiskReport"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessApplicationStatusReport"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessRemediationProgressReport"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessIdentityApplicationRiskReport"/>
+    <Reference class="sailpoint.object.SPRight" name="ViewApplicationRiskScoreChart"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessGroup"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessApplicationRiskModel"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessApplicationRisk"/>
+    <Reference class="sailpoint.object.SPRight" name="ViewAccountGroups"/>
+    <Reference class="sailpoint.object.SPRight" name="ManagedAttributePropertyAdministrator"/>
+    <Reference class="sailpoint.object.SPRight" name="ManagedAttributeProvisioningAdministrator"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessForms"/>
+  </RightRefs>
+</Capability>

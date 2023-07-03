@@ -1,0 +1,115 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Form PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Form name="Connectivity Information Report Form" type="Report">
+  <Section label="Application Filter" name="Application Attributes">
+    <Field displayName="rept_exclude_application_by_name" helpKey="rept_exclude_application_by_name_helpkey" multi="true" name="applicationNames" type="Application" value="ref:applicationNames"/>
+    <Field displayName="rept_exclude_application_by_type" helpKey="rept_exclude_application_by_type_helpkey" multi="true" name="applicationTypes" type="string" value="ref:applicationTypes">
+      <AllowedValuesDefinition>
+        <Script>
+          <Source>
+              
+              import sailpoint.object.*;
+
+              List applicationTypeList = new ArrayList();
+              QueryOptions qo = new QueryOptions();
+              qo.setDistinct(true);
+              Iterator itTypes = context.search(Application.class, qo, "type");
+
+              while (itTypes.hasNext()) {
+              Object[] types = (Object[]) itTypes.next();
+                applicationTypeList.add(types[0]);
+              }
+
+              return applicationTypeList;
+              
+            </Source>
+        </Script>
+      </AllowedValuesDefinition>
+    </Field>
+  </Section>
+  <Section label="Attributes Filter" name="Sensitive Attributes">
+    <Field displayName="rept_exclude_application_attributes" helpKey="rept_exclude_application_attributes_helpkey" multi="true" name="excludeList" type="string">
+      <Value>
+        <List>
+          <String>access_Token</String>
+          <String>accesstoken</String>
+          <String>admin_name</String>
+          <String>admin_password</String>
+          <String>AdminIDFilePath</String>
+          <String>adminName</String>
+          <String>adminPassword</String>
+          <String>adminuser</String>
+          <String>apikey</String>
+          <String>apiToken</String>
+          <String>authHost</String>
+          <String>authIntegrationKey</String>
+          <String>authPassword</String>
+          <String>baseUrl</String>
+          <String>box_token_info</String>
+          <String>client_secret</String>
+          <String>clientId</String>
+          <String>clientNumber</String>
+          <String>clientSecret</String>
+          <String>cmdClientPassword</String>
+          <String>cmdClientUser</String>
+          <String>companyId</String>
+          <String>config_url</String>
+          <String>databaseName</String>
+          <String>dbName</String>
+          <String>domain</String>
+          <String>domainConnPassword</String>
+          <String>domainName</String>
+          <String>ExchHost</String>
+          <String>excludeDatabases</String>
+          <String>gcServer</String>
+          <String>host</String>
+          <String>hostName</String>
+          <String>includeDatabases</String>
+          <String>instance name</String>
+          <String>integrationKey</String>
+          <String>IQServiceHost</String>
+          <String>mscsname</String>
+          <String>oauth_token_info</String>
+          <String>oauthBearerToken</String>
+          <String>oauthTokenInfo</String>
+          <String>partnerID</String>
+          <String>PassphraseForPrivateKey</String>
+          <String>passwd</String>
+          <String>password</String>
+          <String>people</String>
+          <String>private_key</String>
+          <String>private_key_password</String>
+          <String>privateKey</String>
+          <String>provisioningPassword</String>
+          <String>proxyServer</String>
+          <String>refresh_token</String>
+          <String>refreshToken</String>
+          <String>server</String>
+          <String>serverName</String>
+          <String>servers</String>
+          <String>SharePointServer</String>
+          <String>SID</String>
+          <String>SiebelServerHost</String>
+          <String>siteCollections</String>
+          <String>siteID</String>
+          <String>siteName</String>
+          <String>sptProxyEBSUser</String>
+          <String>SudoUser</String>
+          <String>SudoUserPassword</String>
+          <String>SynchronizationServiceHost</String>
+          <String>systemID</String>
+          <String>testConnSQL</String>
+          <String>token</String>
+          <String>Token URL</String>
+          <String>url</String>
+          <String>user</String>
+          <String>User name</String>
+          <String>userID</String>
+          <String>username</String>
+          <String>webexID</String>
+          <String>xmlURL</String>
+        </List>
+      </Value>
+    </Field>
+  </Section>
+</Form>

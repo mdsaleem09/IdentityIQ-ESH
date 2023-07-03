@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="workgroup from rule" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+
+import sailpoint.object.*;
+  import sailpoint.api.*;
+  
+   public void addMember(String identity, String wgName){
+  Identity id = context.getObjectByName(Identity.class,identity);
+  QueryOptions ops = new QueryOptions();
+  ops.addFilter(Filter.eq(wgName,true));
+  id.setWorkgroups(context.getObjects(Identity.class,ops));
+  context.saveObject(id);
+  context.commitTransaction();
+  }
+  
+  
+  for(int i=1; i&lt;=3; i++){
+    List l = new ArrayList();
+Identity wg = new Identity();
+  
+  ArrayList list=new ArrayList();
+  list.add(context.getObjectByName(Capability.class,"SystemAdministrator"));
+  
+  
+wg.setWorkgroup(true);
+wg.setName("test-workgroup"+i);
+  wg.setOwner(context.getObjectByName(Identity.class,"spadmin"));
+
+wg.setDescription("workgroup"+i);
+   wg.setCapabilities(list);
+
+    
+    String wgName="workgroup";
+    String idName="Amanda Ross";
+
+        context.saveObject(wg);
+    context.commitTransaction();
+
+     addMembers(wgName,idName);
+
+   
+    
+  }
+    
+  
+  
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+ 
+  
+  </Source>
+</Rule>

@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE RequestDefinition PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<RequestDefinition executor="sailpoint.request.CertificationBuilderExecutor" name="Certification Builder">
+  <Attributes>
+    <Map>
+      <entry key="maxThreads" value="4"/>
+    </Map>
+  </Attributes>
+</RequestDefinition>

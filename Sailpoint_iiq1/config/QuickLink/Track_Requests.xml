@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE QuickLink PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<QuickLink action="viewAccessRequests" category="Access" cssClass="quicklink-track-requests" messageKey="quicklink_track_requests" name="Track Requests" ordering="3">
+  <Description>quicklink_track_requests_desc</Description>
+  <QuickLinkOptions allowSelf="true">
+    <DynamicScopeRef>
+      <Reference class="sailpoint.object.DynamicScope" name="Self Service"/>
+    </DynamicScopeRef>
+  </QuickLinkOptions>
+</QuickLink>

@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Hybrid Entitlements">
+  <Description>This rule is used to set the owner or modify the account group before it is persisted to the database.</Description>
+  <Source>ManagedAttribute ma=ManagedAttributer.get(context,groupApplication,false,accountGroup.getAttribute(),accountGroup.getValue());
+
+if(ma!=null)
+{
+if(ma.getAttribute("aggregated")==null || ma.getAttribute("aggregated")==false)
+{
+System.out.println("inside if ");
+ma.setRequestable(false);
+accountGroup.setRequestable(false);
+ma.setAttribute("aggregated",true);
+accountGroup.setAttribute("aggregated",true);
+}
+}
+</Source>
+</Rule>

@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="getObjectByName">
+  <Source>
+///This rule is used to get identityObject By using his Name
+  import sailpoint.object.Identity;
+  import sailpoint.object.*;
+  
+  
+  //String idName="James Smith";
+     Identity  idObject=context.getObjectByName(Identity.class, "James Smith");
+  return idObject.getLastname() ;
+  </Source>
+</Rule>

@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="test email" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+  import sailpoint.object.EmailOptions;
+
+  import sailpoint.object.EmailTemplate;
+  import sailpoint.object.*;
+
+  Map map =new HashMap();
+  
+  Custom custom = context.getObjectByName(Custom.class,"Staging_Custom");
+
+  String applicationName = custom.get("appName");
+
+       
+        
+   
+  //List finalList = new ArrayList();
+  List accNames = custom.get(applicationName);
+  //List firstNames = new ArrayList();
+  //List lastNames = new ArrayList();
+/*
+  for(Map accName :accNames){
+    Filter filter = Filter.and(Filter.eq("links.application.name",applicationName),Filter.eq("links.nativeIdentity",accName.get("accountName")));
+    QueryOptions qo=new QueryOptions();
+    qo.addFilter(filter);
+    List result=context.getObjects(Identity.class,qo);
+    Identity idObj = result.get(0);
+
+    Map finalMap = new HashMap();
+    if(idObj!=null){
+      finalMap.put("accountName",accName.get("accountName"));
+      finalMap.put("firstName",accName.get("First Name"));
+      finalMap.put("lastName",accName.get("Last Name"));
+      finalList.add(finalMap);
+    }
+
+  }
+  return finalList;
+      //firstNames.add(idObj.getFirstname());
+      //lastNames.add(idObj.getLastname());
+      //finalList.add(accName+"\t\t\t\t\t"+idObj.getFirstname()+"\t\t\t\t\t"+idObj.getLastname()+"\n");
+    
+    //finalMap.clear();
+
+  
+
+*/
+
+  
+
+  if(applicationName!=null){
+
+    Map map =new HashMap();
+    map.put("accounts",accNames);
+    map.put("app",applicationName);
+
+
+    //map.put("first",firstNames);
+    //map.put("last",lastNames);
+
+
+
+    EmailTemplate template = context.getObjectByName(EmailTemplate.class,"Staging Accounts");
+    EmailOptions options = new EmailOptions();
+    options.setTo("abc@example.com");
+    options.setVariables(map);
+    context.sendEmailNotification(template, options);
+    // custom.get(appName).clear();
+    context.saveObject(custom);
+    context.commitTransaction();
+
+  }
+
+
+
+  /*
+ArrayList list =new ArrayList();
+  list.add("John.Williams@eshiam.com");
+  list.add("Wayne.Gordon@eshiam.com");
+
+
+
+  Map args = new HashMap();
+
+args.put("workItemName", "New certification");
+  args.put("ownerName", "spadmin");
+      args.put("requesterName", "John Williams");
+
+EmailTemplate template = context.getObjectByName(EmailTemplate.class, "Certification");
+
+//EmailOptions options = new EmailOptions();
+
+//options.setTo("John.Williams@eshiam.com");
+          EmailOptions ops = new EmailOptions(list, args);
+
+
+
+
+
+
+
+
+
+
+
+
+context.sendEmailNotification(template, ops);
+*/
+  </Source>
+</Rule>

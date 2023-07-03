@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="managed Attributer" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+  import sailpoint.object.Identity;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+  import sailpoint.api.ManagedAttributer;
+  
+ Application app=context.getObjectByName(Application.class,"Active- DemoJdbcApp");
+  
+  
+  ManagedAttribute ma= ManagedAttributer.getByDisplayName(context,app,"Engineering");
+  return ma.toXml();
+  
+  
+  List list=new ArrayList();
+  Filter filter=Filter.eq("application.name","Active Directory");
+  QueryOptions op=new QueryOptions();
+  op.add(filter);
+  
+  Iterator itr=context.search(ManagedAttribute.class,op);
+  while(itr.hasNext())
+  {
+      ManagedAttribute ma=(ManagedAttribute)itr.next();
+          
+    if(ma!=null)
+    {
+      ma.setRequestable(true);
+        //Map map= ma.getAttribute("sysDescriptions");
+     // list.add(map.get("en_US"));
+  }
+    
+  }
+ // return list;
+System.out.println("Inside the rule");
+  </Source>
+</Rule>

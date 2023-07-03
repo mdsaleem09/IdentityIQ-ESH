@@ -1,0 +1,222 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ObjectConfig PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ObjectConfig name="Identity">
+  <Attributes>
+    <Map>
+      <entry key="defaultIdentityType">
+        <value>
+          <IdentityTypeDefinition name="IIQ_default">
+            <DisallowedAttributes>
+              <String>softwareVersion</String>
+              <String>administrator</String>
+            </DisallowedAttributes>
+          </IdentityTypeDefinition>
+        </value>
+      </entry>
+      <entry key="identityTypeDefinitions">
+        <value>
+          <List>
+            <IdentityTypeDefinition displayName="identity_type_employee" name="employee">
+              <DisallowedAttributes>
+                <String>softwareVersion</String>
+                <String>administrator</String>
+              </DisallowedAttributes>
+            </IdentityTypeDefinition>
+            <IdentityTypeDefinition displayName="identity_type_contractor" name="contractor">
+              <DisallowedAttributes>
+                <String>softwareVersion</String>
+                <String>administrator</String>
+              </DisallowedAttributes>
+            </IdentityTypeDefinition>
+            <IdentityTypeDefinition displayName="identity_type_partner" name="partner">
+              <DisallowedAttributes>
+                <String>softwareVersion</String>
+                <String>administrator</String>
+              </DisallowedAttributes>
+            </IdentityTypeDefinition>
+            <IdentityTypeDefinition displayName="identity_type_rpa" name="rpa">
+              <DisallowedAttributes>
+                <String>manager</String>
+              </DisallowedAttributes>
+              <ManagerCertifierAttribute>administrator</ManagerCertifierAttribute>
+            </IdentityTypeDefinition>
+            <IdentityTypeDefinition displayName="identity_type_service" name="service">
+              <DisallowedAttributes>
+                <String>softwareVersion</String>
+              </DisallowedAttributes>
+              <ManagerCertifierAttribute>administrator</ManagerCertifierAttribute>
+            </IdentityTypeDefinition>
+          </List>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+  <ObjectAttribute displayName="att_user_name" editMode="Permanent" name="name" silent="true" system="true" type="string"/>
+  <ObjectAttribute displayName="att_detected_roles" editMode="Permanent" groupFactory="true" name="bundles" system="true" type="string"/>
+  <ObjectAttribute displayName="att_detected_role_summary" editMode="Permanent" name="bundleSummary" silent="true" system="true" type="string"/>
+  <ObjectAttribute displayName="att_assigned_roles" editMode="Permanent" groupFactory="true" name="assignedRoles" system="true" type="string"/>
+  <ObjectAttribute displayName="att_assigned_role_summary" editMode="Permanent" name="assignedRoleSummary" silent="true" system="true" type="string"/>
+  <ObjectAttribute displayName="att_exceptions" editMode="Permanent" name="exceptions" silent="true" system="true" type="string"/>
+  <ObjectAttribute displayName="att_last_refresh" editMode="Permanent" name="lastRefresh" silent="true" system="true" type="string"/>
+  <ObjectAttribute displayName="att_last_login" editMode="Permanent" name="lastLogin" silent="true" system="true" type="string"/>
+  <ObjectAttribute displayName="att_capabilities" editMode="Permanent" name="capabilities" system="true" type="string"/>
+  <ObjectAttribute displayName="att_composite_score" editMode="Permanent" name="scorecard.compositeScore" silent="true" system="true" type="string"/>
+  <ObjectAttribute displayName="att_manager_status" editMode="Permanent" name="managerStatus" system="true" type="boolean"/>
+  <ObjectAttribute displayName="att_rights" editMode="Permanent" name="rights" system="true" type="string"/>
+  <ObjectAttribute displayName="att_workgroups" editMode="Permanent" name="workgroups" system="true" type="string"/>
+  <ObjectAttribute displayName="att_identity_type" editMode="Permanent" name="type" standard="true" type="string"/>
+  <ObjectAttribute displayName="att_software_version" editMode="Permanent" name="softwareVersion" standard="true" type="string"/>
+  <ObjectAttribute displayName="att_administrator" editMode="Permanent" name="administrator" standard="true" type="sailpoint.object.Identity"/>
+  <ObjectAttribute displayName="att_inactive" editMode="Permanent" name="inactive" standard="true" type="boolean">
+    <AttributeSource name="inactiveIdentity">
+      <ApplicationRef>
+        <Reference class="sailpoint.object.Application" name="HR - System"/>
+      </ApplicationRef>
+    </AttributeSource>
+  </ObjectAttribute>
+  <ObjectAttribute displayName="att_display_name" editMode="Permanent" name="displayName" standard="true" type="string">
+    <AttributeSource name="Name">
+      <ApplicationRef>
+        <Reference class="sailpoint.object.Application" name="HR - System"/>
+      </ApplicationRef>
+    </AttributeSource>
+    <AttributeSource name="sAMAccountName">
+      <ApplicationRef>
+        <Reference class="sailpoint.object.Application" name="Active- Directory"/>
+      </ApplicationRef>
+    </AttributeSource>
+  </ObjectAttribute>
+  <ObjectAttribute displayName="NetworkID" editMode="Permanent" extendedNumber="3" name="networkID" type="string">
+    <AttributeSource name="NetworkID">
+      <ApplicationRef>
+        <Reference class="sailpoint.object.Application" name="HR - System"/>
+      </ApplicationRef>
+    </AttributeSource>
+  </ObjectAttribute>
+  <ObjectAttribute displayName="costCenter" editMode="Permanent" name="costCenter" namedColumn="true" type="string"/>
+  <ObjectAttribute displayName="Test Center" editMode="Permanent" name="testCenter" namedColumn="true" type="string"/>
+  <ObjectAttribute displayName="Department" editMode="Permanent" extendedNumber="2" name="department" type="string">
+    <AttributeSource name="Department">
+      <ApplicationRef>
+        <Reference class="sailpoint.object.Application" name="HR - System"/>
+      </ApplicationRef>
+    </AttributeSource>
+  </ObjectAttribute>
+  <ObjectAttribute displayName="Demo Center" editMode="Permanent" name="demoCenter" namedColumn="true" type="string">
+    <AttributeSource name="Department">
+      <ApplicationRef>
+        <Reference class="sailpoint.object.Application" name="HR - System"/>
+      </ApplicationRef>
+    </AttributeSource>
+  </ObjectAttribute>
+  <ObjectAttribute displayName="startDate" editMode="ReadOnly" name="startDat" namedColumn="true" type="string">
+    <AttributeSource name="AppRule: startDate HR - System">
+      <ApplicationRef>
+        <Reference class="sailpoint.object.Application" name="HR - System"/>
+      </ApplicationRef>
+      <RuleRef>
+        <Reference class="sailpoint.object.Rule" name="startDate"/>
+      </RuleRef>
+    </AttributeSource>
+  </ObjectAttribute>
+  <ObjectAttribute displayName="Dob" editMode="ReadOnly" extendedNumber="5" name="Dob" type="string">
+    <AttributeSource name="DOB">
+      <ApplicationRef>
+        <Reference class="sailpoint.object.Application" name="Oracle"/>
+      </ApplicationRef>
+    </AttributeSource>
+  </ObjectAttribute>
+  <ObjectAttribute displayName="Termination Date" editMode="ReadOnly" extendedNumber="7" name="terminationDate" type="string">
+    <AttributeSource name="Termination Date">
+      <ApplicationRef>
+        <Reference class="sailpoint.object.Application" name="Oracle"/>
+      </ApplicationRef>
+    </AttributeSource>
+  </ObjectAttribute>
+  <ObjectAttribute displayName="att_email" editMode="Permanent" name="email" standard="true" type="string">
+    <AttributeSource name="EmailAddress">
+      <ApplicationRef>
+        <Reference class="sailpoint.object.Application" name="HR - System"/>
+      </ApplicationRef>
+    </AttributeSource>
+    <AttributeTargets>
+      <AttributeTarget name="description">
+        <ApplicationRef>
+          <Reference class="sailpoint.object.Application" name="Active- Directory"/>
+        </ApplicationRef>
+        <RuleRef>
+          <Reference class="sailpoint.object.Rule" name="Mail"/>
+        </RuleRef>
+      </AttributeTarget>
+    </AttributeTargets>
+  </ObjectAttribute>
+  <ObjectAttribute displayName="EmployeeID" editMode="Permanent" extendedNumber="1" name="EmployeeID" type="string">
+    <AttributeSource name="EmployeeID">
+      <ApplicationRef>
+        <Reference class="sailpoint.object.Application" name="HR - System"/>
+      </ApplicationRef>
+    </AttributeSource>
+    <AttributeSource name="EmployeeID">
+      <ApplicationRef>
+        <Reference class="sailpoint.object.Application" name="Oracle"/>
+      </ApplicationRef>
+    </AttributeSource>
+  </ObjectAttribute>
+  <ObjectAttribute displayName="Life Cycle Status" editMode="ReadOnly" extendedNumber="9" name="lifeCycle" type="string"/>
+  <ObjectAttribute displayName="Persona Type" editMode="ReadOnly" extendedNumber="6" name="pType" type="string">
+    <AttributeSource name="PType">
+      <ApplicationRef>
+        <Reference class="sailpoint.object.Application" name="Oracle"/>
+      </ApplicationRef>
+    </AttributeSource>
+  </ObjectAttribute>
+  <ObjectAttribute displayName="Mail Expiration Date" editMode="ReadOnly" extendedNumber="8" name="mailExpiry" type="string"/>
+  <ObjectAttribute displayName="mailboxExtendRequested" editMode="ReadOnly" name="mailboxExtendRequested" type="string"/>
+  <ObjectAttribute displayName="Global Unique ID" editMode="ReadOnly" extendedNumber="4" name="globalID" type="string"/>
+  <ObjectAttribute displayName="Joiner Flag" editMode="ReadOnly" extendedNumber="10" name="joinerFlag" type="string"/>
+  <ObjectAttribute displayName="last4" editMode="ReadOnly" name="Last4SSN" type="string">
+    <AttributeSource name="IIQ_Last4SSN">
+      <ApplicationRef>
+        <Reference class="sailpoint.object.Application" name="Oracle"/>
+      </ApplicationRef>
+    </AttributeSource>
+  </ObjectAttribute>
+  <ObjectAttribute displayName="att_last_name" editMode="ReadOnly" multi="true" name="lastname" standard="true" type="string">
+    <ListenerRule>
+      <Reference class="sailpoint.object.Rule" name="OHSU-ValueChangeRule-Lastname"/>
+    </ListenerRule>
+    <AttributeSource name="Surname">
+      <ApplicationRef>
+        <Reference class="sailpoint.object.Application" name="HR - System"/>
+      </ApplicationRef>
+    </AttributeSource>
+    <AttributeSource name="LastName">
+      <ApplicationRef>
+        <Reference class="sailpoint.object.Application" name="Oracle"/>
+      </ApplicationRef>
+    </AttributeSource>
+  </ObjectAttribute>
+  <ObjectAttribute displayName="First Name" editMode="Permanent" name="firstname" standard="true" type="string">
+    <ListenerRule>
+      <Reference class="sailpoint.object.Rule" name="OHSU-Value-Rule"/>
+    </ListenerRule>
+    <AttributeSource name="GivenName">
+      <ApplicationRef>
+        <Reference class="sailpoint.object.Application" name="HR - System"/>
+      </ApplicationRef>
+    </AttributeSource>
+    <AttributeSource name="FirstName">
+      <ApplicationRef>
+        <Reference class="sailpoint.object.Application" name="Oracle"/>
+      </ApplicationRef>
+    </AttributeSource>
+    <AttributeTargets>
+      <AttributeTarget name="givenName" provisionAllAccounts="true">
+        <ApplicationRef>
+          <Reference class="sailpoint.object.Application" name="Active- Directory"/>
+        </ApplicationRef>
+      </AttributeTarget>
+    </AttributeTargets>
+  </ObjectAttribute>
+  <ObjectAttribute displayName="att_manager" editMode="Permanent" groupFactory="true" name="manager" standard="true" type="sailpoint.object.Identity"/>
+</ObjectConfig>

@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Disable-Account" type="FieldValue">
+  <Description>This rule can be used to generate a field value (eg - an account name) using data from the given Identity. If this rule is run in the context of a workflow step then the arguments passed into the step will also be available. Also, any field values that have been processed so far from the policy related to the Application/Role will be available.</Description>
+  <Signature returnType="String"/>
+  <Source>import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import sailpoint.tools.Util;
+  import sailpoint.object.*;
+
+
+
+return true;
+  
+  if(identity.getAttribute("startDat")!=null){
+  Date startDate = identity.getAttribute("startDat");
+  if(Util.getDaysDifference(new Date(),startDate) &gt;=0 ){
+      return false;
+    }
+    return true;
+    }
+  
+  
+  
+  /*String accStartDate = null;
+  accStartDate =  identity.getStringAttribute("startDat");
+  if(Util.isNotNullOrEmpty(accStartDate)){
+    long longDate =Long.parseLong(accStartDate);
+    Date startDate = new Date(longDate);
+
+    //IT will it startdate is equals or greater then current date it will return true
+    if(Util.getDaysDifference(new Date(),startDate) &gt;=0 ){
+      return false;
+    }
+    return true;
+    }
+    */</Source>
+</Rule>

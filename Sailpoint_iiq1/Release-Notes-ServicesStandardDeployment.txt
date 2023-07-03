@@ -1,0 +1,150 @@
+Release: SSD v7.0.1 GA
+Released: January 2023
+
+****************************************
+OVERVIEW OF RELEASE
+****************************************
+
+Version 7 of the consolidated Services Standard Deployment (SSD) contains several 
+updates, fixes and enhancements.
+
+****************************************
+NEW TO THIS RELEASE:
+****************************************
+
+- Security updates
+
+****************************************
+NEW in v7:
+****************************************
+SSB: 
+- Support added for deployment of Rapid Setup
+- Support added for deployment of integration components for Privileged Access Management, 
+  File Access Manager, Cloud Access Management and AI Services, if your implementation
+  includes these additional services.
+- Fixed issue with SSB subset builds failing.
+- Added classes-connectors and lib-connectors to SSB classpath for correct compilation of
+  custom connectors.
+- Added the ability to define whether the custom jar created from custom Java code gets 
+  included in the build (see SSB User Guide).
+- A number of vulnerabilities have been fixed in various components in the SSB.
+      
+Please refer to the SSB User Guide.        
+         
+SSD:
+
+- Fixed issue with the Enhanced Email Notifier where it was not properly stripping spaces 
+  from lists of email addresses, and provided extra examples.
+- Fixed incorrect example in Password Expiration Reminder tool.
+- Updated Performance Sizing Rule to work with later versions of IdentityIQ.
+- Fixed issue with the Certification Closer iterator being closed before completion in 
+  IdentityIQ 8.x.
+- Certification Closer now ignores immutable items.
+- A number of vulnerabilities have been fixed in various components in the SSD.
+
+
+IMPORTANT: Ant is no longer provided with the SSD and must be supplied by the implementer.
+
+- Latest version of Ant should be downloaded and made available in the path for execution 
+	For Unix & Mac systems: 
+		export ANT_HOME=<Location of ant> (eg: $HOME/build_tools/apache-ant-1.10.9)
+		export PATH=$PATH:$ANT_HOME/bin
+
+	For Windows Machines (SET is for current process space, to set the variables globally use syntax for SETX or use UI to set the variables)
+		SET ANT_HOME=<Location of ant> (eg: D:\build_tools\apache-ant-1.10.9)
+		SET PATH=%ANT_HOME%\bin;%PATH%
+	
+- If variables cannot be set, update the following lines
+	build.sh (for unix machines) - ant $@  to <ANT_HOME>/bin/ant $@ (e.g.: $HOME/build_tools/apache-ant-1.10.9/bin/ant $@)
+	build.bat (for windows machines) - ant %* to <ANT_HOME>\bin\ant %* (e.g.:  D:\build_tools\apache-ant-1.10.9\bin\ant %*)
+
+
+The following SSB and SSD components have been removed:
+
+- SSB Build Checks (will be replaced with a PS Extension plugin)
+- SSB Document Generator / 'document' Ant target (new documentation tools are planned
+  as PS Extensions)
+- LogiPlex Connector (now available on on PS Extensions Page on Compass)
+- IdentityIQ Loopback Connector (now part of the Accelerator Pack)
+- IdentityIQ Summarizer (new documentation tools are planned as PS Extensions)
+- Task Resulter Plugin (similar functionality available OOTB in Administrator Console)
+- Customization Plugin (deprecated due to plugin enhancements in IdentityIQ 8.x versions)
+- Log Level Manager Plugin (similar functionality available in DevSAK)
+- Multithreaded BeanShell Toolkit (Java Multi Threaded Toolkit is planned as a PS 
+  Extension)
+- Rule Runner Task (similar functionality available OOTB)
+- XML Object Exporter (Now available as a PS Extension in plugin format)
+- Email Approvals (uses outdated POP and IMAT technology)
+- Break Glass Access Request (available in Accelerator Pack and Rapid Setup)
+- Server-Specific Task Launcher (similar functionality available OOTB)
+- Certification Exclusion Framework (similar functionality now available in Targeted 
+  Certifications)
+- Access Request Attachments (similar functionality available OOTB)
+
+Services Standard Frameworks and Features are still available in the SSD for customers using
+these components.  SailPoint advises that new implementations should use Rapid Setup (8.1+) 
+or the Accelerator Pack (8.0) instead.  The Features and Frameworks are likely to be dropped
+from the SSD in a future release.
+ 
+****************************************
+NOTES
+****************************************
+
+JDK version 7 is no longer supported in the SSB/SSD.
+
+To assist the SailPoint Support team, the version of the SSB or SSD used to build 
+IdentityIQ can now be seen by accessing the ServicesStandardVersion.html file at the root
+of the application (e.g. http://servername:8080/ServicesStandardVersion.html).  This
+information is taken from these release notes, so please do not delete this file or move
+it from its current location, and do not delete the html file that is generated during the
+build process.  The page also includes a timestamp indicating the last time the build was
+executed.
+
+SSF provisioning now runs in the background by default for all the SSF features, which
+means provisioning will not happen until the next time the Perform Maintenance task runs.
+This is the recommended setting to avoid identity locking conflicts during identity 
+refreshes.
+
+If you are currently using a version of the SSF features and frameworks from SSD v1.1 or
+earlier there is no simple upgrade procedure for these components.  An upgrade would be a
+more in-depth exercise carried out by a trained and experienced IdentityIQ implementer.
+
+****************************************
+SUMMARY OF SSD
+****************************************
+
+The SSD consists of the following packages:
+
+Services Standard Build (SSB) - Standard packaging and build process.
+Services Standard Frameworks (SSF) - Reusable frameworks, features and tools.  
+Services Standard Words (SSW) - Document templates (not shipped with the SSD but provided 
+on Compass)
+Services Standard Performance (SSP) - Performance tools
+Services Standard Test (SST) - Testing tools
+
+
+****************************************
+SUMMARY OF CONTENTS
+****************************************
+
+SSB:            Standard IdentityIQ build tool.
+
+
+SSF:  
+    Frameworks: Field Value, Role Assignment, Dynamic Emails, Approvals, Provision 
+                Processor
+    Features:   Joiner, Mover, Leaver, Attribute Synch, Terminate Identity, Rehire
+    Tools:      Generic Importer, Report Extractor, Correlation Migrator, 
+                Workgroup Migrator, Enhanced Email Notifier, Email Template Editor,
+                Password Expiration Reminder, Certification Closer, 
+                Mock Integration Executor,
+
+SSP: 
+    Tools:      DB Performance Rule, Sizing Rule, DB Row Count Rule
+
+SST:
+    Tools:      Unit Tester, JUnit IdentityIQ Helper
+    
+
+For more details on the SSD please visit:
+https://community.sailpoint.com/community/identityiq/sailpoint-toolkits/standard-services-deployment

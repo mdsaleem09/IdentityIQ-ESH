@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="get managed attributes with type" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+  import sailpoint.object.Identity;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+  
+  
+ // String appName="";
+  
+  List list=new ArrayList();
+  Filter filter=Filter.and(Filter.eq("application.name","Active Directory"),Filter.eq("type","group"));
+  QueryOptions op=new QueryOptions();
+  op.add(filter);
+  
+  Iterator itr=context.search(ManagedAttribute.class,op);
+  while(itr.hasNext())
+  {
+      ManagedAttribute ma=(ManagedAttribute)itr.next();
+    if(ma!=null)
+    {
+      return 	ma.toXml();
+  List childObj = ma.get("ChildRoles");
+      for(String child:childObj)
+      {
+        
+        //list.add(ma.getAttribute());
+    }
+  }
+  }
+  return appName;
+System.out.println("Inside the rule");
+  </Source>
+</Rule>

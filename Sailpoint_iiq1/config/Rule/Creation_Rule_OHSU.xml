@@ -1,0 +1,132 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Creation Rule_OHSU" type="IdentityCreation">
+  <Description>Identity creation rules are used to set attributes on new Identity objects when they are created.  New identities may be created during the aggregation of application accounts, or optionally created after pass-through authentication.
+
+    One common operation is to change the name property of the identity when the default application name is complex (such as a directory DN).
+
+    Another common operation is to assign a set of initial capabilities based on the attributes pulled from the application account.</Description>
+  <Signature returnType="void">
+    <Inputs>
+      <Argument name="log" type="org.apache.commons.logging.Log">
+        <Description>
+          The log object associated with the SailPointContext.
+        </Description>
+      </Argument>
+      <Argument name="context" type="sailpoint.api.SailPointContext">
+        <Description>
+          A sailpoint.api.SailPointContext object that can be used to query the database if necessary.
+        </Description>
+      </Argument>
+      <Argument name="environment" type="Map">
+        <Description>
+          Arguments passed to the aggregation task.
+        </Description>
+      </Argument>
+      <Argument name="application">
+        <Description>
+          Application being aggregated.
+        </Description>
+      </Argument>
+      <Argument name="account" type="ResourceObject">
+        <Description>
+          The resource account for the identity being created.
+        </Description>
+      </Argument>
+      <Argument name="identity" type="Identity">
+        <Description>
+          The identity that is being created.
+        </Description>
+      </Argument>
+    </Inputs>
+  </Signature>
+  <Source>
+  import sailpoint.object.Identity;
+  import sailpoint.object.Filter;
+  import sailpoint.object.QueryOptions;
+  import sailpoint.tools.Util;
+
+  String accName = null;
+  String finalWord = null;
+  String accFirstName = account.getAttribute("FirstName");
+  String accLastName = account.getAttribute("LastName");
+  String accountName = account.getAttribute("Name");
+
+  if (Util.isNullOrEmpty(accFirstName) &amp;&amp; Util.isNullOrEmpty(accLastName)) {
+    if (Util.isNotNullOrEmpty(accountName) &amp;&amp; accountName.contains(", ")) {
+      String [] strArray = accountName.split(", ");
+      if (strArray != null &amp;&amp; strArray.length == 2) {
+        accLastName = strArray[0];
+        accFirstName = strArray[1];
+        String [] strfname = accFirstName.split(" ");
+        if (strfname != null &amp;&amp; strfname.length == 2) {
+          accFirstName = strfname[0];
+        }
+      }
+    }
+  }
+  System.out.println("==================accFirstName:"+accFirstName);
+  System.out.println("==================accLastName:"+accLastName);
+
+
+  int count = 1;
+
+  if(Util.isNotNullOrEmpty(accFirstName) &amp;&amp; Util.isNotNullOrEmpty(accLastName)){
+    if(accFirstName.length()&lt;3 &amp;&amp; accLastName.length()&lt;3){
+      accName=accFirstName+accLastName;
+    } 
+    else if(accFirstName.length()&lt;3 &amp;&amp; accLastName.length()&gt;=3){
+      accName =  accFirstName+accLastName.substring(0,3);
+    }
+    else if(accFirstName.length()&gt;=3 &amp;&amp; accLastName.length()&lt;3){
+      accName =  accFirstName.substring(0,3)+accLastName;
+    }
+    else{
+      accName =  accFirstName.substring(0,3)+accLastName.substring(0,3);
+    }
+  }
+
+  else if (Util.isNullOrEmpty(accFirstName) &amp;&amp; Util.isNotNullOrEmpty(accLastName)){
+    if(accLastName.length()&gt;=3) {
+      accName = accLastName.substring(0,3);
+    } 
+    else{
+      accName = accLastName; 
+    }
+  }
+
+  else if(Util.isNotNullOrEmpty(accFirstName) &amp;&amp; Util.isNullOrEmpty(accLastName)){
+    if(accFirstName.length()&gt;=3) {
+      accName = accFirstName.substring(0,3);
+    }
+    else{
+      accName = accFirstName;   
+    } 
+  }
+
+  System.out.println("accName"+accName);
+  Filter filter = Filter.eq("name",accName);
+  QueryOptions qo = new QueryOptions();
+  qo.addFilter(filter);
+  List identities = context.getObjects(Identity.class, qo);
+  if(Util.nullSafeSize(identities) &gt; 0){
+    List index =new ArrayList();
+    for(Identity id :identities) {
+       System.out.println("Identity"+id.getName());
+      if(id.getName().toString().length() &gt; 6 ){
+        index.add(Integer.valueOf(id.getName().substring(6))); 
+      }
+    }
+    if(index.size()&gt;0){
+      Collections.sort(index);
+      count=index.get(index.size()-1)+1;
+    }
+  }
+  System.out.println("accName after if :-"+accName);
+  if(Util.isNotNullOrEmpty(accName)){
+    finalWord = Util.deleteWhitespace(accName.toLowerCase());
+    identity.setName(finalWord+count.toString());
+  }
+
+  </Source>
+</Rule>

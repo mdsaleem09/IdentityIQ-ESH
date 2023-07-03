@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="TestRoleEventRule">
+  <Source>
+
+  import java.util.ArrayList;
+  import java.util.HashMap;
+  import java.util.List;
+  import java.util.Map;
+
+  import sailpoint.object.Application;
+  import sailpoint.object.Bundle;
+  import sailpoint.object.Filter;
+  import sailpoint.object.Profile;
+  import sailpoint.server.SailPointConsole;
+  import sailpoint.object.Filter.LeafFilter;
+
+  List itRoles = new ArrayList();
+  itRoles.add("DemoJdbcApp-Engineering");
+
+  //	public static void getAppWiseEntitlements(List itRoles) {
+  Map retMap = new  HashMap();
+  try {
+    for(String itRoleName : itRoles) {
+      Bundle itbundle = context.getObjectByName(Bundle.class, itRoleName);
+      if(itbundle == null) continue;
+      List profiles = itbundle.getProfiles();
+      //return profiles;
+      for(Profile pfObj : profiles ) {
+        Application application = pfObj.getApplication();
+        List constraints = pfObj.getConstraints();
+        //return constraints;
+        for(LeafFilter filterobj : constraints) {
+						return filterobj.getValue();
+          return filterobj.getExpression();
+        }
+      }
+
+    }
+
+  }catch(Exception e) {
+    System.out.println(" Error in getAppWiseEntitlements() : "+e.getMessage());
+  }
+
+  //}
+
+
+
+  //getAppWiseEntitlements(removeList);
+
+  </Source>
+</Rule>

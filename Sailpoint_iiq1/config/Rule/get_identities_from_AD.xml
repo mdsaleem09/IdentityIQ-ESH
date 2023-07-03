@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="get identities from AD" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+  import sailpoint.object.Identity;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+  import java.util.*;
+  
+      List list=new ArrayList();
+  
+   
+ 
+  List list=new ArrayList();
+  Filter f=Filter.eq("application.name","Active Directory");
+  QueryOptions opts=new QueryOptions();
+  opts.addFilter(f);
+  Iterator idew=context.search(Link.class,opts);
+  while(idew.hasNext())
+  {
+           Link idsq=idew.next();
+    Identity id = idsq.getIdentity();
+  
+    list.add(id.getName());
+  }
+  return list;
+  
+ 
+  /*
+          List idObj=context.getObjects(Identity.class);
+          for(Identity id:idObj)
+          {
+            if(id!=null)
+            {
+                  List linkObj=id.getLinks();
+                  for(Link link:linkObj)
+                  {
+                    if(link!=null &amp;&amp; link!=void &amp;&amp;  link.getApplicationName()!=null &amp;&amp;  link.getApplicationName().equalsIgnoreCase("Active Directory"))
+                    {
+                     list.add(link.getDisplayName());
+                    
+                    }
+                  }
+            }
+          }
+          
+  return list;
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  /*
+  
+ Filter filter=Filter.ge("application.name","Active Directory");
+   QueryOptions opts=new QueryOptions();
+              opts.addFilter(filter);
+               
+                    Iterator it=context.search(Link.class,opts);
+                          while(it.hasNext())
+                          {
+                           Link liObj=(Link)it.next();
+
+                           
+                              if(link!=null &amp;&amp; link !=void)
+                              {
+                                 return link.getIdentity();
+                             Identity idObj= link.getIdentity();
+                                if(idObj!=null)
+                                {
+                                   list.add(idObj.getAttribute("displayName"));
+                                            }
+                                            }
+                          }
+   return list;
+   */
+  </Source>
+</Rule>

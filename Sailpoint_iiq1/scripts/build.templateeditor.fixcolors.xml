@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="services.standard.build.emailtemplateeditor">
+
+    <!-- ********************************************************* -->
+    <!-- Fix for the Email Template Editor.                        -->
+    <!-- Without this, the color picker palette shows all color    -->
+    <!-- squares as grey.                                          -->
+    <!-- ********************************************************* -->
+   <condition property="colorfix.present">
+      <resourcecontains resource="${build}/extract/scripts/ext-patches.js" substring="Ext.override(Ext.picker.Color,{" />
+   </condition>
+   <target name="templateeditor.fixcolors" unless="colorfix.present">
+
+      <echo file="${build}/extract/scripts/ext-patches.js" append="true">
+         <![CDATA[
+Ext.override(Ext.picker.Color,{
+renderTpl:[
+   '<tpl for="colors">',
+      '<a href="#" class="color-{.}" hidefocus="on">',
+         '<em><span style="background: #\{.}" unselectable="on">&#160;</span></em>',
+      "</a>",
+   "</tpl>"]
+});
+         ]]>      
+      </echo>
+    </target>
+
+</project>

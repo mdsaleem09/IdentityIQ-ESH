@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE IdentityEntitlement PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<IdentityEntitlement aggregationState="Connected" assigned="true" assigner="The Administrator" name="Roles" nativeIdentity="Andrea Hudson" source="LCM" type="Entitlement" value="Test-Role2">
+  <ApplicationRef>
+    <Reference class="sailpoint.object.Application" name="SAP-Direct"/>
+  </ApplicationRef>
+  <IdentityRef>
+    <Reference class="sailpoint.object.Identity" name="Andrea Hudson"/>
+  </IdentityRef>
+</IdentityEntitlement>

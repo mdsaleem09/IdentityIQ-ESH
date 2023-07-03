@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction accountDisplayName="CN=Ad User1,OU=People,OU=Demo,DC=Eshiam,DC=com" applicationName="Active Directory" identityDisplayName="Ad User1" identityName="Ad User1" integration="Active Directory" name="0000000041" nativeIdentity="CN=Ad User1,OU=People,OU=Demo,DC=Eshiam,DC=com" operation="Create" source="IdentityRefresh" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="request">
+        <value>
+          <AccountRequest application="Active Directory" nativeIdentity="CN=Ad User1,OU=People,OU=Demo,DC=Eshiam,DC=com" op="Create">
+            <Attributes>
+              <Map>
+                <entry key="provisioningTransactionId" value="c0a8de017c7e1116817c9316c3b504c0"/>
+              </Map>
+            </Attributes>
+            <AttributeRequest name="memberOf" op="Add">
+              <Value>
+                <List>
+                  <String>CN=Compensation,OU=Groups,OU=Demo,DC=Eshiam,DC=com</String>
+                  <String>CN=campusAccess,OU=Groups,OU=Demo,DC=Eshiam,DC=com</String>
+                </List>
+              </Value>
+            </AttributeRequest>
+            <AttributeRequest name="objectType" op="Set" value="User"/>
+            <AttributeRequest name="sAMAccountName" op="Set" value="Ad User1"/>
+            <AttributeRequest name="password" op="Set">
+              <Attributes>
+                <Map>
+                  <entry key="secret" value="true"/>
+                </Map>
+              </Attributes>
+            </AttributeRequest>
+            <AttributeRequest name="IIQDisabled" op="Set">
+              <Value>
+                <Boolean/>
+              </Value>
+            </AttributeRequest>
+            <AttributeRequest name="givenName" op="Set" value="Ad"/>
+            <AttributeRequest name="sn" op="Set" value="User1"/>
+            <AttributeRequest name="employeeID" op="Add" value="adUser01"/>
+            <AttributeRequest name="msNPAllowDialin" op="Set" value="Not Set"/>
+            <ProvisioningResult status="failed">
+              <Errors>
+                <Message key="Errors returned from IQService. &quot;The object already exists.&#xa; For identity: CN=Ad User1,OU=People,OU=Demo,DC=Eshiam,DC=com&quot;" type="Error"/>
+              </Errors>
+            </ProvisioningResult>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

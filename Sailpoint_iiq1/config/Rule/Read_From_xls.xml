@@ -1,0 +1,179 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Read From xls" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+  import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Iterator;
+import java.io.FileInputStream;
+
+import org.apache.poi.hssf.model.Sheet;
+import org.apache.poi.hssf.model.Workbook;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+		//String file="D:\\ex\\PR1 Security Role Owners and Approvers_FINAL.xls";
+		File excelFile=new File("D:\\Excel\\Roles.xls");
+		FileInputStream fis=new FileInputStream(excelFile);
+		
+		if((!excelFile.exists()) || (excelFile.isDirectory()))
+				{
+			    System.out.println("Sheet does not exists");
+				}
+		
+		
+		
+	
+			
+		
+		//org.apache.poi.ss.usermodel.Workbook workbooks = WorkbookFactory.create(fis);
+		//org.apache.poi.ss.usermodel.Workbook wb = WorkbookFactory.create(new FileInputStream("D:\\ex\\Roles.xlsx"));
+      
+		
+		/*XSSFWorkbook xworkbook;
+		HSSFWorkbook workbook;
+		if (excelFile.toString().endsWith(".xls")) {
+			   workbook = new HSSFWorkbook();
+			   System.out.println("hi");
+			} else {
+			   xworkbook = new XSSFWorkbook();
+			}
+			*/
+	    /*org.apache.poi.ss.usermodel.Sheet sheet = workbooks.getSheetAt(0);
+     System.out.println("sheet"+sheet.getSheetName());
+	    Row row = sheet.getRow(2);
+	    Cell cell = row.getCell(3);
+	    */
+		int indexOfSystem = 0;
+        int indexOfsAp;
+        int indexOfBusinessRole = 0;
+        int indexOfBusinessRoleDescription = 0;
+        int indexOfRoleOwner;
+        int indexOfAccessApprover = 0;
+        int indexOfClassification = 0;
+		int count = 0;
+		int header=0;
+		String sheetName=null;
+		//System.out.println(cell);
+		XSSFWorkbook work= new XSSFWorkbook(fis);
+		sheetName=work.getSheetName(0);
+		XSSFSheet sheet= work.getSheet(sheetName);
+		   XSSFRow row=sheet.getRow(header);
+		   Iterator it =row.cellIterator();
+		   while( it != null &amp;&amp; it.hasNext()) {
+			   org.apache.poi.xssf.usermodel.XSSFCell st =  (XSSFCell) it.next();
+			   String str= st.toString();
+			   if(str.equalsIgnoreCase("System")) {
+				   indexOfSystem = count;
+				   System.out.println("indexOfSystem"+indexOfSystem);
+			   }
+			   if(str.equalsIgnoreCase("s Ap")) {
+				   indexOfsAp = count;
+				   System.out.println("indexOfsAp"+indexOfsAp);
+			   }
+			   if(str.equalsIgnoreCase("Business Role")) {
+				   indexOfBusinessRole = count;
+				   System.out.println("indexOfBusinessRole"+indexOfBusinessRole);
+			   }
+			   if(str.equalsIgnoreCase("Business Role Description")) {
+				   indexOfBusinessRoleDescription = count;
+				   System.out.println("indexOfBusinessRoleDescription"+indexOfBusinessRoleDescription);
+			   }
+			   if(str.equalsIgnoreCase("Role Owner")) {
+				   indexOfRoleOwner = count;
+				   System.out.println("indexOfAccessApprover"+indexOfRoleOwner);
+			   }
+			   if(str.equalsIgnoreCase("Access Approver")) {
+				   indexOfAccessApprover = count;
+				   System.out.println("indexOfAccessApprover"+indexOfAccessApprover);
+			   }
+			   if(str.equalsIgnoreCase("Classification")) {
+				   indexOfClassification = count;
+				   System.out.println("indexOfClassification"+indexOfClassification);
+			   }
+			   count++;
+		   }
+  
+  
+  String nonReqBusinessRole=null;
+   		XSSFCell reqBusinessRole=null;
+			String accessApprover = null;
+           String classificationName=null;
+           String businessRole=null;
+          String businessRoleDescription=null;
+	
+          Iterator sheetIt = sheet.rowIterator();
+          while(sheetIt.hasNext()){
+        	  XSSFRow data = (XSSFRow) sheetIt.next();
+             
+        	 
+        	  if(data.getCell(indexOfAccessApprover)==null || data.getCell(indexOfAccessApprover).toString().equals("NA")) {
+        		  nonReqBusinessRole=data.getCell(indexOfBusinessRole).toString();
+              return nonReqBusinessRole;
+        		  System.out.println("Non****"+nonReqBusinessRole);
+        		  /*Filter filter=Filter.like("displayName",nonReqBusinessRole);
+                  Bundle nonReqBund=context.getUniqueObject(Bundle.class,filter);
+                  if(nonReqBund!=null &amp;&amp; nonReqBund!=void)
+                  {
+                  nonReqBund.setAttribute("Requestable",0);
+                  }
+                  */
+              	
+        	  }
+            
+            else {
+                  reqBusinessRole = data.getCell(indexOfBusinessRole);
+        		  System.out.println("Re****"+reqBusinessRole);
+        		  /*Filter filter=Filter.like("displayName",reqBusinessRole.toString());
+                  Bundle reqBund=context.getUniqueObject(Bundle.class,filter);
+                  if(reqBund!=null &amp;&amp; reqBund!=void)
+                  {
+                  nonReqBund.setAttribute("Requestable",1);
+                  }
+                  */
+        	  }
+        	  
+        	  
+        	  
+        	 if(data.getCell(indexOfClassification)!=null &amp;&amp; data.getCell(indexOfClassification).toString().equals("Privileged"))
+        	  {
+        		 classificationName=data.getCell(indexOfClassification).toString();
+        		 /*if(classificationName.equals("Privileged")) {
+        			 Classification cls=context.getObjectByName(Classification.class,classificationName);
+                     ObjectClassification ob=new ObjectClassification();
+                     ob.setClassification(cl);
+                     Filter filter=Filter.like("displayName",businessRole);
+                     Bundle bund=context.getUniqueObject(Bundle.class,filter);
+                     if(bund!=null &amp;&amp; bund!=void)
+                     {
+                     bund.addClassification(ob);
+                      }
+                      context.saveObject(bund);
+        		 }
+        		 */
+        		 
+
+        	 }
+        	  
+        	  
+
+          }
+         
+
+		   
+		   
+
+
+  </Source>
+</Rule>

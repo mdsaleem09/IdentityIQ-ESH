@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE IdentityArchive PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<IdentityArchive name="Anthony Roberts" sourceId="c0a8010286011a9e81860d489b361884">
+  <Archive>&lt;?xml version='1.0' encoding='UTF-8'?&gt;
+&lt;!DOCTYPE Identity PUBLIC "sailpoint.dtd" "sailpoint.dtd"&gt;
+&lt;Identity correlated="true" created="1675260107588" id="c0a8010286011a9e81860d489b361884" lastRefresh="1675261733952" lock="b937fde207b2410f86af976f0ebfb076|1676960900804|1676961200804|HR - System Account Aggregation" modified="1676886553702" name="Anthony Roberts" needsRefresh="true"&gt;
+  &lt;Attributes&gt;
+    &lt;Map&gt;
+      &lt;entry key="EmployeeID" value="1a2b3b4b"/&gt;
+      &lt;entry key="demoCenter" value="Human Resources"/&gt;
+      &lt;entry key="department" value="Human Resources"/&gt;
+      &lt;entry key="displayName" value="Anthony Roberts"/&gt;
+      &lt;entry key="email" value="Anthony.Roberts@eshiam.com"/&gt;
+      &lt;entry key="firstname" value="Anthony"/&gt;
+      &lt;entry key="lastname" value="Roberts"/&gt;
+      &lt;entry key="networkID" value="Anthony.Roberts"/&gt;
+      &lt;entry key="startDat"&gt;
+        &lt;value&gt;
+          &lt;Date&gt;1675261733880&lt;/Date&gt;
+        &lt;/value&gt;
+      &lt;/entry&gt;
+      &lt;entry key="triggerSnapshots"&gt;
+        &lt;value&gt;
+          &lt;Map&gt;
+            &lt;entry key="ManagerTransfer"/&gt;
+          &lt;/Map&gt;
+        &lt;/value&gt;
+      &lt;/entry&gt;
+    &lt;/Map&gt;
+  &lt;/Attributes&gt;
+  &lt;AttributeMetaDatas&gt;
+    &lt;AttributeMetaData attribute="inactive" source="HR - System:inactiveIdentity"/&gt;
+    &lt;AttributeMetaData attribute="displayName" source="HR - System:Name"/&gt;
+    &lt;AttributeMetaData attribute="networkID" source="HR - System:NetworkID"/&gt;
+    &lt;AttributeMetaData attribute="department" source="HR - System:Department"/&gt;
+    &lt;AttributeMetaData attribute="demoCenter" source="HR - System:Department"/&gt;
+    &lt;AttributeMetaData attribute="startDat" source="HR - System:AppRule: startDate HR - System$startDate"/&gt;
+    &lt;AttributeMetaData attribute="email" source="HR - System:EmailAddress"/&gt;
+    &lt;AttributeMetaData attribute="firstname" source="HR - System:GivenName"/&gt;
+    &lt;AttributeMetaData attribute="lastname" source="HR - System:Surname"/&gt;
+    &lt;AttributeMetaData attribute="EmployeeID" source="HR - System:EmployeeID"/&gt;
+  &lt;/AttributeMetaDatas&gt;
+  &lt;Links&gt;
+    &lt;Link created="1675260107599" displayName="Anthony Roberts" id="c0a8010286011a9e81860d489b4d1885" lastRefresh="1675260107603" modified="1675260393822" identity="1a2b3b4b"&gt;
+      &lt;ApplicationRef&gt;
+        &lt;Reference class="sailpoint.object.Application" id="c0a891017bb91c9d817bba09a7b80094" name="HR - System"/&gt;
+      &lt;/ApplicationRef&gt;
+      &lt;Attributes&gt;
+        &lt;Map&gt;
+          &lt;entry key="Department" value="Human Resources"/&gt;
+          &lt;entry key="EmailAddress" value="Anthony.Roberts@eshiam.com"/&gt;
+          &lt;entry key="EmployeeID" value="1a2b3b4b"/&gt;
+          &lt;entry key="GivenName" value="Anthony"/&gt;
+          &lt;entry key="Name" value="Anthony Roberts"/&gt;
+          &lt;entry key="NetworkID" value="Anthony.Roberts"/&gt;
+          &lt;entry key="Surname" value="Roberts"/&gt;
+          &lt;entry key="inactiveIdentity" value="FALSE"/&gt;
+          &lt;entry key="manager" value="1a2b3b"/&gt;
+        &lt;/Map&gt;
+      &lt;/Attributes&gt;
+    &lt;/Link&gt;
+  &lt;/Links&gt;
+&lt;/Identity&gt;
+</Archive>
+</IdentityArchive>

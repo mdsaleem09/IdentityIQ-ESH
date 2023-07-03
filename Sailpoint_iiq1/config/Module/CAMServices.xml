@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Module PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Module description="ui_cam_module_desc" name="CAMServices">
+  <Attributes>
+    <Map>
+      <entry key="enabledConfigKey" value="camEnabled"/>
+      <entry key="healthCheckClass" value="sailpoint.cam.CAMHealthChecker"/>
+    </Map>
+  </Attributes>
+</Module>

@@ -1,0 +1,314 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule name="SP Mover Rules Library" language="beanshell">
+	<ReferencedRules>
+	    <Reference class="sailpoint.object.Rule" name="SP Provisioning Rules Library"/>
+	    <Reference class="sailpoint.object.Rule" name="SP Role Assigment Rule Library"/>
+	    <Reference class="sailpoint.object.Rule" name="SP Attr Synch Rules Library"/>
+    </ReferencedRules>
+	<Source>
+	<![CDATA[
+	import sailpoint.api.SailPointFactory;
+	import sailpoint.api.SailPointContext;
+	import sailpoint.api.Provisioner;
+	import sailpoint.object.*;
+	import sailpoint.object.ProvisioningPlan.AttributeRequest;
+	import sailpoint.object.ProvisioningPlan.AccountRequest;
+    import sailpoint.object.ProvisioningPlan.Operation; 
+	import sailpoint.tools.Util;
+    import sailpoint.tools.Message;
+    import sailpoint.tools.GeneralException;
+    import java.sql.Connection;
+	import java.sql.PreparedStatement;
+	import java.sql.ResultSet;
+	import java.sql.SQLException;
+	import java.sql.DriverManager;
+    import java.sql.Timestamp;
+	import java.util.*;
+	import java.text.*;
+	import javax.naming.Context;
+	import javax.naming.InitialContext;
+	import javax.sql.DataSource;
+	import sailpoint.api.PasswordGenerator;
+	import sailpoint.api.Matchmaker;
+	
+	
+    import org.apache.commons.logging.Log;
+	import org.apache.commons.logging.LogFactory;
+
+	private Log logger = LogFactory.getLog("rule.SP.Mover.RulesLibrary");
+	
+	
+	public boolean isTriggerMoverRule(SailPointContext context, Identity previousIdentity, Identity newIdentity){
+		logger.trace("Enter isTriggerMoverRule");
+		boolean flag = false;
+		
+		String currStatus = "";
+
+        if(newIdentity == null || newIdentity == void){
+        	logger.warn("New identity objects are null");
+        	return flag;
+        }
+        
+        if(previousIdentity == null || previousIdentity == void){
+        	logger.warn("Prev identity objects are null");
+        	return flag;
+        }
+        
+        String identityName = newIdentity.getName();
+        
+        Custom mappingObj = getMoverMappingObject(context);
+		
+		if (mappingObj != null){
+		
+			String triggerType = mappingObj.get("Trigger Type");
+			
+			logger.debug("Have the trigger type: " + triggerType);
+			if ("Custom Rule".equalsIgnoreCase(triggerType)){
+				logger.trace("Call custom method for mover trigger");
+				flag = isMoverCustomTriggerRule(context, previousIdentity, newIdentity);
+			} else if("Selector".equalsIgnoreCase(triggerType)){
+				logger.trace("Determine if trigger using a selector");
+				Matchmaker matchMaker = new Matchmaker(context);
+				IdentitySelector idSelector = mappingObj.get("Trigger Field Selector");
+				
+				flag = matchMaker.isMatch(idSelector, newIdentity);
+			} else if("Compare Links".equalsIgnoreCase(triggerType)){
+				logger.trace("Determine if trigger by comparing links");
+				
+				flag = isNewLinkChanged(previousIdentity, newIdentity, mappingObj);
+			} else {
+				logger.warn("Unknown trigger type: " + triggerType);
+				
+			}
+		}
+		
+		logger.trace("Exit isTriggerMoverRule: " + flag);
+		return flag;
+	}
+	
+	public ProvisioningPlan getDynamicMoverPlan(SailPointContext context, String identityName, Workflow workflow){
+		logger.trace("Enter getDynamicMoverPlan");
+		
+		Identity identity = context.getObjectByName(Identity.class, identityName);
+		
+		ProvisioningPlan plan = getDynamicMoverPlan (context, identity, workflow);
+		
+		return plan;
+	}
+	
+	public ProvisioningPlan getDynamicMoverPlan(SailPointContext context, Identity identity, Workflow workflow){
+		logger.trace("Enter getDynamicMoverPlan");
+		
+		ProvisioningPlan plan = new ProvisioningPlan();
+		plan.setIdentity(identity);	
+		
+		Custom mappingObj = getMoverMappingObject(context);
+		
+		if (mappingObj != null){
+			logger.trace("Get the con types");
+			List conTypes = mappingObj.get("Plan Construction Types");
+			
+			if (conTypes.contains("Dynamic Roles")){
+				logger.debug("Dynamically assign roles");
+				plan = getDynamicRolesPlan(context, identity);
+			}
+			
+			if (conTypes.contains("Attribute Synch")){
+				logger.debug("Dynamically build target attribute updates");
+				
+				logger.trace("Get the AttributeSynch mapping object");
+				Custom attrSyncMappingObj = getAttrSynchMappingObject(context);
+        
+				List asExcludeApps = new ArrayList();
+				String asPlanConstructionType;
+		
+				if (attrSyncMappingObj != null){
+					logger.trace("Get excluded applications");
+					asExcludeApps = attrSyncMappingObj.get("Excluded Applications");
+					asPlanConstructionType = attrSyncMappingObj.get("Plan Construction Type");
+				}
+			
+				logger.trace("Have excluded apps: " + asExcludeApps);
+				
+				List links = identity.getLinks();
+				AccountRequest.Operation acctOp = AccountRequest.Operation.Modify;
+				
+				
+				for (Link link : links){
+					app = link.getApplication();
+					appName = app.getName();
+					nativeId = link.getNativeIdentity();
+					instance = link.getInstance();
+					
+					logger.trace("Check if app is excluded: " + appName);
+					if ("Dynamic Targets".equals(asPlanConstructionType) && null != asExcludeApps && asExcludeApps.contains(appName)){
+						logger.debug(appName + " App is excluded.  Skip.");
+						continue;
+					}
+					
+					logger.debug("Get attr requests for " + nativeId + ":" + instance + " on " + appName);
+					List attrReqs = getUpdateAttributeRequests(context, identity, link);
+					
+					logger.trace("Have attrReqs: " + attrReqs);
+					if (attrReqs != null && !attrReqs.isEmpty()){
+						
+						logger.debug("Attr reqs not null.  Build account request");
+						
+						AccountRequest acctReq = new AccountRequest(acctOp, appName, instance, nativeId);
+						acctReq.addAll(attrReqs);
+						
+						logger.debug("Add account request: " + acctReq.toXml());
+						plan.add(acctReq);
+						
+					}
+				}
+			}
+			
+			if (conTypes.contains("Custom Rule")){
+				logger.trace("Call buildCustomMoverPlan ");
+				workflow.put("plan", plan);
+				
+				plan = buildCustomMoverPlan(context, workflow);
+			} 
+		}
+		
+		plan.setComments("Adding Mover Access");
+		
+		logger.trace("Set plan identity " + identity);
+		plan.setIdentity(identity);
+		
+		logger.trace("Exit getDynamicMoverPlan: " + plan.toXml());
+		return plan;
+	}
+	
+	public boolean launchMoverCert(SailPointContext context, 
+		String identityName, IdentityChangeEvent event, String launcher){
+		logger.trace("Enter launchMoverCert");
+		boolean launched = false; 
+		
+		Custom mappingObj = getMoverMappingObject(context);
+		
+		if (mappingObj == null){
+			logger.warn("No mapping object found");
+			return launched;
+		}
+			
+		String lc = mappingObj.get("Launch Manager Cert");
+		logger.trace("Have Launch Manager Cert: " + lc + " " + lc.getClass().getName());
+		
+		boolean doLaunch = Boolean.valueOf(lc);
+		logger.trace("doLaunch: " + doLaunch);
+		
+		if (!doLaunch){
+			logger.info("Not launching the cert as it is currently disabled");
+			return launched;
+		}
+		
+		logger.debug("Begin setting up the identity info for the Mover Cert");
+		
+		Identity newIdentity = context.getObjectByName(Identity.class, identityName);
+		Identity oldIdentity = (Identity)event.getOldObject();
+		
+		
+		logger.trace("Building certification for " + identityName);
+		
+		if (newIdentity == null || oldIdentity == null){
+			logger.warn("No identity");
+			return launched;
+		}
+		
+		logger.trace("Set the certifier as the manager");
+		Identity certifier = newIdentity.getManager();
+		
+		try {
+			
+			QueryOptions qo = new QueryOptions();
+			
+			logger.trace("Get identity id");
+			String identityId = newIdentity.getId();
+			
+			qo.addFilter(Filter.eq("CertificationEntity.targetId", identityId));
+			
+			logger.trace("Check for existing certs with query: " + qo);
+			Iterator certs = context.search(CertificationEntity.class, qo);
+			
+			if (certs == null || !certs.hasNext()){
+				logger.trace("Call launch cert");
+				launchCertification(context, newIdentity, launcher, certifier);
+				launched = true;
+			} else {
+				logger.warn("Already existing cert for identity: " + identityName);
+				Util.flushIterator(certs);
+			}
+			
+		
+		} catch (Exception e){
+			logger.error("Failure to launch cert: " + e.toString());
+		}
+		
+		logger.trace("Exit launchMoverCert");
+		return launched;
+	}
+	
+	
+	public void launchCertification(SailPointContext context, Identity identity, String launcher,
+		Identity certifier) throws Exception{
+		logger.trace("Enter launchCertification");
+		
+		String r = launcher;
+		String identityName = identity.getName();
+		
+		if (r == null || r.equalsIgnoreCase("Scheduler") || r.equalsIgnoreCase("RequestHandler")){
+			r = "spadmin";
+		}
+		
+		Identity requestor = context.getObjectByName(Identity.class, r);	 
+		logger.trace("Change requested by " + requestor.getName()); 
+		
+		logger.trace("Add identity to list");
+		List identities = new ArrayList();
+		identities.add(identity.getName());
+
+		logger.trace("Set the cert group owner");
+		Identity certGroupOwner = context.getObjectByName(Identity.class, "spadmin");
+
+		logger.trace("Create scheduler & schedule set to run now");
+		CertificationScheduler scheduler = new CertificationScheduler(context);
+
+		CertificationSchedule schedule = scheduler.initializeScheduleBean(requestor, Certification.Type.Identity);
+		schedule.setRunNow(true);
+
+		logger.trace("Configure cert def");
+		CertificationDefinition definition = schedule.getDefinition();
+		definition.setCertifierSelectionType(CertificationDefinition.CertifierSelectionType.Manual);
+		definition.setProcessRevokesImmediately(true);
+		
+		String certName = "Mover Manager Certification for " + identityName + " - " + identity.getDisplayName();
+		
+		definition.setNameTemplate(certName + ": assigned to " + certifier.getDisplayName());
+		definition.setShortNameTemplate(certName);
+		definition.setName(certName + " [" + new Date().toString() + "]");
+		definition.setIdentitiesToCertify(identities);
+		definition.setCertifierName(certifier.getName());
+		definition.setCertificationOwner(certGroupOwner);
+		definition.setCertificationNameTemplate(certName);
+
+		logger.trace("Schedule task to run, passing in schedule (which has certficiaton defintion attached)");
+		TaskSchedule taskSchedule = scheduler.saveSchedule(schedule, false);
+		
+		logger.trace("Exit launchCertification");
+	}
+	
+	
+	public Custom getMoverMappingObject(SailPointContext context){
+		logger.trace("Enter getMoverMappingObject");
+		
+		Custom mappingObj = context.getObjectByName(Custom.class, "SPCONF Mover Mappings Custom");
+		logger.trace("Exit getMoverMappingObject: " + mappingObj);
+		return mappingObj;
+	}
+	
+	]]>
+	</Source>
+</Rule>

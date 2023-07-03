@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="test managed attributes2" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+  import sailpoint.object.Identity;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+  
+  
+ // String appName="";
+  
+  List list=new ArrayList();
+  Filter filter=Filter.eq("application.name","Active Directory");
+  QueryOptions op=new QueryOptions();
+  op.add(filter);
+  
+  Iterator itr=context.search(ManagedAttribute.class,op);
+  while(itr.hasNext())
+  {
+      ManagedAttribute ma=(ManagedAttribute)itr.next();
+           String groupName=(String)ma.getDisplayName();
+    if(groupName!=null)
+    {
+            String[] splitsarr=groupName.split("::");
+         return splitsarr[1];
+   
+
+    if(ma!=null)
+    {
+      
+  
+    }
+  }
+  }
+  return list;
+System.out.println("Inside the rule");
+  </Source>
+</Rule>

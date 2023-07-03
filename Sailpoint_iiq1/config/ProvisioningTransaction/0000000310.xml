@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction accountDisplayName="CN=Wanda Watkins,OU=People,OU=Demo,DC=Eshiam,DC=com" applicationName="Active- Directory" integration="Active- Directory" name="0000000310" nativeIdentity="CN=Wanda Watkins,OU=People,OU=Demo,DC=Eshiam,DC=com" operation="Modify" source="LCM" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="planResult">
+        <value>
+          <ProvisioningResult status="failed">
+            <Errors>
+              <Message key="sailpoint.tools.GeneralException: Identity is null in the ProvisioningPlan with AccountRequest." type="Error"/>
+            </Errors>
+          </ProvisioningResult>
+        </value>
+      </entry>
+      <entry key="request">
+        <value>
+          <AccountRequest application="Active- Directory" nativeIdentity="CN=Wanda Watkins,OU=People,OU=Demo,DC=Eshiam,DC=com" op="Modify" targetIntegration="Active- Directory">
+            <Attributes>
+              <Map>
+                <entry key="attachmentConfigList"/>
+                <entry key="attachments"/>
+                <entry key="flow" value="AccessRequest"/>
+                <entry key="id" value="c0a8010383391672818339e91c6d0030"/>
+                <entry key="interface" value="LCM"/>
+                <entry key="operation" value="EntitlementAdd"/>
+                <entry key="provisioningTransactionId" value="c0a8010686771a5e818678e7c5340274"/>
+              </Map>
+            </Attributes>
+            <AttributeRequest displayValue="ESHIAM\AccountingGeneral" name="memberOf" op="Add" value="CN=AccountingGeneral,OU=Groups,OU=Demo,DC=Eshiam,DC=com">
+              <Attributes>
+                <Map>
+                  <entry key="assignment" value="true"/>
+                </Map>
+              </Attributes>
+            </AttributeRequest>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

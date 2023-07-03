@@ -1,0 +1,232 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Read Excel" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+  import java.io.File;
+  import java.io.FileInputStream;
+  import java.io.FileNotFoundException;
+  import java.io.IOException;
+  import java.util.Iterator;
+  import java.io.FileInputStream;
+
+  import org.apache.poi.hssf.model.Sheet;
+  import org.apache.poi.hssf.model.Workbook;
+  import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+  import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+  import org.apache.poi.ss.usermodel.Cell;
+  import org.apache.poi.ss.usermodel.DataFormatter;
+  import org.apache.poi.ss.usermodel.Row;
+  import org.apache.poi.ss.usermodel.WorkbookFactory;
+  import org.apache.poi.xssf.usermodel.XSSFCell;
+  import org.apache.poi.xssf.usermodel.XSSFRow;
+  import org.apache.poi.xssf.usermodel.XSSFSheet;
+  import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+
+
+  import sailpoint.object.Bundle;
+    import sailpoint.object.Filter;
+   import sailpoint.object.Classification;
+  import sailpoint.object.ObjectClassification;
+
+  import sailpoint.tools.Util;
+
+
+  File excelFile=new File("D:\\ex\\Ro.xlsx");
+  FileInputStream fis=new FileInputStream(excelFile);
+
+  if((!excelFile.exists()) || (excelFile.isDirectory()))
+  {
+    System.out.println("Sheet does not exists");
+  }
+
+
+
+  int indexOfSystem = 0;
+  int indexOfsAp;
+  int indexOfBusinessRole = 0;
+  int indexOfBusinessRoleDescription = 0;
+  int indexOfRoleOwner;
+  int indexOfAccessApprover = 0;
+  int indexOfClassification = 0;
+  int count = 0;
+  int header=0;
+  String sheetName=null;
+  XSSFWorkbook work= new XSSFWorkbook(fis);
+  sheetName=work.getSheetName(0);
+  XSSFSheet sheet= work.getSheet(sheetName);
+  XSSFRow row=sheet.getRow(header);
+  Iterator it =row.cellIterator();
+  while( it != null &amp;&amp; it.hasNext()) {
+    org.apache.poi.xssf.usermodel.XSSFCell st =  (XSSFCell) it.next();
+    String str= st.toString();
+    if(str.equalsIgnoreCase("System")) {
+      indexOfSystem = count;
+      System.out.println("indexOfSystem"+indexOfSystem);
+    }
+    if(str.equalsIgnoreCase("s Ap")) {
+      indexOfsAp = count;
+      System.out.println("indexOfsAp"+indexOfsAp);
+    }
+    if(str.equalsIgnoreCase("Business Role")) {
+      indexOfBusinessRole = count;
+      System.out.println("indexOfBusinessRole"+indexOfBusinessRole);
+    }
+    if(str.equalsIgnoreCase("Business Role Description")) {
+      indexOfBusinessRoleDescription = count;
+      System.out.println("indexOfBusinessRoleDescription"+indexOfBusinessRoleDescription);
+    }
+    if(str.equalsIgnoreCase("Role Owner")) {
+      indexOfRoleOwner = count;
+      System.out.println("indexOfAccessApprover"+indexOfRoleOwner);
+    }
+    if(str.equalsIgnoreCase("Access Approver")) {
+      indexOfAccessApprover = count;
+      System.out.println("indexOfAccessApprover"+indexOfAccessApprover);
+    }
+    if(str.equalsIgnoreCase("Classification")) {
+      indexOfClassification = count;
+      System.out.println("indexOfClassification"+indexOfClassification);
+    }
+    count++;
+  }
+
+
+  String nonReqBusinessRole=null;
+  String reqBusinessRol=null;
+  String accessApprover = null;
+  String classificationName=null;
+  String businessRole=null;
+  String businessRoleDescription=null;
+  boolean isNewClassification=false;
+  Iterator sheetIt = sheet.rowIterator();
+  while(sheetIt.hasNext()){
+    XSSFRow data = (XSSFRow) sheetIt.next();
+    System.out.println("inside while");
+
+
+
+
+    try{
+     
+
+      
+      if(data.getCell(indexOfAccessApprover)==null || data.getCell(indexOfBusinessRole)!=null &amp;&amp; data.getCell(indexOfAccessApprover).toString().equals("NA")) {
+
+        System.out.println("inside if");
+        nonReqBusinessRole="SAP :"+data.getCell(indexOfBusinessRole).toString();
+        System.out.println("NonRe****"+nonReqBusinessRole);
+
+
+        Filter filter=Filter.like("displayName","SAP :"+nonReqBusinessRole.toString());
+        
+
+        Bundle rebundObj=context.getUniqueObject(Bundle.class,filter);
+        if(rebundObj!=null &amp;&amp; rebundObj!=void)
+        {
+    return rebundObj;
+           System.out.println("rebundObj"+rebundObj);
+          rebundObj.setAttribute("Requestable","0");
+        }
+
+        context.saveObject(rebundObj);
+
+      }
+
+
+
+
+      else{
+        System.out.println("inside else");
+
+        reqBusinessRol =data.getCell(indexOfBusinessRole).toString();
+        System.out.println("Re****"+reqBusinessRol);
+
+        Filter filter=Filter.eq("displayName","SAP :"+reqBusinessRol.toString());
+
+        Bundle norbundObj=context.getUniqueObject(Bundle.class,filter);
+        if(norbundObj!=null &amp;&amp; norbundObj!=void)
+        {
+           System.out.println("norbundObj"+norbundObj);
+
+          norbundObj.setAttribute("Requestables","1");
+                    norbundObj.setAttribute("Role1","demo");
+
+        }
+
+
+        context.saveObject(norbundObj);
+
+      }
+
+      if(data.getCell(indexOfClassification)!=null &amp;&amp; data.getCell(indexOfClassification).toString().equals("Privileged"))
+      {
+
+        businessRole = data.getCell(indexOfBusinessRole).toString();
+        System.out.println("classification Bus Role:"+businessRole);
+        classificationName=data.getCell(indexOfClassification).toString();
+        Classification cls=context.getObjectByName(Classification.class,classificationName);
+
+        ObjectClassification ob=new ObjectClassification();
+        ob.setClassification(cls);
+        Filter filter=Filter.like("displayName",businessRole);
+        Bundle bundObj=context.getUniqueObject(Bundle.class,filter);
+        public static boolean isClassificationAlreadyAdded(List&lt;ObjectClassification&gt; obcList){
+          boolean iscls = false;
+          for(ObjectClassification obc : obcList){
+            if(obc.getClassification() == (cls))
+            {
+              iscls = true;
+              return iscls;     
+            }
+          }
+        }
+
+
+        List cList=bundObj.getClassifications();
+        if(Util.nullSafeSize(cList)&gt;0 )
+        {
+          if(!isClassificationAlreadyAdded(bundObj.getClassifications()))
+          {
+            bundObj.addClassification(ob);
+          }
+
+        }
+        else{
+          bundObj.addClassification(ob);
+        }
+
+
+          context.saveObject(bundObj);
+
+
+      }
+
+
+
+
+
+
+
+      context.commitTransaction(); 
+    }
+    catch(Exception e)
+    {
+      reqBusinessRol="No Business Role";
+    }
+
+
+
+  }
+
+
+
+
+
+
+
+
+
+  </Source>
+</Rule>

@@ -1,0 +1,230 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="SAP-SetRolesRequestableTempAccessApprover" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+  import java.io.File;
+  import java.io.FileInputStream;
+  import java.io.FileNotFoundException;
+  import java.io.IOException;
+  import java.util.Iterator;
+  import java.io.FileInputStream;
+
+  import org.apache.poi.hssf.model.Sheet;
+  import org.apache.poi.hssf.model.Workbook;
+  import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+  import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+  import org.apache.poi.ss.usermodel.Cell;
+  import org.apache.poi.ss.usermodel.DataFormatter;
+  import org.apache.poi.ss.usermodel.Row;
+  import org.apache.poi.ss.usermodel.WorkbookFactory;
+  import org.apache.poi.xssf.usermodel.XSSFCell;
+  import org.apache.poi.xssf.usermodel.XSSFRow;
+  import org.apache.poi.xssf.usermodel.XSSFSheet;
+  import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+  import sailpoint.object.Bundle;
+  import sailpoint.object.Classification;
+  import sailpoint.object.ObjectClassification;
+  import sailpoint.object.Identity;
+  import sailpoint.object.Filter;
+  import sailpoint.tools.Util;
+
+  import org.apache.log4j.Logger;
+
+
+  //Logger log = Logger.getLogger("securian.sap");
+
+  File excelFile=new File("D:\\ex\\Ro.xlsx");
+  FileInputStream fis=new FileInputStream(excelFile);
+  if((!excelFile.exists()) || (excelFile.isDirectory()))
+  {
+    //log.debug("The input sheet does not exist. Please check the path: E:\\IdentityIQ\\apps\\Apache Software Foundation\\Tomcat\\webapps\\IdentityIQ\\sap-imports\\PR1 Security Role Owners and Approvers_FINAL.xlsx ");
+  }
+  
+
+  int indexOfSystem = 0;
+  int indexOfsAp;
+  int indexOfBusinessRole = 0;
+  int indexOfBusinessRoleDescription = 0;
+  int indexOfRoleOwner;
+  int indexOfAccessApprover = 0;
+  int indexOfClassification = 0;
+  int indexOfTempIIQApprover=0;
+  int count = 0;
+  int header=0;
+  String sheetName=null;
+
+ 
+  XSSFWorkbook work= new XSSFWorkbook(fis);
+ // return work.getSheetName(0);
+  sheetName="PR1 Security Role Owners and Ap";
+//sheetName="Owners_Approvers";
+  XSSFSheet sheet= work.getSheet(sheetName);
+  XSSFRow row=sheet.getRow(header);
+  Iterator it =row.cellIterator();
+
+  while( it != null &amp;&amp; it.hasNext()) {
+    org.apache.poi.xssf.usermodel.XSSFCell st =  (XSSFCell) it.next();
+    String str= st.toString();
+    if(str.equalsIgnoreCase("System")) {
+
+      indexOfSystem = count;
+      //return indexOfSystem;
+    }
+
+    if(str.equalsIgnoreCase("s Ap")) {
+
+      indexOfsAp = count;
+    }
+
+    if(str.equalsIgnoreCase("Business Role")) {
+
+      indexOfBusinessRole = count;
+    }
+
+    if(str.equalsIgnoreCase("Business Role Description")) {
+
+      indexOfBusinessRoleDescription = count;
+
+    }
+
+    if(str.equalsIgnoreCase("Role Owner")) {
+
+      indexOfRoleOwner = count;
+
+    }
+
+    if(str.equalsIgnoreCase("Access Approver")) {
+
+      indexOfAccessApprover = count;
+
+    }
+
+    if(str.contains("IIQ Classification")) {
+
+      indexOfClassification = count;
+
+    }
+
+    if(str.contains("Temp IIQ Approver")) {
+
+      indexOfTempIIQApprover = count;
+
+    }
+    count++;
+  }
+
+
+  String clName=null;
+  String bussRole=null;
+  String tempiiqApprover = null;
+  String iiqApproverBusName = null;
+  String approverBusName=null;
+    String roleOwner=null;
+
+
+  Iterator sheetIt = sheet.rowIterator();
+  while(sheetIt.hasNext()){
+    XSSFRow data = (XSSFRow) sheetIt.next();
+
+    try{
+
+      //Skip the headers
+      if(data.getRowNum()==0){
+        continue; 
+      }
+
+
+      if(data.getCell(indexOfClassification)!=null &amp;&amp; data.getCell(indexOfClassification).toString().equalsIgnoreCase("Privileged")) {
+        clName=data.getCell(indexOfClassification).toString();
+        bussRole=data.getCell(indexOfBusinessRole).toString();
+        Classification classObj=context.getObjectByName(Classification.class,clName);
+        ObjectClassification objcls=new ObjectClassification();
+        objcls.setClassification(classObj);
+        Filter filter=Filter.like("displayName",bussRole);
+        Bundle clsBund=context.getUniqueObject(Bundle.class,filter);
+
+        public static boolean isClassificationExists(List&lt;ObjectClassification&gt;  obcList){
+          boolean isclassification=false;
+          for(ObjectClassification obc:obcList){
+            if(obc.getClassification() == (classObj))
+            {
+              isclassification=true;
+              return isclassification;
+            }
+          }
+        }
+
+        List classificationList=clsBund.getClassifications();
+        if(Util.nullSafeSize(classificationList) &gt;0)
+        {
+          if(!isClassificationExists(clsBund.getClassifications())){
+            clsBund.addClassification(objcls);
+          }
+        }
+        else{
+          clsBund.addClassification(objcls);
+        }
+        context.saveObject(clsBund);
+      }
+
+
+
+      if(data.getCell(indexOfClassification)!=null &amp;&amp; data.getCell(indexOfTempIIQApprover)!=null &amp;&amp; !data.getCell(indexOfTempIIQApprover).toString().isEmpty() &amp;&amp; !data.getCell(indexOfClassification).toString().equals("Privileged"))
+      {
+
+        tempiiqApprover = data.getCell(indexOfTempIIQApprover).toString();
+
+        iiqApproverBusName = data.getCell(indexOfBusinessRole).toString();
+
+        Filter filter=Filter.like("displayName",iiqApproverBusName);
+        
+        Bundle bundObj=context.getUniqueObject(Bundle.class,filter);
+        
+        if(bundObj!=null &amp;&amp; bundObj!=void)
+        {
+          bundObj.setAttribute("requestable","1");
+
+         // Filter filter=Filter.eq("displayName",tempiiqApprover);
+
+         // Identity idObj=context.getUniqueObject(Identity.class,filter);
+
+         // String idVal=idObj.getName();
+         // bundObj.setAttribute("securityCoordinator",idVal);
+        }
+
+        context.saveObject(bundObj);
+
+      }
+
+      if(data.getCell(indexOfRoleOwner).toString()!=null)
+      {
+        roleOwner = data.getCell(indexOfRoleOwner).toString();
+        approverBusName = data.getCell(indexOfBusinessRole).toString();
+
+        Filter filter=Filter.like("displayName",approverBusName);
+        Bundle bundObj=context.getUniqueObject(Bundle.class,filter);
+        if(bundObj!=null &amp;&amp; bundObj!=void)
+        {
+          bundObj.setOwner(context.getObjectByName(Identity.class,roleOwner));
+        }
+
+        context.saveObject(bundObj);
+
+      }
+      
+
+      context.commitTransaction();
+
+    } catch( NullPointerException ne){
+
+     // log.debug("The contents of this cell in the sheet are missing and thus will skip this cell and move to the next one");
+
+    }
+
+  }
+  
+
+  </Source>
+</Rule>

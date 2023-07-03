@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction accountDisplayName="CN=Alan Bradley,OU=People,OU=Demo,DC=Eshiam,DC=com" applicationName="Active Directory" identityDisplayName="Alan Bradley" identityName="Alan Bradley" integration="Active Directory" name="0000000084" nativeIdentity="CN=Alan Bradley,OU=People,OU=Demo,DC=Eshiam,DC=com" operation="Create" source="IdentityRefresh" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="request">
+        <value>
+          <AccountRequest application="Active Directory" nativeIdentity="CN=Alan Bradley,OU=People,OU=Demo,DC=Eshiam,DC=com" op="Create" targetIntegration="Active Directory">
+            <Attributes>
+              <Map>
+                <entry key="provisioningTransactionId" value="c0a8de017d131864817d27af8f0e09b5"/>
+              </Map>
+            </Attributes>
+            <AttributeRequest name="memberOf" op="Add" value="CN=automation Testing,OU=Groups,OU=Demo,DC=Eshiam,DC=com"/>
+            <AttributeRequest name="objectType" op="Set" value="User"/>
+            <AttributeRequest name="sAMAccountName" op="Set" value="Alan Bradley"/>
+            <AttributeRequest name="password" op="Set">
+              <Attributes>
+                <Map>
+                  <entry key="secret" value="true"/>
+                </Map>
+              </Attributes>
+            </AttributeRequest>
+            <AttributeRequest name="IIQDisabled" op="Set">
+              <Value>
+                <Boolean/>
+              </Value>
+            </AttributeRequest>
+            <AttributeRequest name="givenName" op="Set" value="Alan"/>
+            <AttributeRequest name="sn" op="Set" value="Bradley"/>
+            <AttributeRequest name="employeeID" op="Add" value="1c2a3c4c"/>
+            <AttributeRequest name="msNPAllowDialin" op="Set" value="Not Set"/>
+            <AttributeRequest name="msExchHideFromAddressLists" op="Set">
+              <Value>
+                <Boolean/>
+              </Value>
+            </AttributeRequest>
+            <ProvisioningResult status="failed">
+              <Errors>
+                <Message key="Errors returned from IQService. &quot;The object already exists.&#xa; For identity: CN=Alan Bradley,OU=People,OU=Demo,DC=Eshiam,DC=com&quot;" type="Error"/>
+              </Errors>
+            </ProvisioningResult>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

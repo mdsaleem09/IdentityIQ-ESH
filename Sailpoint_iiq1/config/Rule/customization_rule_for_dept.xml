@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="customization rule for dept" type="ResourceObjectCustomization">
+  <Description>This rule is configured on the application and is called after the connector has build a ResourceObject from the native application data.
+
+Initially designed for non-rule based connectors to add SPPrivileged flag to an object, but could be used to do any transformations.</Description>
+  <Signature returnType="ResourceObject"/>
+  <Source>import sailpoint.object.*;
+
+
+System.out.println("object in xml:"+object.toXml());
+
+String dept=object.getAttribute("Department");
+
+if(dept!=null &amp;&amp; dept.equalsIgnoreCase("Information Technology"))
+{
+object.put("Salary","5000");
+}
+if(dept!=null &amp;&amp; dept.equalsIgnoreCase("Engineering"))
+{
+object.put("Salary","7000");
+}
+return object;</Source>
+</Rule>

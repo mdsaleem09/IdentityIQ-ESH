@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="return the identity attributes" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+  import sailpoint.object.Identity;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+  
+  
+    //  Identity idObject =  context.getObjectByName(Identity.class,"James Smith");
+  
+  
+      // Identity idObject =  context.getObjectById(Identity.class,"James Smith");
+  
+                             List idList = context.getObjects(Identity.class);
+  for(Identity id:idList)
+  {
+    if(id.getName().toString().equals("James Smith")){
+       return id.getEmail();
+    }
+  }
+  </Source>
+</Rule>

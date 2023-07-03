@@ -1,0 +1,198 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="JDBC-Modify-Provisioning" type="JDBCOperationProvisioning">
+  <Description>This rule is used by the JDBC connector to do provisioning of the data .</Description>
+  <Signature returnType="ProvisioningResult">
+    <Inputs>
+      <Argument name="log">
+        <Description>
+          The log object associated with the SailPointContext.
+        </Description>
+      </Argument>
+      <Argument name="context">
+        <Description>
+          A sailpoint.api.SailPointContext object that can be used to query the database if necessary.
+        </Description>
+      </Argument>
+      <Argument name="application">
+        <Description>The application whose data file is being processed.</Description>
+      </Argument>
+      <Argument name="schema">
+        <Description>The Schema currently in use.</Description>
+      </Argument>
+      <Argument name="connection">
+        <Description>A connection object to connect to database.</Description>
+      </Argument>
+      <Argument name="plan">
+        <Description>The ProvisioningPlan created against the JDBC application.</Description>
+      </Argument>
+      <Argument name="request">
+        <Description>The ProvisioningRequest created against the JDBC application.</Description>
+      </Argument>
+    </Inputs>
+    <Returns>
+      <Argument name="result">
+        <Description>A Provisioning Result object is desirable to return the status.IT can be a new object or part of  Provisioning Plan</Description>
+      </Argument>
+    </Returns>
+  </Signature>
+  <Source>import java.sql.ResultSet;
+  import java.sql.Statement;
+  import java.sql.Connection;
+  import java.sql.DriverManager;
+  import java.sql.Types;
+  import sailpoint.api.SailPointContext;  
+  import sailpoint.object.Identity;
+  import sailpoint.object.*;  
+  import sailpoint.object.ProvisioningPlan;
+  import sailpoint.object.ProvisioningPlan.AccountRequest;
+  import sailpoint.object.ProvisioningPlan.AttributeRequest;
+  import oracle.jdbc.OracleTypes;
+  import java.sql.PreparedStatement;
+  import java.sql.SQLException;
+  import java.sql.Date;
+  import sailpoint.object.PasswordPolicy;
+  import sailpoint.api.PasswordGenerator;
+  import sailpoint.object.ProvisioningResult;
+  
+  
+
+
+  ProvisioningResult provresult = new ProvisioningResult();
+  String user = " ";
+  String username = " ";
+  String emplID = " ";
+  String networkID=" ";
+  System.out.println("calling create ");
+
+
+  if ( plan != null ) {
+    List accRequests = plan.getAccountRequests(); 
+
+    System.out.println("*******JDBC -Modify-Provisioning Rule" + plan.toXml());
+    if ( ( accRequests != null ) &amp;&amp; ( accRequests.size() &gt; 0 ) ) {
+
+
+      try{
+        user = plan.getNativeIdentity();
+        Identity identity = context.getObjectByName(Identity.class, user);
+        emplID = identity.getAttribute("EmployeeID");
+
+        for(AccountRequest accRequest : accRequests){
+
+        if(AccountRequest.Operation.Modify.equals(accRequest.getOperation())) {
+          accRequest.setNativeIdentity(emplID);
+
+
+          for(AttributeRequest attrReq :accRequest.getAttributeRequests()){
+             List entCount = null;
+            if(attrReq.getName().equals("GroupValue") &amp;&amp; (attrReq.getOperation().toString().equalsIgnoreCase("Remove") )){
+              System.out.println("******Entered into attrIf :"+attrReq.getValue());
+
+               entCount = new ArrayList();
+              Object valObj = attrReq.getValue();
+
+              if(valObj instanceof List){
+                entCount.addAll(valObj);
+              }else{
+
+                String val = valObj;
+                //entCount.addAll(val);
+                entCount.add(val);
+
+              }
+              // entCount.add(attrReq.getValue());
+              System.out.println("*****entCount::::"+entCount);
+
+              {
+                for(String grpval : entCount ){
+                  System.out.println("*******inside if  loop to insert single entitlement");
+
+                  PreparedStatement st=connection.prepareStatement("delete from test.demotestusers where EmployeeID=? AND GroupValue=?");
+
+                  st.setString(1, emplID);
+                  st.setString(2, grpval);
+
+                  st.executeUpdate();
+
+
+
+                  provresult.setStatus(ProvisioningResult.STATUS_COMMITTED);
+
+                }
+              }
+
+            }
+            else if(attrReq.getName().equals("GroupValue") ){
+              System.out.println("******Entered into attrIf :"+attrReq.getValue());
+
+              Object valObj = attrReq.getValue();
+ entCount = new ArrayList();
+              if(valObj instanceof List){
+                entCount.addAll(valObj);
+              }else{
+
+                String val = valObj;
+                //entCount.addAll(val);
+                entCount.add(val);
+
+              }
+              // entCount.add(attrReq.getValue());
+              System.out.println("*****entCount::::"+entCount);
+
+              {
+                for(String grpval : entCount ){
+                  System.out.println("*******inside if  loop to insert single entitlement");
+
+
+
+                 PreparedStatement st=connection.prepareStatement("INSERT INTO test.demotestusers VALUES(?,?,?,?,?,?,?)");
+            
+              st.setString(1, identity.getName());
+              st.setString(2, identity.getFirstname());
+              st.setString(3, identity.getLastname());
+
+              // AttributeRequest attrReq = accRequest.getAttributeRequest("GroupId");
+              // st.setString(3,entCount.get(i));
+              st.setString(4,emplID);
+              st.setString(5, identity.getAttribute("email"));
+              st.setString(6,identity.getAttribute("networkID"));
+              st.setString(7,  grpval);
+              System.out.println("*******inside if plan"+plan.toXml());
+
+
+
+
+                  st.executeUpdate();
+
+              System.out.println("*******db insert completed"+plan.toXml());
+
+
+                  provresult.setStatus(ProvisioningResult.STATUS_COMMITTED);
+
+                }
+              }
+
+            }
+          }
+        }
+        }
+
+      } catch (Exception e) {
+        System.out.println("JDBCApplication Create Error e: " +e);
+      }finally {
+
+        try{
+          if (connection != null)
+            connection.close();
+        }catch (SQLException e) {
+          e.printStackTrace();
+        }
+      }  
+
+    }  
+  }
+  
+
+  return provresult;</Source>
+</Rule>

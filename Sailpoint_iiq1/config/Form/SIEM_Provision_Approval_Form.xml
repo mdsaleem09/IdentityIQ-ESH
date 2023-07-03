@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Form PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Form name="SIEM Provision Approval Form" type="Workflow">
+  <Attributes>
+    <Map>
+      <entry key="pageTitle" value="SIEM Provisioning Approval"/>
+      <entry key="title" value="SIEM Provisioning Approval"/>
+    </Map>
+  </Attributes>
+  <Section name="description" type="datatable">
+    <Attributes>
+      <Map>
+        <entry key="subtitle" value="Approve SIEM Provisioning"/>
+      </Map>
+    </Attributes>
+    <Field displayName="" value="The SIEM application has flagged an error and is attempting to provision to         an account. Please approve or reject this provisioning request."/>
+  </Section>
+  <Button action="next" label="Approve"/>
+  <Button action="back" label="Reject"/>
+  <Button action="cancel" label="Cancel"/>
+</Form>

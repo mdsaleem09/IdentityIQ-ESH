@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="OHSU-Value-Rule" type="Listener">
+  <Description>This rule can be used when the ObjectAttribute being listened to has changed.</Description>
+  <Signature returnType="void"/>
+  <Source>import sailpoint.object.Identity;
+
+
+if(identity.getName().equals("Staging_Oracle")){
+System.out.println("identity"+identity.toXml());
+
+System.out.println("oldvalue"+oldValue);
+
+identity.setAttribute("firstname",oldValue);
+}</Source>
+</Rule>

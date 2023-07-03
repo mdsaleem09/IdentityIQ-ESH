@@ -1,0 +1,243 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="RocheRuleTest-BRM-SAPGRCProvisioning">
+  <Signature returnType="String">
+    <Inputs>
+      <Argument name="log">
+        <Description>
+          The log object associated with the SailPointContext.
+        </Description>
+      </Argument>
+      <Argument name="context">
+        <Description>
+          A sailpoint.api.SailPointContext object that can be used to query the database if necessary.
+        </Description>
+      </Argument>
+      <Argument name="plan"/>
+      <Argument name="user"/>
+      <Argument name="url"/>
+      <Argument name="password"/>
+    </Inputs>
+  </Signature>
+  <Source>
+  import java.util.List;
+  import java.util.ArrayList;
+  import java.util.Collection;
+  
+ 
+  import org.apache.commons.logging.Log;
+  import org.apache.commons.logging.LogFactory;
+  import sailpoint.tools.Util;
+  import sailpoint.tools.GeneralException;
+  import sailpoint.api.ManagedAttributer;
+  import sailpoint.object.ManagedAttribute;
+  import sailpoint.object.ProvisioningPlan;
+  import sailpoint.object.ProvisioningResult;
+  import sailpoint.object.ProvisioningPlan.AccountRequest;
+  import sailpoint.object.ProvisioningPlan.AttributeRequest;
+  import sailpoint.object.ProvisioningPlan.Operation;
+
+
+  //private static Log log1 = LogFactory.getLog("com.roche.rule.RocheRule-BRM-SAPGRCProvisioning");
+
+ // System.out.println(" Start Rule RocheRule-SAPProvisioning");
+System.out.println(" Start Rule RocheRule-SAPProvisioning:::");
+
+  ProvisioningResult provisioningResult = new ProvisioningResult();
+
+
+
+  public static String createSOAPBody( String assign, String busRole, String reqId, String userId){
+    String soapbody = "&lt;soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"&gt;\r\n"
+      + "  &lt;soap:Body&gt;\r\n"
+      + "&lt;n0:ZGRAC_BRM_BUSASSIGN xmlns:n0=\"urn:sap-com:document:sap:rfc:functions\"&gt;\r\n"
+      + "    &lt;ASSIGN&gt;"+assign+"&lt;/ASSIGN&gt;\r\n"
+      + "    &lt;BUSROLE&gt;"+busRole+"&lt;/BUSROLE&gt;\r\n"
+      + "    &lt;REQNR&gt;"+reqId+"&lt;/REQNR&gt;\r\n"
+      + "    &lt;USER_ID&gt;"+userId+"&lt;/USER_ID&gt;\r\n"
+      + "&lt;/n0:ZGRAC_BRM_BUSASSIGN&gt;\r\n"
+      + "  &lt;/soap:Body&gt;\r\n"
+      + "&lt;/soap:Envelope&gt;";
+
+    return soapbody;
+  }
+
+
+  public boolean processWSRequest(assign, busRole, reqId, userId){
+
+    boolean retVal = true;
+    try {
+      /*
+    String assign = "X";
+    String busRole = "ZTEST_SOD";
+    String reqId = "123123";
+    String userId = "KRZYCHA";
+    */
+
+      String soapbody = createSOAPBody(assign, busRole, reqId, userId);
+     // System.out.println(" soapbody : "+soapbody);
+     System.out.println( " soapbody : "+soapbody);
+
+      if(Util.isNotNullOrEmpty(soapbody)){
+
+        String soapEndpointUrl = url;//"https://i13as1.sap.roche.com:44301/sap/bc/srt/rfc/sap/zgrac_brm_busassign/010/zgrac_brm_busassign/zgrac_brm_busassign";
+        String userName = user;//"RFCCIDM";
+
+        //System.out.println(" password : "+password);
+        System.out.println(" password : "+password);
+        String password =  context.decrypt(password); //context.decrypt("2:ACP:RMVzdiSFVjRu1C2vd/TV64tpmU8fFBiLY7kc1TOtHI2Ybm9Uv++6sZIg5urYozz/");
+
+        //System.out.println(" soapEndpointUrl : "+soapEndpointUrl);
+        //System.out.println(" userName : "+userName);
+
+           System.out.println(" soapEndpointUrl : "+soapEndpointUrl);
+        System.out.println(" userName : "+userName);
+
+        URL obj = new URL(soapEndpointUrl);
+        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+        con.setRequestMethod("POST");
+
+        con.setRequestProperty("Content-Type", "text/xml");
+        String authorization = new sun.misc.BASE64Encoder().encode((userName + ":" + password).getBytes());
+        con.setRequestProperty("Authorization", "Basic " + authorization);
+        con.setRequestProperty("SOAPAction", soapEndpointUrl);
+        con.setDoOutput(true);
+        con.setDoInput(true);
+
+        //System.out.println("connection " + con);
+          System.out.println("connection " + con);
+
+        DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+        wr.writeBytes(soapbody);
+        wr.flush();
+        wr.close();
+
+        String responseStatus = con.getResponseMessage();
+
+        System.out.println(responseStatus);
+        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+
+        String inputLine;
+        StringBuffer response = new StringBuffer();
+        while ((inputLine = in.readLine()) != null) {
+          response.append(inputLine);
+        }
+
+        in.close();
+        String finalvalue= response.toString();
+        System.out.println("finalValue " + finalvalue);
+        //return finalvalue;
+      }
+    }
+    catch (Exception e) {
+      log.error(" ERROR!! in processWSRequest()  "+ e.getMessage());
+      retVal = false;
+      // return e.getMessage();
+    }
+
+    return retVal;
+  }
+
+
+  try{
+
+    log.error(" plan : "+plan);
+    log.error("user :"+user);
+    log.error("url : "+url);
+
+    System.out.println(" \n\n***************************************************\n\n");
+    
+    System.out.println(" plan to xml : "+plan.toXml());
+    
+     System.out.println(" \n\n***************************************************\n\n");
+    
+    
+
+    // String pwd = context.decrypt(password);
+
+    List failedRolsList = new ArrayList();
+
+    List accountRequests = plan.getAccountRequests();
+    String reqId = (String) plan.get("identityRequestId");
+    System.out.println(" reqId : "+reqId);
+
+    if(Util.nullSafeSize(accountRequests) &gt; 0) {
+      for(AccountRequest acctReq : accountRequests) {
+        String userId = acctReq.getNativeIdentity();
+        System.out.println(" userId : "+userId);
+
+        List attributeRequests = acctReq.getAttributeRequests("Roles");
+        System.out.println(" attributeRequests : "+attributeRequests);
+        if(Util.nullSafeSize(attributeRequests) &gt; 0) {
+          for(AttributeRequest attrReq : attributeRequests) {
+
+            ManagedAttributer managedAttributer = new ManagedAttributer(context);
+            ManagedAttribute ma = ManagedAttributer.getByDisplayName(context, acctReq.getApplication(context), attrReq.getDisplayValue());
+            System.out.println(" ma : "+ma);
+
+            //if(ma != null &amp;&amp; !"BUS".equalsIgnoreCase((String) ma.getAttribute("Role Type"))) {
+              //System.out.println("inside if Role Type check, Role Type != BUS ");
+              //continue;
+            //}
+
+            String assign = "X";
+            Operation op = attrReq.getOp() == null ? attrReq.getOperation() : attrReq.getOp();
+            System.out.println(" op : "+op);
+            if(ProvisioningPlan.Operation.Remove.equals(op)) {
+              assign = "";
+            }
+            System.out.println(" assign : "+assign);
+
+            Object obj = attrReq.getValue();
+            List valList = new ArrayList();
+
+            if(obj instanceof List) {
+              valList.addAll((Collection) obj);
+            }
+            else {
+              String val = (String)obj;
+              valList.add(val);
+            }
+
+            System.out.println(" valList : "+valList);
+            System.out.println("Plan in this rule"+plan.toXml());
+
+
+            if(Util.nullSafeSize(valList) &gt; 0) {
+              boolean result = false;
+              for(String roleName : valList) {
+               // boolean result = processWSRequest( assign,  roleName,  reqId,  userId);
+                result = true;
+               //  result = false;
+                if(!result){
+                  failedRolsList.add(roleName);
+                }
+
+              }
+            }
+
+          }
+        }
+      }
+
+    }
+
+    if(Util.nullSafeSize(failedRolsList) &gt; 0) {
+      provisioningResult.setStatus(ProvisioningResult.STATUS_FAILED);
+      provisioningResult.addError(" Provisioning failed for :"+Util.listToCsv(failedRolsList));
+    }
+    else{
+      provisioningResult.setStatus(ProvisioningResult.STATUS_COMMITTED);
+    }
+
+    return provisioningResult;
+
+  }catch(Exception e){
+    log.error(" ERROR!!! : Error in rule RocheRule-SAPProvisioning :"+e.getMessage());
+    provisioningResult.setStatus(ProvisioningResult.STATUS_FAILED);
+    provisioningResult.addError(" Error in rule RocheRule-SAPProvisioning :"+e.getMessage());
+  }
+  
+  </Source>
+</Rule>

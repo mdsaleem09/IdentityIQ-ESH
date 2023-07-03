@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction accountDisplayName="CN=Tracy Meyer,OU=People,OU=Demo,DC=Eshiam,DC=com" applicationName="Active Directory" identityDisplayName="Tracy Meyer" identityName="Tracy Meyer" integration="Active Directory" name="0000000048" nativeIdentity="CN=Tracy Meyer,OU=People,OU=Demo,DC=Eshiam,DC=com" operation="Create" source="RoleChangePropagation" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="request">
+        <value>
+          <AccountRequest application="Active Directory" assignmentIds="f39a4c0d171a46089975908af4ca6ab6" nativeIdentity="CN=Tracy Meyer,OU=People,OU=Demo,DC=Eshiam,DC=com" op="Create" targetIntegration="Active Directory">
+            <Attributes>
+              <Map>
+                <entry key="provisioningTransactionId" value="c0a8de017c7e1116817c9ce6b84c0957"/>
+              </Map>
+            </Attributes>
+            <AttributeRequest name="objectType" op="Set" value="User"/>
+            <AttributeRequest name="sAMAccountName" op="Set" value="Tracy Meyer"/>
+            <AttributeRequest name="password" op="Set">
+              <Attributes>
+                <Map>
+                  <entry key="secret" value="true"/>
+                </Map>
+              </Attributes>
+            </AttributeRequest>
+            <AttributeRequest name="IIQDisabled" op="Set">
+              <Value>
+                <Boolean/>
+              </Value>
+            </AttributeRequest>
+            <AttributeRequest name="givenName" op="Set" value="Tracy"/>
+            <AttributeRequest name="sn" op="Set" value="Meyer"/>
+            <AttributeRequest name="employeeID" op="Add" value="1c2c3b4c"/>
+            <AttributeRequest name="msNPAllowDialin" op="Set" value="Not Set"/>
+            <ProvisioningResult status="retry"/>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

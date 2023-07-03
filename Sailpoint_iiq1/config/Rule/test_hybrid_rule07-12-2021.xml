@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="test hybrid rule07-12-2021" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+  import sailpoint.object.Identity;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+  import sailpoint.object.Filter;
+  import sailpoint.object.Profile;
+  
+  import java.util.*;
+  
+
+  String roledisplayName=null;
+  String groupName=null;
+  
+String appName="Active Directory";
+  String owner="spadmin";
+  
+ Identity idObject=context.getObjectByName(Identity.class,"spadmin");
+Application appObj=context.getObjectByName(Application.class,appName);
+Filter filter=Filter.eq("application.name",appName);
+QueryOptions opts=new QueryOptions();
+opts.addFilter(filter);
+opts.setCloneResults(true);
+  
+  Bundle orgBund=context.getObjectByName(Bundle.class,"Org-SAP");
+if(orgBund==null)
+{
+ orgBundle=new Bundle();
+orgBundle.setName("Org-SAP");
+orgBundle.setType("organizational");
+orgBundle.setDisplayName("Org-SAP");
+  orgBundle.setOwner(idObject);
+    context.saveObject(orgBundle);
+}
+
+Iterator it=context.search(ManagedAttribute.class,opts);
+while(it.hasNext())
+{
+  
+ManagedAttribute ma=(ManagedAttribute)it.next();
+  System.out.println("Inside managed Attribute");
+//if(ma.getAttribute("Type")!=null &amp;&amp; ma.getAttribute("Type").equalsIgnoreCase("Composite"))
+
+  
+  if(ma!=null &amp;&amp; ma.getDisplayName()!=null &amp;&amp; ma.getDisplayableName()!=null &amp;&amp;  ma.getAttribute("sysDescriptions")!=null)
+  {
+Bundle bundObj=context.getObjectByName(Bundle.class,ma.getDisplayableName());
+if(bundObj!=null)
+{
+   return bundObj;
+}
+  bundObj=new Bundle();
+  
+            System.out.println("Inside else bundObj"+bundObj);
+
+  
+  String groupName = (String) ma.getDisplayName();
+		            System.out.println("groupName"+groupName);
+ 
+  
+  
+  
+Map map= ma.getAttribute("sysDescriptions");
+roledisplayName=map.get("en_US");
+
+bundObj.setDisplayName(roledisplayName);
+bundObj.setName(ma.getDisplayableName());
+bundObj.setType("Hybrid");
+    Bundle orgBundle=context.getObjectByName(Bundle.class,"Org-SAP");
+
+bundObj.addInheritance(orgBundle);
+    //context.saveObject(orgBund);
+//bundObj.setDescription(ma.getAttribute("Long Description"));
+bundObj.setOwner(appObj.getOwner());
+Profile profile=new Profile();
+profile.setApplication(appObj);
+List entValues = new ArrayList();
+entValues.add(ma.getValue());
+Filter fil = Filter.containsAll(ma.getAttribute(), entValues);
+     profile.addConstraint(fil);
+    bundObj.add(profile);
+    System.out.println("bundle:"+bundObj.toXml());
+    context.saveObject(bundObj);
+    context.commitTransaction();
+  
+}
+}
+  
+    context.decache();
+    sailpoint.tools.Util.flushIterator(it); 
+
+
+  </Source>
+</Rule>

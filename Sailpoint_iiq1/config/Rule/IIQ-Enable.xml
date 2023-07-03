@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="IIQ-Enable" type="IdentityTrigger">
+  <Description>This rule can be used for Certification Events that use rule triggers. The previousIdentity and newIdentity hold snapshots of the identity before the update has occurred and the state of the identity after the update, respectively.</Description>
+  <Signature returnType="boolean">
+    <Inputs>
+      <Argument name="log" type="org.apache.commons.logging.Log">
+        <Description>
+          The log object associated with the SailPointContext.
+        </Description>
+      </Argument>
+      <Argument name="context" type="sailpoint.api.SailPointContext">
+        <Description>
+          A sailpoint.api.SailPointContext object that can be used to query the database if necessary.
+        </Description>
+      </Argument>
+      <Argument name="previousIdentity">
+        <Description>
+          The identity before the refresh/aggregation (this will be null when an
+          identity is created).
+        </Description>
+      </Argument>
+      <Argument name="newIdentity">
+        <Description>
+          The identity after the refresh/aggregation (this will be null when an
+          identity is deleted).
+        </Description>
+      </Argument>
+    </Inputs>
+    <Returns>
+      <Argument name="result">
+        <Description>
+          A boolean describing the result of the rule.
+        </Description>
+      </Argument>
+    </Returns>
+  </Signature>
+  <Source>
+  import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import sailpoint.tools.Util;
+  import sailpoint.object.*;
+
+  List list = new ArrayList();
+  
+
+System.out.println("Entering  AD Enable Trigger Rule");
+
+
+  Date startDate = null;
+  startDate =  newIdentity.getAttribute("startDat");
+  String joinerFlag = newIdentity.getAttribute("joinerFlag");
+ Application application = context.getObjectByName(Application.class,"Active- Directory");
+  Link link = newIdentity.getLink(application);
+
+  if(Util.isNotNullOrEmpty(joinerFlag) &amp;&amp; joinerFlag.equalsIgnoreCase("processed") &amp;&amp; link.isDisabled() &amp;&amp; link.getApplicationName().equals("Active- Directory")){
+   System.out.println("inside AD Enable Trigger Rule"+Util.getDaysDifference(new Date(),startDate));
+    
+  SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    //IT will it startdate is equals or greater then current date it will return true
+    if(Util.getDaysDifference(new Date(),startDate) &gt;=0 ){
+      return true;
+    }
+    return false;
+    }</Source>
+</Rule>

@@ -1,0 +1,206 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule name="SP Field Value Rules Library" language="beanshell"> 
+    <Source>
+    <![CDATA[
+
+        import org.apache.commons.logging.Log;
+        import org.apache.commons.logging.LogFactory;
+        import sailpoint.api.SailPointContext;
+        import sailpoint.object.Custom;
+        import sailpoint.object.Field;
+        import sailpoint.object.Identity;
+
+        import sailpoint.tools.GeneralException;
+
+        import sailpoint.tools.VelocityUtil;
+
+        import java.io.StringWriter;
+        import java.io.Writer;
+        import java.util.List;
+        import java.util.HashMap;
+
+        private static Log logger= LogFactory.getLog("rule.SP.FieldValue.RulesLibrary");
+
+    private static Object getVelocityResult(Object value, Identity identity) {
+        logger.trace("Enter getVelocityResult");
+        String result = "";
+        try {
+            String formatted;
+            if(value instanceof Script) {
+                Script sFieldValue = value;
+                formatted = sFieldValue.getSource();
+            }
+            else {
+                formatted = value.toString();
+            }
+
+            //Velocity execution parsing the Identity variable to be used
+            //You could add DateTime or Math to use the functions from this class
+            //You can also add the Country and Zone to make language aware content
+            HashMap mapParam = new HashMap();
+            mapParam.put("identity", identity);
+            result = VelocityUtil.render(formatted,mapParam,null,null).trim();
+
+        } catch (Exception e) {
+            logger.error("Error in Velocity Format String " + e.getMessage());
+        }
+        logger.trace("Exit getVelocityResult");
+
+        return result;
+    }
+
+    private static Object getRuleResult(SailPointContext context, Identity identity, Object ruleObject,String defaultValue,String op) {
+        Object val = null;
+        Object[] params;
+
+        logger.debug("Enter getRuleResult");
+
+        
+
+        try {
+
+            if(ruleObject instanceof Script)
+            {
+                Script sFieldValue = ruleObject;
+                String scriptCode = sFieldValue.getSource();
+                logger.trace("Dynamically eval code: " + scriptCode);
+                
+                HashMap mapParam = new HashMap();
+                mapParam.put("context",context);
+                mapParam.put("identity",identity);
+                mapParam.put("op",op);
+                mapParam.put("logger",logger);
+                if(defaultValue != null)
+                    mapParam.put("defaultValue",defaultValue);
+
+                val = context.runScript(sFieldValue,mapParam);
+            }
+            else
+            {
+                logger.trace("Dynamically invoke method: " + ruleObject.toString());                
+                if (defaultValue == null || defaultValue.equals("")) {
+                    logger.debug("Build the parameters without a default value");
+                    params = new Object[] {context,identity,op};
+                } else {
+                    logger.debug("Build the parameters with a default value");
+                    params = new Object[] {context,identity,op,defaultValue};
+                }
+                val = this.invokeMethod(ruleObject.toString(), params);
+            }
+
+        } catch (Exception e){
+            logger.error("Exception with value of field, invoking method, " + ruleObject+ ": " + e);
+            val = "CHECK CONFIG";
+        }
+
+        logger.debug("Exit getRuleResult");
+
+        return val;
+    }    
+
+    private static Object executeLegacy(SailPointContext context,Identity identity, Field field) {
+        logger.trace("Enter executeLegacy");
+
+        logger.trace("Have field: " + field);
+
+        if (field == null){
+            return "no field passed in. this is impossible so this is just a sanity check.";
+        }
+
+        String fieldName = field.getName();
+        String appName = field.getApplication();
+        Object defaultValue = field.getDefaultValue();
+
+        String templateOp = field.getTemplate();
+        String op = "Create";
+        if (templateOp != null){
+            op = templateOp;
+        }
+
+        logger.debug("Template: " + templateOp);
+        logger.debug("Field name: " + fieldName);
+        logger.debug("App name: " + appName);
+        logger.debug("Op: " + op);
+        logger.debug("default value: " + defaultValue);
+
+        Object val = null;
+
+        logger.debug("Replacing all invalid characters");
+        String aName = appName;
+
+        if (appName != null){
+            aName=appName.replaceAll(" ", "_");
+        }
+
+        String fName = fieldName.replaceAll("-", "_");
+        fName = fName.replaceAll(" ", "_");
+        fName = fName.replaceAll("\\.", "_");
+
+        String methodName = "getFV_" + aName + "_" + fName + "_Rule";
+        logger.debug("Have the method name: " + methodName);
+
+        Object[] params;
+
+        if (defaultValue == null){
+            logger.debug("Build the parameters without a default value");
+            params = new Object[] {context,identity,op};
+        } else {
+            logger.debug("Build the parameters with a default value");
+            params = new Object[] {context,identity,op,defaultValue};
+        }
+
+        try {
+            logger.trace("Dynamically invoke method: " + methodName);
+            val = this.invokeMethod(methodName, params);            
+        } catch (Exception e){
+            logger.error("Exception with value of field { " + fieldName + " }, invoking method, " + methodName + ": " + e);
+            val = "CHECK CONFIG";
+        }
+
+        logger.trace("Exit executeLegacy with val: " + val);
+        return val;
+    }
+
+    private static Object getIdentityAttribute(SailPointContext context, Identity identity, String op, String attName, String targetAttName, String defaultValue) {
+        String methodName = "getIdentityAttribute " + attName;
+        logStart(context, identity, op, methodName);
+
+        String val = fixNulls(identity.getStringAttribute(targetAttName));
+        val = (!val.isEmpty()?val:(String)defaultValue);
+        logEnd(context, identity, op, methodName, val);
+
+        return val;
+    }
+
+    public static String fixNulls(String strIn) {
+        String val = strIn;
+        logger.debug("value passed to fixNulls=" + val);
+        if (strIn == null) {
+            val = "";
+        }
+        val = val.replaceFirst("\\s++$", "");
+        logger.debug("value returned from fixNulls=" + val);
+        return val;
+    }
+
+    public static void logStart(SailPointContext context, Identity identity, String op, String method) {
+        logger.trace("Start " + method);
+
+        logger.debug("OP = " + op);
+        logger.debug("Context = " + context);
+        logger.debug("identity = " + identity);
+
+    }
+
+    public static void logEnd(SailPointContext context, Identity identity, String op, String method, String result) {
+        logger.trace("End " + method + " - Return value: " + result);
+
+        logger.debug("OP =  " + op);
+        logger.debug("Context =  " + context);
+        logger.debug("Identity =  " + identity);
+    }
+    
+    ]]>
+    </Source>
+</Rule>

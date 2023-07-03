@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE RightConfig PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<RightConfig name="RightConfig">
+  <Rights>
+    <Right name="create" weight="5"/>
+    <Right name="read" weight="1"/>
+    <Right name="update" weight="10"/>
+    <Right name="delete" weight="100"/>
+    <Right name="execute" weight="10"/>
+  </Rights>
+</RightConfig>

@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction accountDisplayName="CN=Benjamin Hicks,OU=People,OU=Demo,DC=Eshiam,DC=com" applicationName="Active Directory" integration="Active Directory" name="0000000065" nativeIdentity="CN=Benjamin Hicks,OU=People,OU=Demo,DC=Eshiam,DC=com" operation="Disable" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="request">
+        <value>
+          <AccountRequest application="Active Directory" nativeIdentity="CN=Benjamin Hicks,OU=People,OU=Demo,DC=Eshiam,DC=com" op="Disable" targetIntegration="Active Directory">
+            <Attributes>
+              <Map>
+                <entry key="provisioningTransactionId" value="c0a8de017ca61435817cab8803ac02a3"/>
+              </Map>
+            </Attributes>
+            <AttributeRequest name="AC_NewParent" op="Set" value="OU=Disable-Users,OU=Demo,DC=Eshiam,DC=com"/>
+            <ProvisioningResult status="failed">
+              <Errors>
+                <Message key="Software caused connection abort: connect" type="Error"/>
+              </Errors>
+            </ProvisioningResult>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

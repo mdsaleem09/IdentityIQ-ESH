@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE IdentityEntitlement PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<IdentityEntitlement aggregationState="Disconnected" assigned="true" assigner="spadmin" name="assignedRoles" nativeIdentity="Ad User8" source="RapidSetup" type="Entitlement" value="OHSU-BirthRight">
+  <IdentityRef>
+    <Reference class="sailpoint.object.Identity" name="Ad User8"/>
+  </IdentityRef>
+</IdentityEntitlement>

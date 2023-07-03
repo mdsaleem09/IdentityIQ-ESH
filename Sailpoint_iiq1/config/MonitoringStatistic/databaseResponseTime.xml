@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE MonitoringStatistic PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<MonitoringStatistic displayName="monitor_stat_label_database_response_time" name="databaseResponseTime" type="Server" value="call:getDatabaseResponseTime" valueType="long">
+  <Attributes>
+    <Map>
+      <entry key="valueRenderer" value="milliseconds"/>
+    </Map>
+  </Attributes>
+</MonitoringStatistic>

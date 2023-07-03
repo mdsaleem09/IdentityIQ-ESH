@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE IdentityRequest PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<IdentityRequest completionStatus="Success" endDate="1676569979781" executionStatus="Completed" name="0000000661" priority="Normal" requesterDisplayName="Scheduler" source="LCM" state="End" targetClass="sailpoint.object.Identity" targetDisplayName="Wanda Watkins" type="Leaver" verified="1676569979785">
+  <Attributes>
+    <Map>
+      <entry key="provisionedProject">
+        <value>
+          <ProvisioningProject identity="Wanda Watkins">
+            <Attributes>
+              <Map>
+                <entry key="disableRetryRequest">
+                  <value>
+                    <Boolean>true</Boolean>
+                  </value>
+                </entry>
+                <entry key="identityRequestId" value="0000000661"/>
+                <entry key="optimisticProvisioning" value="false"/>
+                <entry key="requester" value="Scheduler"/>
+                <entry key="source" value="LCM"/>
+              </Map>
+            </Attributes>
+            <MasterPlan>
+              <ProvisioningPlan>
+                <AccountRequest application="IIQ" nativeIdentity="Wanda Watkins" op="Modify">
+                  <AttributeRequest name="assignedRoles" op="Set">
+                    <Value>
+                      <List>
+                        <String>Organization</String>
+                      </List>
+                    </Value>
+                  </AttributeRequest>
+                </AccountRequest>
+                <Attributes>
+                  <Map>
+                    <entry key="comments" value="Adding Joiner Access"/>
+                    <entry key="identityRequestId" value="0000000661"/>
+                    <entry key="requester" value="Scheduler"/>
+                    <entry key="source" value="LCM"/>
+                  </Map>
+                </Attributes>
+              </ProvisioningPlan>
+            </MasterPlan>
+          </ProvisioningProject>
+        </value>
+      </entry>
+      <entry key="taskResultId" value="c0a81de68649119081865b5ba42312d5"/>
+    </Map>
+  </Attributes>
+  <RequestItems>
+    <IdentityRequestItem application="IIQ" approvalState="Pending" compilationStatus="Filtered" name="assignedRoles" nativeIdentity="Wanda Watkins" operation="Set" provisioningEngine="IIQ" provisioningState="Finished" value="Organization">
+      <Attributes>
+        <Map>
+          <entry key="requesterComments" value="Adding Joiner Access"/>
+        </Map>
+      </Attributes>
+    </IdentityRequestItem>
+  </RequestItems>
+</IdentityRequest>

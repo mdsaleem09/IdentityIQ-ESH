@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Dynamic Template Test">
+
+  <Source><![CDATA[
+  
+	//
+	// For IIQDA, if oyu lioke that sort of thing...
+	//
+	//Expect: sailpoint.object.EmailTemplate emailTemplate
+	//Expect: sailpoint.object.EmailOptions emailOptions
+	//Expect: sailpoint.object.Identity identity
+	//Expect: java.lang.String emailAddress
+	
+	// We have the following additional variables set in this rule
+	// 
+	// emailTemplate (EmailTemplate class)
+	// emailOptions (EmailOptions class)
+	// emailAddress (String)
+	// identity (Identity object if found via the email address ... so this could be null)
+	//
+  
+  	String templateName = emailTemplate.getName();
+	
+    // if we know what type of person, we will augment this
+    if (identity != null) {
+    
+    	String value = identity.getAttribute("department");
+    	if (value.equals("Human Resources")) templateName += ".hr";
+  	
+  	}
+  	
+ 	//
+ 	// When we return this template name a couple of things happen,
+ 	// first:  If the returned template name does not exist, then 
+ 	// the class will revert to the original template name.
+ 	//
+ 	// If you have then specified a dynamicEmailIdentityAttribute 
+ 	// attribute then this may argument the template name afterwards.  
+ 	// SO this rule can be used to fetch the base Template used for the use
+ 	// case you are after, then additionally if the dynamicEmailIdentityAttribute
+ 	// can be used to select the language of the email template to use. 
+	//
+  	
+  	return templateName;
+  
+
+]]></Source>
+</Rule>

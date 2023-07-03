@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE QuickLink PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<QuickLink action="manageAccounts" category="Access" cssClass="quicklink-manage-accounts" messageKey="quicklink_manage_accounts" name="Manage Accounts" ordering="1">
+  <Description>quicklink_manage_accounts_desc</Description>
+  <QuickLinkOptions allowSelf="true">
+    <DynamicScopeRef>
+      <Reference class="sailpoint.object.DynamicScope" name="Self Service"/>
+    </DynamicScopeRef>
+    <Attributes>
+      <Map>
+        <entry key="allowAccountOnlyRequests" value="false"/>
+        <entry key="allowManageAccountsAdditionalAccountRequests" value="false"/>
+        <entry key="allowManageExistingAccounts" value="true"/>
+      </Map>
+    </Attributes>
+  </QuickLinkOptions>
+  <QuickLinkOptions allowOther="true">
+    <DynamicScopeRef>
+      <Reference class="sailpoint.object.DynamicScope" name="Manager"/>
+    </DynamicScopeRef>
+    <Attributes>
+      <Map>
+        <entry key="allowAccountOnlyRequests" value="false"/>
+        <entry key="allowManageAccountsAdditionalAccountRequests" value="false"/>
+        <entry key="allowManageExistingAccounts" value="true"/>
+      </Map>
+    </Attributes>
+  </QuickLinkOptions>
+  <QuickLinkOptions allowOther="true">
+    <DynamicScopeRef>
+      <Reference class="sailpoint.object.DynamicScope" name="Help Desk"/>
+    </DynamicScopeRef>
+    <Attributes>
+      <Map>
+        <entry key="allowAccountOnlyRequests" value="false"/>
+        <entry key="allowManageAccountsAdditionalAccountRequests" value="false"/>
+        <entry key="allowManageExistingAccounts" value="true"/>
+      </Map>
+    </Attributes>
+  </QuickLinkOptions>
+</QuickLink>

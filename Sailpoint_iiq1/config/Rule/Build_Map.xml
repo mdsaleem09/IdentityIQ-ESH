@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Build Map" type="JDBCBuildMap">
+  <Description>This rule is used by the JDBC connector to build a map representation of the Resultset.</Description>
+  <Signature returnType="Map">
+    <Inputs>
+      <Argument name="log">
+        <Description>
+          The log object associated with the SailPointContext.
+        </Description>
+      </Argument>
+      <Argument name="context">
+        <Description>
+          A sailpoint.api.SailPointContext object that can be used to query the database if necessary.
+        </Description>
+      </Argument>
+      <Argument name="application">
+        <Description>
+                The application whose data file is being processed.
+                </Description>
+      </Argument>
+      <Argument name="schema">
+        <Description>
+                The Schema currently in use.
+                </Description>
+      </Argument>
+      <Argument name="state">
+        <Description>
+                A Map containing state information.
+                </Description>
+      </Argument>
+      <Argument name="result">
+        <Description>
+                The ResultSet from database.
+                </Description>
+      </Argument>
+      <Argument name="connection">
+        <Description>
+                A connection object to connect to database.
+                </Description>
+      </Argument>
+    </Inputs>
+    <Returns>
+      <Argument name="map">
+        <Description>
+                A Map of the resource object assembled from the data.
+                </Description>
+      </Argument>
+    </Returns>
+  </Signature>
+  <Source>import java.sql.Statement;
+    import java.sql.ResultSet;
+    import java.util.HashMap;
+    import java.util.Map;
+    import sailpoint.connector.JDBCConnector;
+    import java.sql.*;   
+  import java.sql.Connection;
+import sailpoint.object.Identity;
+import sailpoint.object.Application;
+  
+    Map mape = JDBCConnector.buildMapFromResultSet(result, schema);
+ String user = mape.get("Name");
+
+if(user!=null){
+  
+String attrib1 = mape.get("James Smith"); 
+  
+  
+ Identity identity = context.getObjectByName(Identity.class,user) 
+ 
+ Application app1 = context.getObjectByName(Application.class, "Active- DemoJdbcApp"); 
+ if(app1 != null &amp;&amp; identity != null){  
+ Link appdata = identity.getLink(app1); 
+ if(appdata != null) {            
+ String link_attrib1 = (String) appdata.getAttribute("FirstName");     
+   
+ 
+ if(link_attrib1.equals(attrib1))    
+{ 
+ System.out.println("Same");   
+}  
+ else
+{
+ System.out.println("different");  
+  
+ } } }
+}
+return mape ;</Source>
+</Rule>

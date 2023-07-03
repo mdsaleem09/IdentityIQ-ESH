@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Capability PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Capability displayName="capability_rapidsetup_birthright_role_administrator" name="RapidSetupBirthrightRoleAdministrator">
+  <Description>capability_desc_rapidsetup_birthright_role_administrator</Description>
+  <RightRefs>
+    <Reference class="sailpoint.object.SPRight" name="ViewRole"/>
+    <Reference class="sailpoint.object.SPRight" name="ManageRole"/>
+    <Reference class="sailpoint.object.SPRight" name="ManageRapidSetupBirthrightRoles"/>
+    <Reference class="sailpoint.object.SPRight" name="FullAccessForms"/>
+  </RightRefs>
+</Capability>

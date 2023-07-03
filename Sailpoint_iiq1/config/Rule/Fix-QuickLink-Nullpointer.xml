@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Fix-QuickLink-Nullpointer">
+  <Source>
+
+
+
+  import sailpoint.object.*;
+
+  import sailpoint.api.Terminator;
+import sailpoint.api.*;
+  import sailpoint.object.QuickLinkOptions;
+
+  //boolean debug = false;
+
+  ////////////////
+  
+ArrayList list=new ArrayList();
+  Filter filter = Filter.isnull("quickLink");
+
+  QueryOptions options = new QueryOptions();
+  options.addFilter(filter);
+  Iterator iterator = context.search(QuickLinkOptions.class, options,Arrays.asList("id"));
+
+  while(iterator !=null &amp;&amp; iterator != void &amp;&amp; iterator.hasNext()) {
+    
+    String id = (String) ((Object[])iterator.next())[0];
+    Terminator terminator = new Terminator(context);
+    Filter f = Filter.eq("id", id);
+    QueryOptions ops = new QueryOptions();
+    ops.addFilter(f);
+    terminator.deleteObjects(QuickLinkOptions.class, ops);
+
+  }
+
+  context.commitTransaction();
+        context.decache(); 
+
+  return context.countObjects(QuickLinkOptions.class, options);
+  
+  
+  
+  
+  /*
+  ArrayList list=new ArrayList();
+
+  Filter filter = Filter.isnull("quickLink");
+
+  QueryOptions options = new QueryOptions();
+    List list1= context.getObjects(QuickLinkOptions.class, options);
+  for(QuickLinkOptions q:list1)
+  {
+    list.add(q);
+    
+  }
+  return list;
+  */
+
+
+  </Source>
+</Rule>

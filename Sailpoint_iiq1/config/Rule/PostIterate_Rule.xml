@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="PostIterate_Rule" type="PostIterate">
+  <Description>This rule is called after the connector processes the data in a file.
+
+Stats is a Map passed in by the connector with the information it has gathered. Custom keys can be added here if necessary for validation.</Description>
+  <Signature returnType="void">
+    <Inputs>
+      <Argument name="log" type="org.apache.commons.logging.Log">
+        <Description>
+          The log object associated with the SailPointContext.
+        </Description>
+      </Argument>
+      <Argument name="context" type="sailpoint.api.SailPointContext">
+        <Description>
+          A sailpoint.api.SailPointContext object that can be used to query the database if necessary.
+        </Description>
+      </Argument>
+      <Argument name="application">
+        <Description>
+          Application being iterated.
+        </Description>
+      </Argument>
+      <Argument name="schema">
+        <Description>
+          Schema requested during iteration.
+        </Description>
+      </Argument>
+      <Argument name="stats">
+        <Description>
+          A map of the stats for the current file that was just iterated.
+          Contains keys:
+            fileName : (String) filename of the file about to be processed
+            absolutePath : (String) absolute filename
+            length : (Long) length in bytes
+            lastModified : (Long) last time the file was updated Java GMT
+            columnNames : (List) column names that were used during the iteration
+            objectsIterated : (Long) total number of objects iterated during this run
+        </Description>
+      </Argument>
+    </Inputs>
+  </Signature>
+  <Source>System.out.println("PostIterate_Rule Starting ");
+
+System.out.println("context"+context);
+System.out.println("application"+application);
+System.out.println("schema"+schema);
+System.out.println("stats"+stats);
+
+</Source>
+</Rule>

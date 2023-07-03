@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction applicationName="Active- Directory" integration="Active- Directory" name="0000000143" operation="Create" source="GroupManagement" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="request">
+        <value>
+          <ObjectRequest application="Active- Directory" op="Create" targetIntegration="Active- Directory" type="group">
+            <Attributes>
+              <Map>
+                <entry key="provisioningTransactionId" value="c0a80103848b129b81848e7db47302bd"/>
+              </Map>
+            </Attributes>
+            <AttributeRequest name="GroupType" op="Set" value="Security"/>
+            <AttributeRequest name="GroupScope" op="Set" value="Global"/>
+            <AttributeRequest name="sysAttribute" op="Set" value="memberOf"/>
+            <AttributeRequest name="sysDisplayName" op="Set" value="Automation_Test"/>
+            <AttributeRequest name="sysDescriptions" op="Set">
+              <Value>
+                <Map>
+                  <entry key="en_US"/>
+                </Map>
+              </Value>
+            </AttributeRequest>
+            <AttributeRequest name="sysOwner" op="Set" value="spadmin"/>
+            <AttributeRequest name="sysRequestable" op="Set">
+              <Value>
+                <Boolean>true</Boolean>
+              </Value>
+            </AttributeRequest>
+            <AttributeRequest name="sysManagedAttributeType" op="Set" value="group"/>
+            <AttributeRequest name="sysClassifications" op="Set"/>
+            <AttributeRequest name="sysIiqElevatedAccess" op="Set">
+              <Value>
+                <Boolean/>
+              </Value>
+            </AttributeRequest>
+            <ProvisioningResult status="failed">
+              <Errors>
+                <Message key="Native Identity should not be null or empty" type="Error"/>
+              </Errors>
+            </ProvisioningResult>
+          </ObjectRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

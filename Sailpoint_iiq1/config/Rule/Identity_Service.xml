@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Identity Service" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+
+import sailpoint.object.*;
+  import sailpoint.api.*;
+  import java.util.*;
+  import java.util.List;
+  import sailpoint.object.ManagedAttribute;
+    import sailpoint.api.Workgroup;
+
+  
+   
+  Identity id=context.getObjectByName(Identity.class,"James Smith");
+  return id.getLinks();
+ // Application app=context.getObjectByName(Application.class,"AD");
+ 
+  //IdentityService idService =new IdentityService(context);
+ // List lisytidService.getLinks(id,app);
+  
+ 
+  
+  </Source>
+</Rule>

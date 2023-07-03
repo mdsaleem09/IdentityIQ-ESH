@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Group Refesh Rule" type="GroupAggregationRefresh">
+  <Description>This rule is used to set the owner or modify the account group before it is persisted to the database.</Description>
+  <Signature returnType="Object"/>
+  <Source>System.out.println("accountGroup"+accountGroup.toXml());
+System.out.println("accountGroupDisplayName"+accountGroup.getDisplayName());
+System.out.println("accountGroupValue"+accountGroup.getValue());</Source>
+</Rule>

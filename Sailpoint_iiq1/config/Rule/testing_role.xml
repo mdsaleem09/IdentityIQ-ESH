@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="testing role" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+  import sailpoint.object.Identity;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+  import sailpoint.object.Filter;
+  import sailpoint.object.Profile;
+  
+  import java.util.*;
+  
+  Application appObj=context.getObjectByName(Application.class,"Active Directory");
+  Bundle bund=new Bundle();
+  bund.setName("SP Bus");
+  bund.setType("business");
+  bund.setDisplayName("AD Business Role");
+  
+  
+  
+  
+  
+  
+  bund.setName("DemoITROLE");
+  bund.setType("it");
+  bund.setDisplayName("DemoITROLE");
+  Profile prof=new Profile();
+  prof.setApplication(appObj);
+    
+  List grpList1=new ArrayList();
+  grpList1.add("CN=AccountsPayable,OU=Groups,OU=Demo,DC=Eshiam,DC=com");
+  
+  Filter fill = Filter.containsAll("memberOf",grpList1);
+    
+  prof.addConstraint(fill);
+  bund.add(prof);
+  
+  
+  
+  
+  
+    Profile prof2=new Profile();
+    prof2.setApplication(appObj); 
+    List grpList2=new ArrayList();
+    grpList2.add("CN=AccountsReceivable,OU=Groups,OU=Demo,DC=Eshiam,DC=com");
+    Filter filter = Filter.containsAll("memberOf",grpList2);
+    prof2.addConstraint(filter);
+    bund.add(prof2);
+    context.saveObject(bund);
+    context.commitTransaction();
+  
+  
+  
+  </Source>
+</Rule>

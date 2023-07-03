@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="List of all workflows in iqq" type="Validation">
+  <Source>
+  
+  
+  import java.util.*;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+ 
+  
+  
+  List list=new ArrayList();
+  
+       List li=context.getObjects(Workflow.class);
+  for(Workflow wf:li)
+  {
+    list.add(wf.getName());
+    
+  }
+  return list;
+  </Source>
+</Rule>

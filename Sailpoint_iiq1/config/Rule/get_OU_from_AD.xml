@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="get OU from AD" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+  import sailpoint.object.Identity;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+  import java.util.*;
+  
+      List list=new ArrayList();
+  
+   
+ 
+  List list=new ArrayList();
+  Filter f=Filter.eq("application.name","Active Directory");
+  QueryOptions opts=new QueryOptions();
+  opts.addFilter(f);
+  Iterator idew=context.search(Link.class,opts);
+  while(idew.hasNext())
+  {
+           Link idsq=idew.next();
+    list.add(idsq.getIdentity());
+  
+   // list.add(idsq.getAttribute("distinguishedName"));
+  }
+  return list;
+  
+ 
+ 
+          
+ 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  </Source>
+</Rule>

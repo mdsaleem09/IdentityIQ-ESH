@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="get assigned roles from identity request" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+ 
+
+  
+ import sailpoint.object.*;
+import sailpoint.api.*;
+import sailpoint.object.ProvisioningPlan.AccountRequest;
+   import sailpoint.object.ProvisioningPlan.AttributeRequest;
+   import sailpoint.object.ProvisioningPlan.Operation;
+  import sailpoint.object.ProvisioningPlan;
+
+  ArrayList list =new ArrayList();
+  
+      List idreqs= context.getObjects(IdentityRequest.class);
+  for(IdentityRequest idreq:idreqs){
+    if(idreq!=null){
+      return idreq.getItems();
+      ProvisioningProject pj = idreq.getProvisionedProject();
+      if(pj.getMasterPlan()!=null &amp;&amp; pj.getIIQAccountRequest()!=null){
+  AccountRequest acc=pj.getIIQAccountRequest();
+        
+   List attributeRequests = acc.getAttributeRequests("assignedRoles");
+        System.out.println(" attributeRequests : "+attributeRequests);
+        if(sailpoint.tools.Util.nullSafeSize(attributeRequests) &gt; 0) {
+         for(AttributeRequest att:attributeRequests){
+           list.add(idreq.getName());
+        }
+    }
+  }
+    }
+    }
+
+  }
+  return list;
+  
+  </Source>
+</Rule>

@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Form PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Form name="Create" type="CreateIdentity">
+  <Attributes>
+    <Map>
+      <entry key="pageTitle" value="Create"/>
+    </Map>
+  </Attributes>
+  <Description/>
+  <Section label="Account" name="Account">
+    <Attributes>
+      <Map>
+        <entry key="subtitle" value="Account"/>
+      </Map>
+    </Attributes>
+    <Field displayName="Username" helpKey="Username" name="name" required="true" type="string" value="Test Attr"/>
+    <Field displayName="Password" helpKey="Password" name="password" type="secret" value="admin"/>
+    <Field displayName="Password Confirmation" helpKey="Password Confirmation" name="passwordConfirm" type="secret" value="admin"/>
+  </Section>
+</Form>

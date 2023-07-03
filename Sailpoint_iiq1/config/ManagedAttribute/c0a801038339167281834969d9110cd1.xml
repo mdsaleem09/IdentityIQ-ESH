@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ManagedAttribute PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ManagedAttribute attribute="GroupValue" hash="22c01cd92ba74d50708d200a769bb2d7d903c96d" requestable="true" type="Group" value="Testing">
+  <ApplicationRef>
+    <Reference class="sailpoint.object.Application" name="Active- DemoJdbcApp"/>
+  </ApplicationRef>
+</ManagedAttribute>

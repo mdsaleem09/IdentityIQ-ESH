@@ -1,0 +1,118 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="OHSU-Rule-AfterProvisioning-ActiveDirectory" type="AfterProvisioning">
+  <Description>An IdentityIQ server-side rule that is executed after the connector's provisioning method is called. This gives the customer the ability to customize or react to anything in the ProvisioningPlan AFTER it has been sent out to the specific applications. 
+
+This rule will be called for any application found in a plan that also has a configured 'afterProvisioningRule' configured.</Description>
+  <Signature>
+    <Inputs>
+      <Argument name="log" type="org.apache.commons.logging.Log">
+        <Description>
+          The log object associated with the SailPointContext.
+        </Description>
+      </Argument>
+      <Argument name="context" type="sailpoint.api.SailPointContext">
+        <Description>
+          A sailpoint.api.SailPointContext object that can be used to query the database if necessary.
+        </Description>
+      </Argument>
+      <Argument name="plan">
+        <Description>
+          The ProvisioningPlan object on its way to the Connector.
+        </Description>
+      </Argument>
+      <Argument name="application">
+        <Description>
+          The application object that references this before/after script.
+        </Description>
+      </Argument>
+      <Argument name="result">
+        <Description>
+          The ProvisioningResult object returned by the connectors provision method. This can be null and in many cases the connector will  not return a result and instead will annotate the plan's ProvisioningResult either at the plan or account level.        
+        </Description>
+      </Argument>
+    </Inputs>
+  </Signature>
+  <Source>  import sailpoint.object.Identity;
+  import sailpoint.object.EmailOptions;
+  import sailpoint.object.EmailTemplate;
+  import sailpoint.tools.Util;
+  import sailpoint.object.ProvisioningPlan;
+  import sailpoint.object.ProvisioningPlan.AccountRequest;
+  import sailpoint.object.ProvisioningPlan.AttributeRequest;
+  import sailpoint.object.ProvisioningResult;
+
+  import org.apache.log4j.Logger;
+  import org.apache.log4j.Level;
+
+ // Logger log = Logger.getLogger("rule.ohsu.AfterProvisioning");
+  String ruleName = "OHSU-Rule-AfterProvisioning-ActiveDirectory";
+
+  List ccList = new ArrayList(Arrays.asList("abc@ohsu.com", "cde@ohsu.com"));
+
+  System.out.println("inside After Provisioning Rule:");
+  
+  EmailOptions eo = new EmailOptions();
+  EmailTemplate et = context.getObjectByName(EmailTemplate.class,"OHSU-EmailTemplate-TempPasswordNotification");
+  //if(log.isDebugEnabled()) log.debug("***RUNNING RULE [ " + ruleName +" ] ");
+  if (plan != null) {
+    System.out.println("inside  Provisioning Plan:"+plan.toXml());
+    List accReqs=plan.getAccountRequests();
+    if(Util.nullSafeSize(accReqs)&gt;0) {
+      for(ProvisioningPlan.AccountRequest accReq:accReqs) {
+        if(ProvisioningPlan.AccountRequest.Operation.Create.equals(accReq.getOperation())){
+          
+          System.out.println("Inside Account Request Plan:");
+          List attrReqs=accReq.getAttributeRequests();
+          String password="";
+          String username="";
+          for(ProvisioningPlan.AttributeRequest attrReq:attrReqs){
+            if(attrReq.getName().equals("password")) password=attrReq.getValue();
+            if(attrReq.getName().equals("sAMAccountName")) username=attrReq.getValue();
+          }
+          System.out.println("password:"+password);
+          System.out.println("username:"+username);
+          
+          Identity identity = plan.getIdentity();
+          if ( identity == null) {
+            String identityName = plan.getNativeIdentity();
+            identity = context.getObjectByName(Identity.class,identityName);
+          }
+          ProvisioningResult result = plan.getResult();
+          if (result == null) {
+            result = accReq.getResult();
+          }
+          if (result != null) {
+            System.out.println("result:"+result.toXml());
+            
+         
+            if (identity != null ) {
+              System.out.println("identity:"+identity);
+              if (identity.getManager() != null &amp;&amp; Util.isNotNullOrEmpty(identity.getManager().getAttribute("email"))) {
+                System.out.println("inside Manager if:"+identity.getManager().getAttribute("email"));
+                String mail = identity.getManager().getAttribute("email");
+                System.out.println("email in After Provisioning"+mail);
+                if (Util.isNotNullOrEmpty(mail)) {
+                  eo.setTo(mail);
+                  eo.setCc(Util.listToCsv(ccList));
+                  Map args = new HashMap();
+                  args.put("application",application.getName());
+                  args.put("idname",identity.getDisplayName());
+                  args.put("username",username);  
+                  args.put("password",password);
+                  //Setting Password for Identity
+                  if (identity.getPassword() == null) {
+                    identity.setPassword(password);
+                  }
+                  eo.setVariables(args);
+                  System.out.println("Exiting  After Rule:");
+                  context.sendEmailNotification(et,eo);
+                }
+              } 
+            }
+          }
+        }
+      }
+    }
+  }</Source>
+</Rule>

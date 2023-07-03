@@ -1,0 +1,325 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="sAMA-Account-Generation-modifying" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+  import sailpoint.api.*;
+  import sailpoint.object.*;
+  import sailpoint.api.SailPointContext;
+  import sailpoint.object.Identity;
+  import sailpoint.object.Link;
+  import sailpoint.tools.Util;
+  import sailpoint.tools.CloseableIterator;
+  
+  import sailpoint.connector.ADLDAPConnector;
+  import sailpoint.connector.Connector;
+  import sailpoint.connector.ConnectorException;
+
+  Identity id = context.getObjectByName(Identity.class,"Ashley Simpson");
+  String firstName=id.getFirstname();
+  //String firstName="Teresa";
+  String lastName=id.getLastname();
+  //return lastName;
+  //String lastName="Cole";
+  String userName="";
+  boolean foundNoUser=true;
+  int j=1;
+
+  System.out.println("Entering into  SAMA-Account-NAme Generation");
+
+  /*
+  public  boolean checkUsername(String name){
+    Filter f = Filter.and(Filter.eq("links.test",name),Filter.and(Filter.eq("links.application.name","Active- Directory")));
+    QueryOptions qo = new QueryOptions();
+    qo.add(f);
+    List ids = context.getObjects(Identity.class,qo);
+    if(ids.size()&gt;0) return true;
+    else return false;
+  }
+  */
+  
+  
+  Application application = context.getObjectByName(Application.class,"Active- Directory");
+  
+  public Boolean isUniqueADName(Application application, String attName, String attValue) {
+
+       if (log.isDebugEnabled()) log.debug("Checking for uniqueness of " + attName + " " + attValue + " for application " + application.getName());
+       Boolean unique = false;
+        
+       // Make a copy of the AD application
+       Application appCopy = (Application) application.deepCopy((sailpoint.object.Resolver) context);
+       String appConnName = appCopy.getConnector();
+       
+       // Get the domain DN and use this as the searchDN so that we search the entire domain
+       List domainSettings = appCopy.getAttributes().getMap().get("domainSettings");
+       Map searchDNMap = domainSettings.get(0);
+       String searchDN = searchDNMap.get("domainDN");
+      // String searchDN = appCopy.getAttributes().getMap().get("domainSettings").get(0).get("domainDN");
+       if (log.isDebugEnabled()) log.debug("Searching in: " + searchDN);
+      
+       List dnList = new ArrayList();
+       Map setupMap = new HashMap();
+       setupMap.put("iterateSearchFilter", "(" + attName  + "=" + attValue + ")");
+       setupMap.put("searchDN", searchDN);
+       
+       dnList.add(0, setupMap); // This takes the map we just changed and adds it back to the list in place of the map that was there.
+       appCopy.setAttribute("searchDNs", dnList); // Add the list back to the app copy. 
+      
+       appCopy.setAttribute("referral", "ignore");
+       appCopy.setAttribute("useHasMoreElements", true);
+       appCopy.setCustomizationRule(null);
+      
+       Connector appConnector = sailpoint.connector.ConnectorFactory.getConnector(appCopy, null);
+       CloseableIterator iterator = appConnector.iterateObjects(Connector.TYPE_ACCOUNT, null, null);
+
+       try {
+            if (iterator != null &amp;&amp; iterator.hasNext() ) { 
+               if (iterator.hasNext()) {   
+                  ResourceObject user = iterator.next();    
+                  String foundName = user.getAttribute(attName).toString();
+                  if (log.isDebugEnabled()) log.debug("Found an AD account with " + attName + ": " + foundName);        
+                  unique = true;
+               }
+            } else {
+               if (log.isDebugEnabled()) log.debug("Could not find an AD account with " + attName + ": " + attValue);
+            }
+       } finally {
+          if ( iterator != null ) iterator.close();
+       }
+       if (log.isDebugEnabled()) log.debug("Unique: " + unique);
+       return unique;
+    }
+  
+  
+  
+  
+  
+  
+
+  //#########################  LAST+FIRST  #########################
+  while(foundNoUser){
+    if(firstName!=null){
+      if(lastName.length()&gt;=12){
+        for(int i=0;i&lt;12;i++){
+          if(i&lt;=firstName.length()) userName=lastName+firstName.substring(0,i);
+          if(userName.length()&gt;12) userName=lastName.substring(0,(12-i))+firstName.substring(0,i);   
+          if(i&gt;firstName.length()) userName=userName.substring(0,(12-i))+firstName;
+          if(!isUniqueADName(application,"sAMAccountName",userName)) {
+            foundNoUser=false;
+            break;
+            break;
+          }
+          else j++;
+        }
+      }
+      else{
+        for(int i=0;i&lt;12;i++){
+          if(i&lt;=firstName.length()) userName=lastName+firstName.substring(0,i);
+          else if(firstName.length()!=lastName.length()) continue;
+            if(userName.length()&gt;12) userName=lastName.substring(0,(12-i))+firstName.substring(0,i);   
+            if(i&gt;firstName.length()) userName=userName.substring(0,(12-i))+firstName;
+            if(!isUniqueADName(application,"sAMAccountName",userName)) {
+            foundNoUser=false;
+            break;
+            break;
+          }
+          else j++;
+
+        }
+      }
+    }
+  }
+
+  //#########################  FIRST+LAST  #########################
+  while(foundNoUser){
+    if(lastName!=null){
+      if(firstName.length()&gt;=12){
+        for(int i=0;i&lt;12;i++){
+          if(i&lt;=lastName.length()) userName=firstName+lastName.substring(0,i);
+          if(userName.length()&gt;12) userName=firstName.substring(0,(12-i))+lastName.substring(0,i); 
+          if(i&gt;lastName.length()) userName=userName.substring(0,(12-i))+lastName;
+          if(!isUniqueADName(application,"sAMAccountName",userName)) {
+            foundNoUser=false;
+            break;
+            break;
+          }
+          else j++;
+        }
+      }
+
+      else{
+        if(lastName.length()&gt;firstName.length()){
+          for(int i=0;i&lt;12;i++){
+            if(i&lt;lastName.length()) userName=firstName+lastName.substring(0,i);
+            if(userName.length()&gt;12) userName=firstName.substring(0,(12-i))+lastName.substring(0,i);  //new
+            if(!isUniqueADName(application,"sAMAccountName",userName)){ 
+              foundNoUser=false;
+              break;
+              break;
+            }
+            else j++;
+          }
+        }
+
+
+        else if(lastName.length()==firstName.length()){
+          for(int i=0;i&lt;12;i++){
+            if(i&lt;=lastName.length()) userName=firstName+lastName.substring(0,i);
+            if(userName.length()&gt;12) userName=firstName.substring(0,(12-i))+lastName.substring(0,i); 
+            if(i&gt;lastName.length()) userName=userName.substring(0,(12-i))+lastName;
+            if(!isUniqueADName(application,"sAMAccountName",userName)){
+              foundNoUser=false;
+              break;
+              break;
+            }
+            else j++;
+          }
+        }
+
+
+        else{
+          for(int i=0;i&lt;12;i++){
+            if(i&lt;lastName.length()) userName=firstName.substring(0,(firstName.length()-i))+lastName.substring(0,i);
+            else {
+              if(i&lt;=firstName.length()) userName=firstName.substring(0,(firstName.length()-i+1))+lastName;
+              else continue;
+            }
+            if(userName.length()&gt;12) userName=firstName.substring(0,(12-i))+lastName.substring(0,i);
+
+            if(i&gt;lastName.length()) userName=userName.substring(0,(12-i))+lastName;
+            if(!isUniqueADName(application,"sAMAccountName",userName)) {
+              foundNoUser=false;
+              break;
+              break;
+            }
+            else j++;
+          }
+        }
+      }
+
+    }
+  }
+
+  
+
+  //#########################  NUMBERS  #########################
+
+  while(foundNoUser){
+    if(j&gt;9){
+      if(firstName!=null){
+        if(lastName.length()&gt;=12){
+          for(int i=0;i&lt;(12-(j.toString().length()));i++){
+            userName=lastName.substring(0,(11-i))+firstName.substring(0,i)+j.toString();
+            if(!isUniqueADName(application,"sAMAccountName",userName)) {
+              foundNoUser=false;
+              break;
+              break;
+            }
+            else j++;
+          }
+        }
+        else{
+          for(int i=0;i&lt;(12-j.toString().length());i++){
+            if(i&lt;=firstName.length()) userName=lastName+firstName.substring(0,i)+j.toString();
+            if(userName.length()&gt;12) userName=lastName.substring(0,(12-(j.toString().length())-i))+firstName.substring(0,i)+j.toString();
+            if(i&gt;firstName.length()) userName=userName.substring(0,(12-j.toString().length()-i))+firstName+j.toString();
+            if(!isUniqueADName(application,"sAMAccountName",userName)) {
+              foundNoUser=false;
+              break;
+              break;
+            }
+            else j++;
+          }
+        }
+      }
+
+
+      if(lastName!=null){
+        if(firstName.length()&gt;=12){
+          for(int i=0;i&lt;(12-(j.toString().length()));i++){
+            userName=firstName.substring(0,(11-i))+lastName.substring(0,i)+j.toString();
+            if(!isUniqueADName(application,"sAMAccountName",userName)) {
+              foundNoUser=false;
+              break;
+              break;
+            }
+            else j++;
+          }
+        }
+        else{
+          for(int i=0;i&lt;(12-j.toString().length());i++){
+            if(i&lt;=lastName.length()) userName=firstName+lastName.substring(0,i)+j.toString();
+            if(userName.length()&gt;12) userName=firstName.substring(0,(12-(j.toString().length())-i))+lastName.substring(0,i)+j.toString();
+            if(i&gt;lastName.length()) userName=userName.substring(0,(12-j.toString().length()-i))+lastName+j.toString();
+            if(!isUniqueADName(application,"sAMAccountName",userName)) {
+              foundNoUser=false;
+              break;
+              break;
+            }
+            else j++;
+          }
+        }
+      }
+    }
+
+
+    else{
+      if(firstName!=null){
+        if(lastName.length()&gt;=12){
+          for(int i=0;i&lt;11;i++){
+            userName=lastName.substring(0,(12-i))+firstName.substring(0,i)+j.toString();
+            if(!isUniqueADName(application,"sAMAccountName",userName)) {
+              foundNoUser=false;
+              break;
+              break;
+            }
+            else j++;
+          }
+        }
+        else{
+          for(int i=0;i&lt;=10;i++){
+            if(i&lt;=firstName.length()) userName=lastName+firstName.substring(0,i)+j.toString();
+            if(userName.length()&gt;12) userName=lastName.substring(0,(11-i))+firstName.substring(0,i)+j.toString();
+            if(i&gt;firstName.length()) userName=userName.substring(0,(11-i))+firstName+j.toString();
+            if(!isUniqueADName(application,"sAMAccountName",userName)) {
+              foundNoUser=false;
+              break;
+              break;
+            }
+            else j++;
+          }
+        }
+      }
+      if(lastName!=null){
+        if(firstName.length()&gt;=12){
+          for(int i=0;i&lt;11;i++){
+            userName=firstName.substring(0,(12-i))+lastName.substring(0,i)+j.toString();
+            if(!isUniqueADName(application,"sAMAccountName",userName)) {
+              foundNoUser=false;
+              break;
+              break;
+            }
+            else j++;
+          }
+        }
+        else{
+          for(int i=0;i&lt;=10;i++){
+            if(i&lt;=lastName.length()) userName=firstName+lastName.substring(0,i)+j.toString();
+            if(userName.length()&gt;12) userName=firstName.substring(0,(11-i))+lastName.substring(0,i)+j.toString();
+            if(i&gt;lastName.length()) userName=userName.substring(0,(11-i))+lastName+j.toString();
+            if(!isUniqueADName(application,"sAMAccountName",userName)) {
+              foundNoUser=false;
+              break;
+              break;
+            }
+            else j++;
+          }
+        }
+      }
+    }
+  }
+
+  
+  return userName;
+  </Source>
+</Rule>

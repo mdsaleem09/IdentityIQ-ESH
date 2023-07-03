@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Global_Unique_ID" type="IdentityCreation">
+  <Description>Identity creation rules are used to set attributes on new Identity objects when they are created.  New identities may be created during the aggregation of application accounts, or optionally created after pass-through authentication.
+
+One common operation is to change the name property of the identity when the default application name is complex (such as a directory DN).
+
+Another common operation is to assign a set of initial capabilities based on the attributes pulled from the application account.</Description>
+  <Signature returnType="void">
+    <Inputs>
+      <Argument name="log" type="org.apache.commons.logging.Log">
+        <Description>
+          The log object associated with the SailPointContext.
+        </Description>
+      </Argument>
+      <Argument name="context" type="sailpoint.api.SailPointContext">
+        <Description>
+          A sailpoint.api.SailPointContext object that can be used to query the database if necessary.
+        </Description>
+      </Argument>
+      <Argument name="environment" type="Map">
+        <Description>
+          Arguments passed to the aggregation task.
+        </Description>
+      </Argument>
+      <Argument name="application">
+        <Description>
+          Application being aggregated.
+        </Description>
+      </Argument>
+      <Argument name="account" type="ResourceObject">
+        <Description>
+          The resource account for the identity being created.
+        </Description>
+      </Argument>
+      <Argument name="identity" type="Identity">
+        <Description>
+          The identity that is being created.
+        </Description>
+      </Argument>
+    </Inputs>
+  </Signature>
+  <Source>import java.util.UUID; 
+import sailpoint.object.Identity;
+
+
+
+/**
+     * Generate a GUID return The generated GUID
+     */
+    public String generateGUID() {
+      //randomly generates a UUID  
+        UUID uuid = UUID.randomUUID();  
+      //converts the randomly generated UUID into String  
+        String guid = uuid.toString();  
+        System.out.println("Generated guid is: " + guid.toString());
+        return guid;
+    }
+
+        String uniqueId= generateGUID();
+        identity.setAttribute("globalID",uniqueId);
+        //identity.setName(uniqueId);</Source>
+</Rule>

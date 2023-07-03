@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ProvisioningTransaction PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<ProvisioningTransaction accountDisplayName="ESHIAM\Boyd" applicationName="Active- Directory" identityDisplayName="Kelly Boyd" identityName="Kelly Boyd" integration="Active- Directory" name="0000000293" nativeIdentity="CN=Kelly Boyd,OU=People,OU=Demo,DC=Eshiam,DC=com" operation="Enable" source="UI" status="Failed" type="Auto">
+  <Attributes>
+    <Map>
+      <entry key="filtered">
+        <value>
+          <AccountRequest application="Active- Directory" nativeIdentity="CN=Kelly Boyd,OU=People,OU=Demo,DC=Eshiam,DC=com" op="Enable">
+            <AttributeRequest name="distinguishedName" op="Set" value="CN=Kelly Boyd,OU=People,OU=Demo,DC=Eshiam,DC=com">
+              <Attributes>
+                <Map>
+                  <entry key="reason">
+                    <value>
+                      <FilterReason>Exists</FilterReason>
+                    </value>
+                  </entry>
+                </Map>
+              </Attributes>
+            </AttributeRequest>
+          </AccountRequest>
+        </value>
+      </entry>
+      <entry key="request">
+        <value>
+          <AccountRequest application="Active- Directory" nativeIdentity="CN=Kelly Boyd,OU=People,OU=Demo,DC=Eshiam,DC=com" op="Enable" targetIntegration="Active- Directory">
+            <Attributes>
+              <Map>
+                <entry key="provisioningTransactionId" value="c0a801038620140a8186207902250122"/>
+              </Map>
+            </Attributes>
+            <AttributeRequest name="assignedRoles" op="Set" value="OHSU-Role"/>
+            <AttributeRequest name="password" op="Set"/>
+            <ProvisioningResult status="committed"/>
+          </AccountRequest>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+</ProvisioningTransaction>

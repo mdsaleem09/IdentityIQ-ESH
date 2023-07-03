@@ -1,0 +1,3 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Classification PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Classification displayName="Google" name="GCP" origin="CAM" type="cloud"/>

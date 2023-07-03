@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Policy PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Policy certificationActions="Mitigated,Delegated" configPage="genericpolicy.xhtml" executor="sailpoint.policy.RiskPolicyExecutor" name="Risk Template" state="Inactive" template="true" type="Risk" typeKey="policy_type_risk" violationOwnerType="Manager">
+  <Attributes>
+    <Map>
+      <entry key="compositeThreshold" value="1000"/>
+    </Map>
+  </Attributes>
+  <Signature>
+    <Inputs>
+      <Argument helpKey="policy_composite_threshold" name="compositeThreshold" type="int">
+        <Prompt>risk_template_composite_score_threshold</Prompt>
+      </Argument>
+    </Inputs>
+  </Signature>
+</Policy>

@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="get uncorrelated" type="Validation">
+  <Description>This program will return all the objects from Identity Class</Description>
+  <Source>
+  import sailpoint.object.Identity;
+  import sailpoint.object.*;
+  import sailpoint.api.*;
+  
+  
+  
+ // String appName="";
+  
+                      List l=new ArrayList();
+                     Filter f=Filter.eq("manuallyCorrelated",true);
+  Filter f1 = Filter.and(Filter.eq("application.name","Active Directory"),Filter.eq("manuallyCorrelated",true));
+  QueryOptions qo = new QueryOptions();
+ List links = context.getObjects(Link.class,qo.addFilter(f1));
+  for(Link link : links){
+    Identity id = link.getIdentity();
+      l.add("Identity Name"+id.getName()+ " Correlation Status "+id.isCorrelated());
+  }
+  return l;
+      
+  </Source>
+</Rule>
